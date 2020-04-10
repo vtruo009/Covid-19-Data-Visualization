@@ -1,0 +1,11 @@
+<!--Extends the parent template 'layout.html'-->
+{% extends 'layout.html' %}
+
+{% block content %}
+<!--Classes added to check that bootstrap is properly imported-->
+<div class="container">
+    <!-- title is a variablt that is is passed from the index router -->
+    <h1 class="display-5">This is the home page for our {{title}}</p>
+    <button class="btn btn-primary">I DO NOTHING</button>
+</div>
+{% endblock %}
