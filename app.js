@@ -9,7 +9,7 @@ const port = 5000;
 
 // Import routers
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
+const USDataRouter = require('./routes/USData');
 
 // Set up swig
 app.engine('html', swig.renderFile);
@@ -25,8 +25,7 @@ app.use(express.json());
 
 // Set up routes
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
+app.use('/USData', USDataRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

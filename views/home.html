@@ -1,17 +1,34 @@
-<!--Extends the parent template 'layout.html'-->
 {% extends 'layout.html' %}
 
 {% block content %}
-<!--Classes added to check that bootstrap is properly imported-->
-<div class="container">
-    <!-- title is a variablt that is is passed from the index router -->
-    <h1 class="display-5">This is the home page for our COVID-19 Website</p>
-    <a class="btn btn-primary" href="/response">Send Request to Server</a>
-    
-    {% if response %}
-        <div style="border: 10px; color: blue;" class="mt-4">
-            <span>{{ response }}</span>
-        </div>
-    {%  endif %}
+<h1 class="display-5 text-center">Welcome!</h1>
+<div class="row mt-5">
+    <div class="col intro-container">
+        <h5>What is this website?</h5>
+        <span>
+            Place Icon here
+        </span>
+        <p class="text-justify mt-4">
+            Est quis nulla laborum officia ad nisi ex nostrud culpa Lorem excepteur aliquip dolor aliqua irure ex. Nulla ut duis ipsum nisi elit fugiat commodo sunt reprehenderit laborum veniam eu veniam. Eiusmod minim exercitation fugiat irure ex labore incididunt do fugiat commodo aliquip sit id deserunt reprehenderit aliquip nostrud. 
+        </p>
+    </div>
+    <div class="col intro-container">
+        <h5>How does it work?</h5>
+        <span class>
+            Place Icon here
+        </span>
+        <p class="text-justify mt-4">
+            Est quis nulla laborum officia ad nisi ex nostrud culpa Lorem excepteur aliquip dolor aliqua irure ex. Nulla ut duis ipsum nisi elit fugiat commodo sunt reprehenderit laborum veniam eu veniam. Eiusmod minim exercitation fugiat irure ex labore incididunt do fugiat commodo aliquip sit id deserunt reprehenderit aliquip nostrud. 
+        </p>
+    </div>
+    <div class="col intro-container">
+        <h5>Why did we build it?</h5>
+        <span>
+            Place Icon here
+        </span>
+        <p class="text-justify mt-4">
+            Est quis nulla laborum officia ad nisi ex nostrud culpa Lorem excepteur aliquip dolor aliqua irure ex. Nulla ut duis ipsum nisi elit fugiat commodo sunt reprehenderit laborum veniam eu veniam. Eiusmod minim exercitation fugiat irure ex labore incididunt do fugiat commodo aliquip sit id deserunt reprehenderit aliquip nostrud. 
+        </p>
+    </div>
 </div>
 {% endblock %}
