@@ -1,0 +1,29 @@
+{% extends '../layout.html' %}
+{% block content %}
+<div>
+    <form action="USData/search" method="GET">
+        <div class="row">
+            <div class="col form-group">
+                <select name="Gender" class="form-control" required>
+                    <option selected>Age Range</option>
+                    <option value="1">80+</option>
+                    <option value="1">60 - 80</option>
+                    <option value="1">40 - 60</option>
+                    <option value="1">20 - 40</option>
+                    <option value="1">0 - 20</option>
+                </select>
+            </div>
+            <div class="col form-group">
+                <select name="TypeOfData" class="form-control" required>
+                    <option selected>Choose...</option>
+                    <option value="1">Number of cases, deaths, and recovered for each country</option>
+                    <option value="2">Number of cases per day</option>
+                </select>
+            </div>
+            <div class="col">
+                <button type="submit" class="btn btn-primary my-1"><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
