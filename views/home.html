@@ -5,7 +5,13 @@
 <!--Classes added to check that bootstrap is properly imported-->
 <div class="container">
     <!-- title is a variablt that is is passed from the index router -->
-    <h1 class="display-5">This is the home page for our {{title}}</p>
-    <button class="btn btn-primary">I DO NOTHING</button>
+    <h1 class="display-5">This is the home page for our COVID-19 Website</p>
+    <a class="btn btn-primary" href="/response">Send Request to Server</a>
+    
+    {% if response %}
+        <div style="border: 10px; color: blue;" class="mt-4">
+            <span>{{ response }}</span>
+        </div>
+    {%  endif %}
 </div>
 {% endblock %}
