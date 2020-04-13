@@ -27,18 +27,20 @@
     </form>
 	{% if data %}
 		{% if TypeOfTable == 1 %}
-			<h2 class="text-center display-5 mt-5">Number of confirmed, deaths, and recovered for each country for age </h2>
-			{% if AgeRange == 1 %}
-				<h2 class="text-center display-5 mt-5">80+</h2>
-			{% elseif AgeRange == 2 %}
-				<h2 class="text-center display-5 mt-5">60-80</h2>
-			{% elseif AgeRange == 3 %}
-				<h2 class="text-center display-5 mt-5">40-60</h2>
-			{% elseif AgeRange == 4 %}
-				<h2 class="text-center display-5 mt-5">20-40</h2>
-			{% elseif AgeRange == 5 %}
-				<h2 class="text-center display-5 mt-5">0-20</h2>
-			{% endif %}
+			<h2 class="text-center display-5 mt-5">
+				Number of confirmed, dead and recovered cases for each country for age 
+				{% if AgeRange == 1 %}
+					80+
+				{% elseif AgeRange == 2 %}
+					60-80
+				{% elseif AgeRange == 3 %}
+					40-60
+				{% elseif AgeRange == 4 %}
+					20-40
+				{% elseif AgeRange == 5 %}
+					0-20
+				{% endif %}
+			</h2>
 			<table class="table table-dark mt-5">
 				<thead>
 					<tr>
@@ -60,18 +62,20 @@
 				  </tbody>
 			</table>
 		{% else %}
-			<h2 class="text-center display-5 mt-5">Number of cases per day for age </h2>
-			{% if AgeRange == 1 %}
-				<h2 class="text-center display-5 mt-5">80+</h2>
-			{% elseif AgeRange == 2 %}
-				<h2 class="text-center display-5 mt-5">60-80</h2>
-			{% elseif AgeRange == 3 %}
-				<h2 class="text-center display-5 mt-5">40-60</h2>
-			{% elseif AgeRange == 4 %}
-				<h2 class="text-center display-5 mt-5">20-40</h2>
-			{% elseif AgeRange == 5 %}
-				<h2 class="text-center display-5 mt-5">0-20</h2>
-			{% endif %}
+			<h2 class="text-center display-5 mt-5">
+				Number of cases per day for age
+				{% if AgeRange == 1 %}
+					80+
+				{% elseif AgeRange == 2 %}
+					60-80
+				{% elseif AgeRange == 3 %}
+					40-60
+				{% elseif AgeRange == 4 %}
+					20-40
+				{% elseif AgeRange == 5 %}
+					0-20
+				{% endif %}
+			</h2>
 			<table class="table table-dark mt-5">
 				<thead>
 					<tr>
