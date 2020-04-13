@@ -19,7 +19,7 @@
                 </select>
             </div>
             <div class="col">
-                <button onclick="onSubmit()" type="submit" class="btn btn-primary my-1"><i class="fas fa-search"></i></button>
+                <button onclick="cleanURL()" type="submit" class="btn btn-primary my-1"><i class="fas fa-search"></i></button>
             </div>
         </div>
     </form>
@@ -44,10 +44,4 @@
         </table>
     {% endif %}
 </div>
-<script>
-    // clean URL before submitting the form... not best practices
-    function onSubmit (){
-        window.history.pushState({}, document.title, '/');
-    }
-</script>
 {% endblock %}

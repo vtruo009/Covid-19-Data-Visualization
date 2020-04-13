@@ -21,7 +21,7 @@ router.get('/search', (req, res) => {
                     cases: 130
                 },
                 {
-                    date: "04/02/20202",
+                    date: "04/02/202-",
                     cases: 133
                 },
                 {
