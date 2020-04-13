@@ -3,6 +3,9 @@ const swig = require('swig');
 const createError = require('http-errors');
 const app = express();
 const path = require('path');
+let bodyParser = require('body-parser');
+
+app.use(bodyParser.urlencoded({extended: true}));
 
 // Port to listen to
 const port = 5000;
