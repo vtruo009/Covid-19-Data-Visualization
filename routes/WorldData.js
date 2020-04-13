@@ -12,7 +12,7 @@ router.get('/search', (req, res) => {
     res.render(
         'WorldDATA/search.html', 
         {
-            TypeOfTable: "Number of Confirmed Cases",
+            TypeOfTable: req.query.TypeOfData,
             Country: req.query.Country,
             State: req.query.State,
             data: [
@@ -21,7 +21,7 @@ router.get('/search', (req, res) => {
                     cases: 130
                 },
                 {
-                    date: "04/02/202-",
+                    date: "04/02/2020",
                     cases: 133
                 },
                 {

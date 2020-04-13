@@ -12,13 +12,13 @@
             </div>
             <div class="col form-group">
                 <select name="TypeOfData" class="form-control" required>
-                    <option selected>Choose...</option>
+					<option value="" disabled selected hidden>Choose...</option>
                     <option value="1">Number of confirmed, deaths, and recovered for each country</option>
                     <option value="2">Number of cases per day</option>
                 </select>
             </div>
             <div class="col">
-                <button type="submit" class="btn btn-primary my-1"><i class="fas fa-search"></i></button>
+                <button onclick="cleanURL()" type="submit" class="btn btn-primary my-1"><i class="fas fa-search"></i></button>
             </div>
         </div>
     </form>

@@ -14,7 +14,7 @@ router.get('/search', (req, res) => {
         'USDATA/search.html', 
         {
             // response with dummy data
-            TypeOfTable: 'Number of Deaths',
+            TypeOfTable: req.query.TypeOfData,
             County: req.query.County,
             State: req.query.State,
             data: [
