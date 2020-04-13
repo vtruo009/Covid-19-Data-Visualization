@@ -10,6 +10,7 @@ const port = 5000;
 // Import routers
 const indexRouter = require('./routes/index');
 const USDataRouter = require('./routes/USData');
+const WorldDataRouter = require('./routes/WorldData');
 const AgeDataRouter = require('./routes/AgeData');
 const GenderDataRouter = require('./routes/GenderData');
 
@@ -28,6 +29,7 @@ app.use(express.json());
 // Set up routes
 app.use('/', indexRouter);
 app.use('/USData', USDataRouter);
+app.use('/WorldData', WorldDataRouter);
 app.use('/DataByAgeDistribution', AgeDataRouter);
 app.use('/DataByGender', GenderDataRouter);
 
