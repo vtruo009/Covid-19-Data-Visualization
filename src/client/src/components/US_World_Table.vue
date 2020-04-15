@@ -1,6 +1,6 @@
 <template>
   <div id="US_WORLD_Table">
-    <b-table striped hover :items="items"></b-table>   
+    <b-table striped hover :items="this.data"></b-table>   
   </div>
 </template>
 
@@ -13,10 +13,9 @@ export default {
     data() {
         return {
              items: [
-                { age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
-                { age: 21, first_name: 'Larsen', last_name: 'Shaw' },
-                { age: 89, first_name: 'Geneva', last_name: 'Wilson' },
-                { age: 38, first_name: 'Jami', last_name: 'Carney' }
+                { date: '01/02/2020', number: 40},
+                { date: '01/03/2020', number: 50},
+                { date: '01/04/2020', number: 60},              
             ]
         }
     },

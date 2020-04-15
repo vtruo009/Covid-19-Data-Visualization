@@ -11,9 +11,7 @@ router.get('/SelectFeature', (req, res) => {
     console.log(req.query);
     // Get respective data using the query parameters
     res.render(
-        'DataByGender/SelectFeature.html', 
         {
-            // response with dummy data
             TypeOfTable: req.query.TypeOfData,
             Gender: req.query.Gender,
             data: [

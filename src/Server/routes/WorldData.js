@@ -9,8 +9,7 @@ router.get('/', (req, res) => {
 router.get('/search', (req, res) => {
     console.log(req.query);
     // Get respective data using the query parameters
-    res.render(
-        'WorldDATA/search.html', 
+    res.send(
         {
             TypeOfTable: req.query.TypeOfData,
             Country: req.query.Country,
