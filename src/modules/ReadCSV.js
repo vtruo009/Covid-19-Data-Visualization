@@ -7,11 +7,15 @@ module.exports = {
         var lines = data.split("\n");
 
         var parsedCSV = [];
-        lines.forEach(line => splitLine(line));
+
+        for (var i = 1; i < lines.length - 1; ++i){
+            // We want to skip the very top row and the last row.
+            // The very top row is labels.
+            // The last row is empty.
+            splitLine(lines[i]);
+        }
 
         function splitLine (line){
-            if (line.length == 0) return;
-
             var csvArray = [];
             var curPos = -1;
             while (curPos < line.length){
