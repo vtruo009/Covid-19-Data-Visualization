@@ -1,10 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-// Renders search.html with passing any data
-router.get('/', (req, res) => {
-  res.render('USData/search.html')
-});
 
 // Get request. query paraemeters contain data from form. render search.html passing data
 router.get('/search', (req, res) => {

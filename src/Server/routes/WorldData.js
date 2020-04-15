@@ -1,10 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-// Renders search.html with passing any data
-router.get('/', (req, res) => {
-  res.render('WorldData/search.html')
-});
 
 router.get('/search', (req, res) => {
     console.log(req.query);
