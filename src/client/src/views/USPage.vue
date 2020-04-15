@@ -1,7 +1,6 @@
 <template>
   <div class="USPage">
     <InputForm
-      class="m-5 text-center"
       firstInputName= "County"
       secondInputName= "State"
       apiEndPoint= "/USData"

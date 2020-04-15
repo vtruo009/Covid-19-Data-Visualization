@@ -25,8 +25,8 @@ app.use(express.json());
 // Set up routes
 app.use('/USData', USDataRouter);
 app.use('/WorldData', WorldDataRouter);
-app.use('/DataByAgeDistribution', AgeDataRouter);
-app.use('/DataByGender', GenderDataRouter);
+app.use('/AgeData', AgeDataRouter);
+app.use('/GenderData', GenderDataRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

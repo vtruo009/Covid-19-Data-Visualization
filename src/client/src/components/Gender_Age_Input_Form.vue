@@ -1,15 +1,12 @@
 <template>
-  <div class="m-5 text-center" id="US_World_Input_Form">
+  <div class="m-5 text-center"  id="Gender_Age_Input_Form">
         <b-form @submit="displayData">
             <b-row>
                 <b-col>
-                    <b-input v-model="firstInput" v-bind:placeholder="this.firstInputName" required></b-input>
+                    <b-form-select v-model="dynamicOptionSelected" :options="dynamicOptions" required ></b-form-select>
                 </b-col>
                 <b-col>
-                    <b-input v-model="secondInput" v-bind:placeholder="this.secondInputName" required></b-input>
-                </b-col>
-                <b-col>
-                    <b-form-select v-model="optionSelected" :options="options" required ></b-form-select>
+                    <b-form-select v-model="TypeOfDataSelected" :options="TypeOfDataoptions" required ></b-form-select>
                 </b-col>
                 <b-col>
                     <b-button variant="primary" type="submit"><BIconSearch/></b-button>
@@ -24,35 +21,34 @@ import { BIconSearch, componentsPlugin } from 'bootstrap-vue';
 import Services from '../Services/Services';
 
 export default {
-    name: 'US_World_Input_Form',
+    name: 'Gender_Age_Input_Form',
     props: {
-        firstInputName: String,
-        secondInputName: String,
+        InputName: String,
+        dynamicOptions: Array,
         apiEndPoint: String
     },
     data() {
         return {
-            firstInput: null,
-            secondInput: null,
-            optionSelected: null,
-            options:[
+            // Selected by user
+            dynamicOptionSelected: null,
+            TypeOfDataSelected: null,
+
+            // Options for select
+            TypeOfDataoptions:[
                 { value: null, text: 'Please select an option', disabled: true},
-                { value: '1', text: 'Confirmed cases per day' },
-                { value: '2', text: 'Deaths per day' },
-                { value: '3', text: 'Recovered cases per day' }
+                { value: '1', text: 'Number of confirmed, deaths, and recovered for each country' },
+                { value: '2', text: 'Number of cases per day' },
             ]
         }
     },
     methods:{
         async displayData(e) {
             e.preventDefault();
-            console.log(this.firstInput, this.secondInput, this.optionSelected);
             Services.searchData({
                 apiEndPoint: this.apiEndPoint,
                 params: {
-                    [this.firstInputName] : this.firstInput,
-                    [this.secondInputName] : this.secondInput,
-                    TypeOfData: this.optionSelected
+                    [this.InputName] : this.dynamicOptionSelected,
+                    TypeOfData: this.TypeOfDataSelected
                 }
             })
             .then((response) => {

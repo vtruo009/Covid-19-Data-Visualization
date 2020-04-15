@@ -1,7 +1,6 @@
 <template>
   <div class="WorldPge">
     <InputForm
-      class="m-5 text-center"
       firstInputName= "State"
       secondInputName= "Country"
       apiEndPoint= "/WorldData"
