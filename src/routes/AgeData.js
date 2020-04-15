@@ -6,6 +6,15 @@ router.get('/', (req, res) => {
   res.render('DataByAgeDistribution/SelectFeature.html')
 });
 
+const readCSVModule = require('../modules/ReadCases.js');
+var allCases = readCSVModule.loadAllCases();
+// Now, allCases stores list of Cases read from the csv file.
+
+// Print first 10 countries.
+for (var i = 0; i < 10; ++i){
+    console.log(allCases[i].country);
+}
+
 // Get request. query paraemeters contain data from form. render search.html passing data
 router.get('/SelectFeature', (req, res) => {
     console.log(req.query);
