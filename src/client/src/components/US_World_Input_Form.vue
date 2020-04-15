@@ -20,7 +20,8 @@
 </template>
 
 <script>
-import { BIconSearch } from 'bootstrap-vue'
+import { BIconSearch, componentsPlugin } from 'bootstrap-vue';
+import Services from '../Services/Services';
 
 export default {
     name: 'US_World_Input_Form',
@@ -43,9 +44,28 @@ export default {
         }
     },
     methods:{
-        displayData(e) {
+        async displayData(e) {
             e.preventDefault();
             console.log(this.firstInput, this.secondInput, this.optionSelected);
+            Services.searchData({
+                apiEndPoint: this.apiEndPoint,
+                params: {
+                    [this.firstInputName] : this.firstInput,
+                    [this.secondInputName] : this.secondInput,
+                    optionSelected: this.optionSelected
+                }
+            })
+            .then((response) => {
+                console.log(response);
+                if (response.status == 200){
+                    console.log(response.data.data);
+                    this.$parent.tableData = response.data.data;
+                }
+                else {
+                    console.log("Error occurred");
+                }
+            })
+            .catch(error => console.log(error));            
         }
     },
     components:{

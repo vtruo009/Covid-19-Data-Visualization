@@ -14,10 +14,11 @@ const USDataRouter = require('./routes/USData');
 const WorldDataRouter = require('./routes/WorldData');
 const AgeDataRouter = require('./routes/AgeData');
 const GenderDataRouter = require('./routes/GenderData');
-
+const cors = require('cors');
 // Public assests set up
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(cors());
 // Used to recognize incoming requests as Json objects
 app.use(express.json());
 
