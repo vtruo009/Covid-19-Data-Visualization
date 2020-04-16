@@ -19,6 +19,47 @@ for (var i = 0; i < 10; ++i){
 router.get('/SelectFeature', (req, res) => {
     console.log(req.query);
     // Get respective data using the query parameters
+
+    //get age range input from user, 
+    var selectedRange = [];
+   // allCases.length(); size of array
+    if (req.query.AgeRange == 1){
+        for (var i = 0; i<allCases.length(); ++i){
+            if (allCases[i].age > 80){
+                selectedRange.append(allCases[i]);
+            }
+        }
+    }
+    if (req.query.AgeRange == 2){
+        for (var i = 0; i<allCases.length(); ++i){
+            if (allCases[i].age > 60 && allCases[i].age <= 80){
+                selectedRange.append(allCases[i]);
+            }
+        }
+    }
+    if (req.query.AgeRange == 3){
+        for (var i = 0; i<allCases.length(); ++i){
+            if (allCases[i].age > 40 && allCases[i].age <= 60){
+                selectedRange.append(allCases[i]);
+            }
+        }
+    }   
+    if (req.query.AgeRange == 4){
+        for (var i = 0; i<allCases.length(); ++i){
+            if (allCases[i].age > 20 && allCases[i].age <= 40){
+                selectedRange.append(allCases[i]);
+            }
+        }
+    }    
+    if (req.query.AgeRange == 5){
+        for (var i = 0; i<allCases.length(); ++i){
+            if (allCases[i].age <= 20){
+                selectedRange.append(allCases[i]);
+            }
+        }
+    }
+    console.log(selectedRange);
+
     res.render(
         'DataByAgeDistribution/SelectFeature.html', 
         {
