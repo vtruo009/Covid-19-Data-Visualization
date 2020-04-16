@@ -21,44 +21,45 @@ router.get('/SelectFeature', (req, res) => {
     // Get respective data using the query parameters
 
     //get age range input from user, 
+    //console.log("hi");
     var selectedRange = [];
-   // allCases.length(); size of array
+   // allCases.length; size of array
     if (req.query.AgeRange == 1){
-        for (var i = 0; i<allCases.length(); ++i){
+        for (var i = 0; i<allCases.length; ++i){
             if (allCases[i].age > 80){
-                selectedRange.append(allCases[i]);
+                selectedRange.push(allCases[i]);
             }
         }
     }
     if (req.query.AgeRange == 2){
-        for (var i = 0; i<allCases.length(); ++i){
+        for (var i = 0; i<allCases.length; ++i){
             if (allCases[i].age > 60 && allCases[i].age <= 80){
-                selectedRange.append(allCases[i]);
+                selectedRange.push(allCases[i]);
             }
         }
     }
     if (req.query.AgeRange == 3){
-        for (var i = 0; i<allCases.length(); ++i){
+        for (var i = 0; i<allCases.length; ++i){
             if (allCases[i].age > 40 && allCases[i].age <= 60){
-                selectedRange.append(allCases[i]);
+                selectedRange.push(allCases[i]);
             }
         }
     }   
     if (req.query.AgeRange == 4){
-        for (var i = 0; i<allCases.length(); ++i){
+        for (var i = 0; i<allCases.length; ++i){
             if (allCases[i].age > 20 && allCases[i].age <= 40){
-                selectedRange.append(allCases[i]);
+                selectedRange.push(allCases[i]);
             }
         }
     }    
     if (req.query.AgeRange == 5){
-        for (var i = 0; i<allCases.length(); ++i){
+        for (var i = 0; i<allCases.length; ++i){
             if (allCases[i].age <= 20){
-                selectedRange.append(allCases[i]);
+                selectedRange.push(allCases[i]);
             }
         }
     }
-    console.log(selectedRange);
+    //console.log(selectedRange);
 
     res.render(
         'DataByAgeDistribution/SelectFeature.html', 
