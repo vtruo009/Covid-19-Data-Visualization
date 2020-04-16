@@ -65,6 +65,9 @@ module.exports = {
             var state = parsedDeathData[i][6];
             var county = parsedDeathData[i][5];
 
+            if (!(county + "," + state in statesDict))
+                statesDict[county + "," + state] = new classModule.USPlace(state, county);
+
             statesDict[county + "," + state].addNumConfirmed(
                 confirmedDates, parsedConfirmedData[i].slice(numNonDateColumn));
         }
@@ -124,8 +127,11 @@ module.exports = {
 
         // We skip the first row. This is a label.
         for (var i = 1; i < parsedConfirmedData.length; ++i){
-            var state = parsedDeathData[i][0];
-            var country = parsedDeathData[i][1];
+            var state = parsedConfirmedData[i][0];
+            var country = parsedConfirmedData[i][1];
+
+            if (!(state + "," + country in statesDict))
+                statesDict[state + "," + country] = new classModule.WorldPlace(country, state);
 
             statesDict[state + "," + country].addNumConfirmed(
                 confirmedDates, parsedConfirmedData[i].slice(numNonDateColumn));
@@ -133,19 +139,21 @@ module.exports = {
 
         // Organize recovered data.
         let parsedRecoveredData = readCSVModule.readCSV('../src/database/time_series_covid_19_recovered.csv');
-        
         numNonDateColumn = 4;
 
         var recoveredDates = [];
         var recoveredDatesDateLabels = parsedRecoveredData[0].slice(numNonDateColumn);
-        recovereddDatesDateLabels.forEach(date => recoveredDates.push(helperModule.stringToDate(date)));
+        recoveredDatesDateLabels.forEach(date => recoveredDates.push(helperModule.stringToDate(date)));
 
         // We skip the first row. This is a label.
-        for (var i = 1; i < parsedConfirmedData.length; ++i){
-            var state = parsedDeathData[i][0];
-            var country = parsedDeathData[i][1];
+        for (var i = 1; i < parsedRecoveredData.length; ++i){
+            var state = parsedRecoveredData[i][0];
+            var country = parsedRecoveredData[i][1];
+    
+            if (!(state + "," + country in statesDict))
+                statesDict[state + "," + country] = new classModule.WorldPlace(country, state);
 
-            statesDict[state + "," + country].addNumConfirmed(
+            statesDict[state + "," + country].addNumRecovered(
                 recoveredDates, parsedRecoveredData[i].slice(numNonDateColumn));
         }
 

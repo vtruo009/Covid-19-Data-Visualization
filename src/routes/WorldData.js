@@ -6,6 +6,16 @@ router.get('/', (req, res) => {
   res.render('WorldData/search.html')
 });
 
+const readCSVModule = require('../modules/ReadCases.js');
+var WorldData = readCSVModule.loadWorldData();
+// Now, WorldData stores list of WorldPlace read from the csv file.
+
+// Print number of recovered cases for each day for the first country.
+console.log(WorldData[0].state + ", " + WorldData[0].country);
+for(var date in WorldData[0].numRecovered) {
+    console.log(date + ": " + WorldData[0].numDeaths[date]);
+}
+
 router.get('/search', (req, res) => {
     console.log(req.query);
     // Get respective data using the query parameters

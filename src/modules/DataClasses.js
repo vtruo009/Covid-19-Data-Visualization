@@ -54,6 +54,7 @@ module.exports = {
 
             // Dictionary of { <Date, number of Confirmed cases> }
             this.numConfirmed = {};
+
             // Dictionary of { <Date, number of Recovered cases> }
             this.numRecovered = {};
         }
