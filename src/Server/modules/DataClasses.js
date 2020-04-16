@@ -5,7 +5,6 @@ module.exports = {
 
             const helperModule = require('../modules/BasicHelpers.js');
             this.reportingDate = helperModule.stringToDate(line[2]);
-
             this.country = line[6];
             this.gender = line[7];
             this.age = line[8];

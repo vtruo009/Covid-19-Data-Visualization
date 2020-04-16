@@ -1,168 +1,217 @@
 module.exports = {
-    loadAllCases: function(){
-        // Read values from the CSV, organizes the data into an array of "Case", and returns the array.
+	loadAllCases: function () {
+		// Read values from the CSV, organizes the data into an array of "Case", and returns the array.
 
-        const readCSVModule = require('../modules/ReadCSV.js');
-        let parsedCSV = readCSVModule.readCSV('../Server/database/COVID19_line_list_data.csv');
-    
-        var allCases = [];
+		const readCSVModule = require('../modules/ReadCSV.js');
+		let parsedCSV = readCSVModule.readCSV(
+			'../Server/database/COVID19_line_list_data.csv'
+		);
 
-        const caseClassModule = require('../modules/DataClasses.js');
-        for (var i = 1; i < parsedCSV.length; ++i){
-            // We want to skip the first row because it is labels.
-            allCases.push(new caseClassModule.Case(parsedCSV[i]));
-        }
+		var allCases = [];
 
-        return allCases;
-    },
+		const caseClassModule = require('../modules/DataClasses.js');
+		for (var i = 1; i < parsedCSV.length; ++i) {
+			// We want to skip the first row because it is labels.
+			allCases.push(new caseClassModule.Case(parsedCSV[i]));
+		}
 
-    loadUSData: function(){
-        // Read values from the CSV, organizes the data into an array of "USPlace" and returns the array.
+		return allCases;
+	},
 
-        // Modules
-        const readCSVModule = require('../modules/ReadCSV.js');
-        const classModule = require('../modules/DataClasses.js');
-        const helperModule = require('../modules/BasicHelpers.js');
+	loadUSData: function () {
+		// Read values from the CSV, organizes the data into an array of "USPlace" and returns the array.
 
-        // The US data csv has columns { /* Country information */, /* Number of deaths for each date */}
-        // numNonDateColumn is the number of columns that contains the country information.
-        // In other words, number of columns we need to skip when reading the values for each dates.
-        var numNonDateColumn;
+		// Modules
+		const readCSVModule = require('../modules/ReadCSV.js');
+		const classModule = require('../modules/DataClasses.js');
+		const helperModule = require('../modules/BasicHelpers.js');
 
-        // Contains { <"COUNTY,STATE" (string), corresponding USPlace object> }
-        var statesDict = {};
+		// The US data csv has columns { /* Country information */, /* Number of deaths for each date */}
+		// numNonDateColumn is the number of columns that contains the country information.
+		// In other words, number of columns we need to skip when reading the values for each dates.
+		var numNonDateColumn;
 
-        // Load death data
-        let parsedDeathData = readCSVModule.readCSV('../src/database/time_series_covid_19_deaths_US.csv');
-   
-        numNonDateColumn = 12;
+		// Contains { <"COUNTY,STATE" (string), corresponding USPlace object> }
+		var statesDict = {};
 
-        var deathDates = []; // Array of Date objects. Contains all dates that we have data for.
-        var deathDateLabels = parsedDeathData[0].slice(numNonDateColumn);
-        deathDateLabels.forEach(date => deathDates.push(helperModule.stringToDate(date)));
+		// Load death data
+		let parsedDeathData = readCSVModule.readCSV(
+			'../Server/database/time_series_covid_19_deaths_US.csv'
+		);
 
-        // We skip the first row. This is a label.
-        for (var i = 1; i < parsedDeathData.length; ++i){
-            var state = parsedDeathData[i][6];
-            var county = parsedDeathData[i][5];
+		numNonDateColumn = 12;
 
-            var newState = new classModule.USPlace(state, county);
-            newState.addNumDeaths(deathDates, parsedDeathData[i].slice(numNonDateColumn));
-            statesDict[county + "," + state] = newState;
-        }
+		var deathDates = []; // Array of Date objects. Contains all dates that we have data for.
+		var deathDateLabels = parsedDeathData[0].slice(numNonDateColumn);
+		deathDateLabels.forEach((date) =>
+			deathDates.push(helperModule.stringToDate(date))
+		);
 
-        // Organize confirmed data.
-        let parsedConfirmedData = readCSVModule.readCSV('../src/database/time_series_covid_19_confirmed_US.csv');
-        
-        numNonDateColumn = 11;
+		// We skip the first row. This is a label.
+		for (var i = 1; i < parsedDeathData.length; ++i) {
+			var state = parsedDeathData[i][6];
+			var county = parsedDeathData[i][5];
 
-        var confirmedDates = [];
-        var confirmedDatesDateLabels = parsedConfirmedData[0].slice(numNonDateColumn);
-        confirmedDatesDateLabels.forEach(date => confirmedDates.push(helperModule.stringToDate(date)));
+			var newState = new classModule.USPlace(state, county);
+			newState.addNumDeaths(
+				deathDates,
+				parsedDeathData[i].slice(numNonDateColumn)
+			);
+			statesDict[county + ',' + state] = newState;
+		}
 
-        // We skip the first row. This is a label.
-        for (var i = 1; i < parsedConfirmedData.length; ++i){
-            var state = parsedDeathData[i][6];
-            var county = parsedDeathData[i][5];
+		// Organize confirmed data.
+		let parsedConfirmedData = readCSVModule.readCSV(
+			'../Server/database/time_series_covid_19_confirmed_US.csv'
+		);
 
-            if (!(county + "," + state in statesDict))
-                statesDict[county + "," + state] = new classModule.USPlace(state, county);
+		numNonDateColumn = 11;
 
-            statesDict[county + "," + state].addNumConfirmed(
-                confirmedDates, parsedConfirmedData[i].slice(numNonDateColumn));
-        }
+		var confirmedDates = [];
+		var confirmedDatesDateLabels = parsedConfirmedData[0].slice(
+			numNonDateColumn
+		);
+		confirmedDatesDateLabels.forEach((date) =>
+			confirmedDates.push(helperModule.stringToDate(date))
+		);
 
-        // Copy USPlace objects from dictionary to an array.
-        var allStates = [];
-        for(var key in statesDict) {
-            allStates.push(statesDict[key]);
-        }
+		// We skip the first row. This is a label.
+		for (var i = 1; i < parsedConfirmedData.length; ++i) {
+			var state = parsedDeathData[i][6];
+			var county = parsedDeathData[i][5];
 
-        return allStates;
-    },
+			if (!(county + ',' + state in statesDict))
+				statesDict[county + ',' + state] = new classModule.USPlace(
+					state,
+					county
+				);
 
-    loadWorldData: function(){
-        // Read values from the CSV, organizes the data into an array of "WorldPlace" and returns the array.
+			statesDict[county + ',' + state].addNumConfirmed(
+				confirmedDates,
+				parsedConfirmedData[i].slice(numNonDateColumn)
+			);
+		}
 
-        // Modules
-        const readCSVModule = require('../modules/ReadCSV.js');
-        const classModule = require('../modules/DataClasses.js');
-        const helperModule = require('../modules/BasicHelpers.js');
+		// Copy USPlace objects from dictionary to an array.
+		var allStates = [];
+		for (var key in statesDict) {
+			allStates.push(statesDict[key]);
+		}
 
-        // The World data csv has columns { /* Country information */, /* Number of deaths for each date */}
-        // numNonDateColumn is the number of columns that contains the country information.
-        // In other words, number of columns we need to skip when reading the values for each dates.
-        var numNonDateColumn;
+		return allStates;
+	},
 
-        // Contains { <"STATE,COUNTRY" (string), corresponding WorldPlace object> }
-        var statesDict = {};
+	loadWorldData: function () {
+		// Read values from the CSV, organizes the data into an array of "WorldPlace" and returns the array.
 
-        // Load death data
-        let parsedDeathData = readCSVModule.readCSV('../src/database/time_series_covid_19_deaths.csv');
-   
-        numNonDateColumn = 4;
+		// Modules
+		const readCSVModule = require('../modules/ReadCSV.js');
+		const classModule = require('../modules/DataClasses.js');
+		const helperModule = require('../modules/BasicHelpers.js');
 
-        var deathDates = []; // Array of Date objects. Contains all dates that we have data for.
-        var deathDateLabels = parsedDeathData[0].slice(numNonDateColumn);
-        deathDateLabels.forEach(date => deathDates.push(helperModule.stringToDate(date)));
+		// The World data csv has columns { /* Country information */, /* Number of deaths for each date */}
+		// numNonDateColumn is the number of columns that contains the country information.
+		// In other words, number of columns we need to skip when reading the values for each dates.
+		var numNonDateColumn;
 
-        // We skip the first row. This is a label.
-        for (var i = 1; i < parsedDeathData.length; ++i){
-            var state = parsedDeathData[i][0];
-            var country = parsedDeathData[i][1];
+		// Contains { <"STATE,COUNTRY" (string), corresponding WorldPlace object> }
+		var statesDict = {};
 
-            var newState = new classModule.WorldPlace(country, state);
-            newState.addNumDeaths(deathDates, parsedDeathData[i].slice(numNonDateColumn));
-            statesDict[state + "," + country] = newState;
-        }
+		// Load death data
+		let parsedDeathData = readCSVModule.readCSV(
+			'../Server/database/time_series_covid_19_deaths.csv'
+		);
 
-        // Organize confirmed data.
-        let parsedConfirmedData = readCSVModule.readCSV('../src/database/time_series_covid_19_confirmed.csv');
-        
-        numNonDateColumn = 4;
+		numNonDateColumn = 4;
 
-        var confirmedDates = [];
-        var confirmedDatesDateLabels = parsedConfirmedData[0].slice(numNonDateColumn);
-        confirmedDatesDateLabels.forEach(date => confirmedDates.push(helperModule.stringToDate(date)));
+		var deathDates = []; // Array of Date objects. Contains all dates that we have data for.
+		var deathDateLabels = parsedDeathData[0].slice(numNonDateColumn);
+		deathDateLabels.forEach((date) =>
+			deathDates.push(helperModule.stringToDate(date))
+		);
 
-        // We skip the first row. This is a label.
-        for (var i = 1; i < parsedConfirmedData.length; ++i){
-            var state = parsedConfirmedData[i][0];
-            var country = parsedConfirmedData[i][1];
+		// We skip the first row. This is a label.
+		for (var i = 1; i < parsedDeathData.length; ++i) {
+			var state = parsedDeathData[i][0];
+			var country = parsedDeathData[i][1];
 
-            if (!(state + "," + country in statesDict))
-                statesDict[state + "," + country] = new classModule.WorldPlace(country, state);
+			var newState = new classModule.WorldPlace(country, state);
+			newState.addNumDeaths(
+				deathDates,
+				parsedDeathData[i].slice(numNonDateColumn)
+			);
+			statesDict[state + ',' + country] = newState;
+		}
 
-            statesDict[state + "," + country].addNumConfirmed(
-                confirmedDates, parsedConfirmedData[i].slice(numNonDateColumn));
-        }
+		// Organize confirmed data.
+		let parsedConfirmedData = readCSVModule.readCSV(
+			'../Server/database/time_series_covid_19_confirmed.csv'
+		);
 
-        // Organize recovered data.
-        let parsedRecoveredData = readCSVModule.readCSV('../src/database/time_series_covid_19_recovered.csv');
-        numNonDateColumn = 4;
+		numNonDateColumn = 4;
 
-        var recoveredDates = [];
-        var recoveredDatesDateLabels = parsedRecoveredData[0].slice(numNonDateColumn);
-        recoveredDatesDateLabels.forEach(date => recoveredDates.push(helperModule.stringToDate(date)));
+		var confirmedDates = [];
+		var confirmedDatesDateLabels = parsedConfirmedData[0].slice(
+			numNonDateColumn
+		);
+		confirmedDatesDateLabels.forEach((date) =>
+			confirmedDates.push(helperModule.stringToDate(date))
+		);
 
-        // We skip the first row. This is a label.
-        for (var i = 1; i < parsedRecoveredData.length; ++i){
-            var state = parsedRecoveredData[i][0];
-            var country = parsedRecoveredData[i][1];
-    
-            if (!(state + "," + country in statesDict))
-                statesDict[state + "," + country] = new classModule.WorldPlace(country, state);
+		// We skip the first row. This is a label.
+		for (var i = 1; i < parsedConfirmedData.length; ++i) {
+			var state = parsedConfirmedData[i][0];
+			var country = parsedConfirmedData[i][1];
 
-            statesDict[state + "," + country].addNumRecovered(
-                recoveredDates, parsedRecoveredData[i].slice(numNonDateColumn));
-        }
+			if (!(state + ',' + country in statesDict))
+				statesDict[state + ',' + country] = new classModule.WorldPlace(
+					country,
+					state
+				);
 
-        // Copy USPlace objects from dictionary to an array.
-        var allStates = [];
-        for(var key in statesDict) {
-            allStates.push(statesDict[key]);
-        }
+			statesDict[state + ',' + country].addNumConfirmed(
+				confirmedDates,
+				parsedConfirmedData[i].slice(numNonDateColumn)
+			);
+		}
 
-        return allStates;
-    }
-}
+		// Organize recovered data.
+		let parsedRecoveredData = readCSVModule.readCSV(
+			'../Server/database/time_series_covid_19_recovered.csv'
+		);
+		numNonDateColumn = 4;
+
+		var recoveredDates = [];
+		var recoveredDatesDateLabels = parsedRecoveredData[0].slice(
+			numNonDateColumn
+		);
+		recoveredDatesDateLabels.forEach((date) =>
+			recoveredDates.push(helperModule.stringToDate(date))
+		);
+
+		// We skip the first row. This is a label.
+		for (var i = 1; i < parsedRecoveredData.length; ++i) {
+			var state = parsedRecoveredData[i][0];
+			var country = parsedRecoveredData[i][1];
+
+			if (!(state + ',' + country in statesDict))
+				statesDict[state + ',' + country] = new classModule.WorldPlace(
+					country,
+					state
+				);
+
+			statesDict[state + ',' + country].addNumRecovered(
+				recoveredDates,
+				parsedRecoveredData[i].slice(numNonDateColumn)
+			);
+		}
+
+		// Copy USPlace objects from dictionary to an array.
+		var allStates = [];
+		for (var key in statesDict) {
+			allStates.push(statesDict[key]);
+		}
+
+		return allStates;
+	},
+};
