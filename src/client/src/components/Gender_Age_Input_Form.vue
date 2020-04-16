@@ -9,7 +9,7 @@
                     <b-form-select v-model="TypeOfDataSelected" :options="TypeOfDataoptions" required ></b-form-select>
                 </b-col>
                 <b-col>
-                    <b-button style="margin-right:160px" variant="primary" type="submit"><BIconSearch/></b-button>
+                    <b-button style="margin-right:160px" variant="primary" type="submit"><font-awesome-icon :icon="['fas', 'search']"/></b-button>
                 </b-col>
             </b-row>
         </b-form>
@@ -17,8 +17,11 @@
 </template>
 
 <script>
-import { BIconSearch, componentsPlugin } from 'bootstrap-vue';
 import Services from '../Services/Services';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
+ 
+library.add(faSearch)
 
 export default {
     name: 'Gender_Age_Input_Form',
@@ -70,7 +73,7 @@ export default {
         }
     },
     components:{
-        BIconSearch
+        
     }  
 }
 </script>

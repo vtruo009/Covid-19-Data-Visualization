@@ -12,7 +12,7 @@
                     <b-form-select v-model="optionSelected" :options="options" required ></b-form-select>
                 </b-col>
                 <b-col>
-                    <b-button variant="primary" type="submit"><BIconSearch/></b-button>
+                    <b-button variant="primary" type="submit"><font-awesome-icon :icon="['fas', 'search']"/></b-button>
                 </b-col>
             </b-row>
 
@@ -22,8 +22,11 @@
 </template>
 
 <script>
-import { BIconSearch, componentsPlugin } from 'bootstrap-vue';
 import Services from '../Services/Services';
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
+ 
+library.add(faSearch)
 
 export default {
     name: 'US_World_Input_Form',
@@ -74,7 +77,6 @@ export default {
         }
     },
     components:{
-        BIconSearch
     }  
 }
 </script>
