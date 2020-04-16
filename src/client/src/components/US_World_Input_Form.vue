@@ -18,8 +18,8 @@
 				</b-col>
 				<b-col>
 					<b-form-select
-						v-model="optionSelected"
-						:options="options"
+						v-model="TypeOfDataSelected"
+						:options="TypeOfDataoptions"
 						required
 					></b-form-select>
 				</b-col>
@@ -51,8 +51,8 @@ export default {
 		return {
 			firstInput: null,
 			secondInput: null,
-			optionSelected: null,
-			options: [
+			TypeOfDataSelected: null,
+			TypeOfDataoptions: [
 				{ value: null, text: 'Please select an option', disabled: true },
 				{ value: '1', text: 'Confirmed cases per day' },
 				{ value: '2', text: 'Deaths per day' },
@@ -71,7 +71,7 @@ export default {
 				params: {
 					[this.firstInputName]: this.firstInput,
 					[this.secondInputName]: this.secondInput,
-					TypeOfData: this.optionSelected,
+					TypeOfData: this.TypeOfDataSelected,
 				},
 			})
 				.then((response) => {
