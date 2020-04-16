@@ -42,5 +42,45 @@ module.exports = {
                 this.numConfirmed[dates[i]] = values[i];
             }
         }
+    },
+
+    WorldPlace : class{
+        constructor(country, state) {
+            this.country = country;
+            this.state = state;
+
+            // Dictionary of { <Date, number of Deaths> }
+            this.numDeaths = {};
+
+            // Dictionary of { <Date, number of Confirmed cases> }
+            this.numConfirmed = {};
+
+            // Dictionary of { <Date, number of Recovered cases> }
+            this.numRecovered = {};
+        }
+        addNumDeaths(dates, values){
+            // dates is a list of Date {1/20/20, 1/21/20, 1/22/20, ...}
+            // values contains the number of people died on the corresponding date.
+
+            for (var i = 0; i < dates.length; ++i){
+                this.numDeaths[dates[i]] = values[i];
+            }
+        }
+        addNumConfirmed(dates, values){
+            // dates is a list of Date {1/20/20, 1/21/20, 1/22/20, ...}
+            // values contains the number of confirmed cases on the corresponding date.
+
+            for (var i = 0; i < dates.length; ++i){
+                this.numConfirmed[dates[i]] = values[i];
+            }
+        }
+        addNumRecovered(dates, values){
+            // dates is a list of Date {1/20/20, 1/21/20, 1/22/20, ...}
+            // values contains the number of recovered cases on the corresponding date.
+
+            for (var i = 0; i < dates.length; ++i){
+                this.numRecovered[dates[i]] = values[i];
+            }
+        }
     }
 }
