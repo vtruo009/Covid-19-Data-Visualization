@@ -3,9 +3,8 @@ const createError = require('http-errors');
 const path = require('path');
 const cors = require('cors');
 const app = express();
-const morgan = require('morgan')
+const morgan = require('morgan');
 let bodyParser = require('body-parser');
-
 
 // Port to listen to
 const port = 5000;
@@ -19,7 +18,7 @@ const GenderDataRouter = require('./routes/GenderData');
 // App set up
 
 // Used to make server decode data from body of requests
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Public assests set up
 app.use(express.static(path.join(__dirname, 'public')));
@@ -40,13 +39,13 @@ app.use('/AgeData', AgeDataRouter);
 app.use('/GenderData', GenderDataRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.use(function (req, res, next) {
+	next(createError(404));
 });
 
 // Start listening
 app.listen(port, () => {
-  console.log(`Sever is running on port: ${port}`);
-})
+	console.log(`Sever is running on port: ${port}`);
+});
 
 module.exports = app;
