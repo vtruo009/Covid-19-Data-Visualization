@@ -60,6 +60,7 @@ router.get('/SelectFeature', (req, res) => {
         }
     }
     //console.log(selectedRange);
+    // From here the selected range of age data is stored in selectedRange[] (array of Cases) now.
 
     res.render(
         'DataByAgeDistribution/SelectFeature.html', 
