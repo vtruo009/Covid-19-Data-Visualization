@@ -2,6 +2,17 @@ var express = require('express');
 var router = express.Router();
 
 
+const readCSVModule = require('../modules/ReadCases.js');
+var USData = readCSVModule.loadUSData();
+// Now, USData stores list of USPlace read from the csv file.
+
+// Print number of confirmed cases for each day for the second country.
+for (var i = 1; i < 2; ++i){
+    for(var date in USData[i].numConfirmed) {
+        console.log(date + ": " + USData[i].numConfirmed[date]);
+    }
+}
+
 // Get request. query paraemeters contain data from form. render search.html passing data
 router.get('/search', (req, res) => {
     console.log(req.query);
