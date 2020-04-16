@@ -21,7 +21,7 @@
     npm install
 ```
 
-4. Go back to the root directory and run the entire project, both client and server. Note both server will be running concurrently
+4. Go back to the root directory and run the entire project, both client and server. Note both client and server will be running concurrently
 
 ```
     npm start
