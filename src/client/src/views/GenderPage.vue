@@ -1,11 +1,13 @@
 <template>
   <div class="GenderPage">
-    <InputForm
-      InputName="Gender"
-      v-bind:dynamicOptions="genderOptions"
-      apiEndPoint="/GenderData"
-    />
-    <Table v-bind:data="tableData"/>
+    <b-overlay v-bind:show="show" rounded="sm">
+      <InputForm
+        InputName="Gender"
+        v-bind:dynamicOptions="genderOptions"
+        apiEndPoint="/GenderData"
+      />
+      <Table v-bind:data="tableData"/>
+    </b-overlay>
   </div>
 </template>
 
@@ -25,7 +27,8 @@ export default {
         { value: null, text: 'Please select a gender', disabled: true},
         { value: '1', text: 'Male' },
         { value: '2', text: 'Female' },
-      ]
+      ],
+      show: false
     }
   }
 }

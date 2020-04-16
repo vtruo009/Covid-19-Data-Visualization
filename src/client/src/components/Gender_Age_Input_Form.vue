@@ -9,7 +9,7 @@
                     <b-form-select v-model="TypeOfDataSelected" :options="TypeOfDataoptions" required ></b-form-select>
                 </b-col>
                 <b-col>
-                    <b-button variant="primary" type="submit"><BIconSearch/></b-button>
+                    <b-button style="margin-right:160px" variant="primary" type="submit"><BIconSearch/></b-button>
                 </b-col>
             </b-row>
         </b-form>
@@ -43,6 +43,9 @@ export default {
     },
     methods:{
         async displayData(e) {
+            // Turns on loading spinner
+            this.$parent.$parent.show = true;
+            // Send search request to backend
             e.preventDefault();
             Services.searchData({
                 apiEndPoint: this.apiEndPoint,
@@ -54,14 +57,16 @@ export default {
             .then((response) => {
                 console.log(response);
                 if (response.status == 200){
-                    console.log(response.data.data);
-                    this.$parent.tableData = response.data.data;
+                    // Populates tabledata in grandparent component
+                    this.$parent.$parent.tableData = response.data.data;
                 }
                 else {
                     console.log("Error occurred");
                 }
             })
-            .catch(error => console.log(error));            
+            .catch(error => console.log(error));      
+             // Turns off loading spinner   
+            this.$parent.$parent.show = false;      
         }
     },
     components:{

@@ -15,7 +15,9 @@
                     <b-button variant="primary" type="submit"><BIconSearch/></b-button>
                 </b-col>
             </b-row>
+
         </b-form>
+        
     </div>
 </template>
 
@@ -28,7 +30,7 @@ export default {
     props: {
         firstInputName: String,
         secondInputName: String,
-        apiEndPoint: String
+        apiEndPoint: String,
     },
     data() {
         return {
@@ -44,9 +46,11 @@ export default {
         }
     },
     methods:{
-        async displayData(e) {
+        displayData(e) {
             e.preventDefault();
-            console.log(this.firstInput, this.secondInput, this.optionSelected);
+            // Turns on loading spinner
+            this.$parent.$parent.show = true;
+            // Send search request to backend
             Services.searchData({
                 apiEndPoint: this.apiEndPoint,
                 params: {
@@ -56,16 +60,17 @@ export default {
                 }
             })
             .then((response) => {
-                console.log(response);
                 if (response.status == 200){
-                    console.log(response.data.data);
-                    this.$parent.tableData = response.data.data;
-                }
+                    // Populates tabledata in grandparent component
+                    this.$parent.$parent.tableData = response.data.data;
+                }   
                 else {
                     console.log("Error occurred");
                 }
             })
-            .catch(error => console.log(error));            
+            .catch(error => console.log(error));
+            // Turns off loading spinner   
+            this.$parent.$parent.show = false;
         }
     },
     components:{

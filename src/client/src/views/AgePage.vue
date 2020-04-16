@@ -1,11 +1,13 @@
 <template>
   <div class="AgePage">
-    <InputForm
-      InputName="AgeRange"
-      v-bind:dynamicOptions="ageOptions"
-      apiEndPoint="/AgeData"
-    />
-    <Table v-bind:data="tableData"/>
+    <b-overlay v-bind:show="show" rounded="sm">
+      <InputForm
+        InputName="AgeRange"
+        v-bind:dynamicOptions="ageOptions"
+        apiEndPoint="/AgeData"
+      />
+      <Table v-bind:data="tableData"/>
+    </b-overlay>
   </div>
 </template>
 
@@ -28,7 +30,8 @@ export default {
         { value: '3', text: '40 - 60' },
         { value: '4', text: '20 - 40' },
         { value: '5', text: '0 - 20' },
-      ]
+      ],
+      show: false
     }
   }
 }

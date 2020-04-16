@@ -1,11 +1,13 @@
 <template>
   <div class="USPage">
-    <InputForm
-      firstInputName= "County"
-      secondInputName= "State"
-      apiEndPoint= "/USData"
-    />
-    <Table v-bind:data="tableData"/>
+    <b-overlay v-bind:show="show" rounded="sm">
+      <InputForm
+        firstInputName= "County"
+        secondInputName= "State"
+        apiEndPoint= "/USData"
+      />
+      <Table v-bind:data="tableData"/>
+    </b-overlay>
   </div>
 </template>
 
@@ -17,11 +19,11 @@ export default {
   name:'USPage',
   data() {
     return {
-      tableData: null
+      tableData: null,
+      show: false,
     }
   },
   methods:{
-
   },
   components: {
     InputForm,

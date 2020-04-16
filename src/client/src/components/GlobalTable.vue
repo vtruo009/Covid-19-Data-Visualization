@@ -1,9 +1,13 @@
 <template>
-  <b-table
-      dark
-      striped
-      hover
-      :items="this.data"/>
+    <div>
+        <b-table
+            dark
+            striped
+            hover
+            :items="this.data">
+        </b-table>
+    </div>
+   
 </template>
 
 <script>
@@ -16,5 +20,5 @@ export default {
 </script>
 
 <style>
-
+   
 </style>

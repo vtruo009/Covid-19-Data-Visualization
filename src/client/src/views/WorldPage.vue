@@ -1,11 +1,13 @@
 <template>
   <div class="WorldPge">
-    <InputForm
-      firstInputName= "State"
-      secondInputName= "Country"
-      apiEndPoint= "/WorldData"
-    />
-    <Table v-bind:data="tableData"/>
+    <b-overlay v-bind:show="show" rounded="sm">
+      <InputForm
+        firstInputName= "State"
+        secondInputName= "Country"
+        apiEndPoint= "/WorldData"
+      />
+      <Table v-bind:data="tableData"/>
+    </b-overlay>
   </div>
 </template>
 
@@ -17,7 +19,8 @@ export default {
   name:'WorldPage',
   data() {
     return {
-      tableData: null
+      tableData: null,
+      show: false
     }
   },
   methods:{
