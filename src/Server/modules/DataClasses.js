@@ -1,13 +1,13 @@
 module.exports = {
     Case : class{
         constructor(line) {
-            this.id = line[0];
+            this.id = parseInt(line[0]);
 
             const helperModule = require('../modules/BasicHelpers.js');
             this.reportingDate = helperModule.stringToDate(line[2]);
             this.country = line[6];
             this.gender = line[7];
-            this.age = line[8];
+            this.age = parseInt(line[8]);
 
             this.dead = (line[16] == '1');
             this.recovered = (line[17] == '1');
@@ -30,7 +30,7 @@ module.exports = {
             // values contains the number of people died on the corresponding date.
 
             for (var i = 0; i < dates.length; ++i){
-                this.numDeaths[dates[i]] = values[i];
+                this.numDeaths[dates[i]] =  parseInt(values[i]);
             }
         }
         addNumConfirmed(dates, values){
@@ -38,7 +38,7 @@ module.exports = {
             // values contains the number of confirmed cases on the corresponding date.
 
             for (var i = 0; i < dates.length; ++i){
-                this.numConfirmed[dates[i]] = values[i];
+                this.numConfirmed[dates[i]] =  parseInt(values[i]);
             }
         }
     },
@@ -62,7 +62,7 @@ module.exports = {
             // values contains the number of people died on the corresponding date.
 
             for (var i = 0; i < dates.length; ++i){
-                this.numDeaths[dates[i]] = values[i];
+                this.numDeaths[dates[i]] =  parseInt(values[i]);
             }
         }
         addNumConfirmed(dates, values){
@@ -70,7 +70,7 @@ module.exports = {
             // values contains the number of confirmed cases on the corresponding date.
 
             for (var i = 0; i < dates.length; ++i){
-                this.numConfirmed[dates[i]] = values[i];
+                this.numConfirmed[dates[i]] =  parseInt(values[i]);
             }
         }
         addNumRecovered(dates, values){
@@ -78,7 +78,7 @@ module.exports = {
             // values contains the number of recovered cases on the corresponding date.
 
             for (var i = 0; i < dates.length; ++i){
-                this.numRecovered[dates[i]] = values[i];
+                this.numRecovered[dates[i]] =  parseInt(values[i]);
             }
         }
     }
