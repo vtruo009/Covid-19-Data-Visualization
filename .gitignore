@@ -1,6 +1,6 @@
 bin
 package-lock.json
-node_modules
+node_modules/
 
 # Visual Studio auto generated files
 .vscode

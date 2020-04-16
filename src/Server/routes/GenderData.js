@@ -1,5 +1,14 @@
 var express = require('express');
 var router = express.Router();
+const readCSVModule = require('../modules/ReadCases.js');
+
+var allCases = readCSVModule.loadAllCases();
+// Now, allCases stores list of Cases read from the csv file.
+
+// Print first 10 ages.
+for (var i = 0; i < 10; ++i){
+    console.log(allCases[i].age);
+}
 
 // Get request. query paraemeters contain data from form. render search.html passing data
 router.get('/search', (req, res) => {
