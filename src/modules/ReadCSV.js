@@ -8,10 +8,8 @@ module.exports = {
 
         var parsedCSV = [];
 
-        for (var i = 1; i < lines.length - 1; ++i){
-            // We want to skip the very top row and the last row.
-            // The very top row is labels.
-            // The last row is empty.
+        for (var i = 0; i < lines.length - 1; ++i){
+            // We want to skip the last row because it is empty.
             splitLine(lines[i]);
         }
 

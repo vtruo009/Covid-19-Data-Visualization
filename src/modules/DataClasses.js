@@ -3,11 +3,8 @@ module.exports = {
         constructor(line) {
             this.id = line[0];
 
-            var dateValues = line[2].split("/");
-            var year = dateValues[2];
-            var month = dateValues[0];
-            var date = dateValues[1];
-            this.reportingDate = new Date(year + "-" + month + "-" + date);
+            const helperModule = require('../modules/BasicHelpers.js');
+            this.reportingDate = helperModule.stringToDate(line[2]);
 
             this.country = line[6];
             this.gender = line[7];
@@ -15,6 +12,35 @@ module.exports = {
 
             this.dead = (line[16] == '1');
             this.recovered = (line[17] == '1');
+        }
+    },
+
+    USPlace : class{
+        constructor(state, county) {
+            this.state = state;
+            this.county = county;
+
+            // Dictionary of { <Date, number of Deaths> }
+            this.numDeaths = {};
+
+            // Dictionary of { <Date, number of Confirmed cases> }
+            this.numConfirmed = {};
+        }
+        addNumDeaths(dates, values){
+            // dates is a list of Date {1/20/20, 1/21/20, 1/22/20, ...}
+            // values contains the number of people died on the corresponding date.
+
+            for (var i = 0; i < dates.length; ++i){
+                this.numDeaths[dates[i]] = values[i];
+            }
+        }
+        addNumConfirmed(dates, values){
+            // dates is a list of Date {1/20/20, 1/21/20, 1/22/20, ...}
+            // values contains the number of confirmed cases on the corresponding date.
+
+            for (var i = 0; i < dates.length; ++i){
+                this.numConfirmed[dates[i]] = values[i];
+            }
         }
     }
 }
