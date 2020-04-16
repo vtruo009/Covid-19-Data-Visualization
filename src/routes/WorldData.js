@@ -13,7 +13,7 @@ var WorldData = readCSVModule.loadWorldData();
 // Print number of recovered cases for each day for the first country.
 console.log(WorldData[0].state + ", " + WorldData[0].country);
 for(var date in WorldData[0].numRecovered) {
-    console.log(date + ": " + WorldData[0].numDeaths[date]);
+    console.log(date + ": " + WorldData[0].numRecovered[date]);
 }
 
 router.get('/search', (req, res) => {
