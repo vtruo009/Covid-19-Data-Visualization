@@ -12,4 +12,13 @@ export default{
         .then(response => response)
         .catch(error => error.status);
     },
+    insertData(payload){
+        // Implements create request to server
+    },
+    updateData(payload){
+        // Implements create request to server
+    },
+    deleteData(payload){
+        // Implements create request to server
+    }
 }
