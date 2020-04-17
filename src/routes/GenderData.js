@@ -19,6 +19,23 @@ for (var i = 0; i < 10; ++i){
 router.get('/SelectFeature', (req, res) => {
     console.log(req.query);
     // Get respective data using the query parameters
+    var selectedGender = [];
+    if (req.query.Gender = "Female"){
+        for (var i =0; i<allCases.length; ++i){
+            if (allCases[i].gender == "Female"){
+                selectedGender.push(allCases[i]);
+            }
+        }
+    }
+    if (req.query.Gender = "Male"){
+        for (var i =0; i<allCases.length; ++i){
+            if (allCases[i].gender == "Male"){
+                selectedGender.push(allCases[i]);
+            }
+        }
+    }
+    //From here the selected gender data is stored in selectedGender[] (array of Cases) now
+    
     res.render(
         'DataByGender/SelectFeature.html', 
         {
