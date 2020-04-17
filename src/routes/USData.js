@@ -21,8 +21,15 @@ for (var i = 1; i < 2; ++i){
 router.get('/search', (req, res) => {
     console.log(req.query);
     // Get respective data using the query parameters
+    var selectedInUS = [];
+    for (var i = 0; i<USData.length; ++i){
+        if ( req.query.County == USData[i].County && req.query.State == USData[i].State){
+            selectedInUS.push(USData[i]);
+        }
+    }
+
     res.render(
-        'USDATA/search.html', 
+        'USData/search.html', 
         {
             // response with dummy data
             TypeOfTable: req.query.TypeOfData,
