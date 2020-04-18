@@ -19,8 +19,14 @@ for(var date in WorldData[0].numRecovered) {
 router.get('/search', (req, res) => {
     console.log(req.query);
     // Get respective data using the query parameters
+    for (var i = 0; i<WorldData.length; ++i){
+        if (req.query.Country == WorldData[i].Country && req.query.State == WorldData[i].State){
+            var selectedCountry = WorldData[i];
+        }
+    }
+
     res.render(
-        'WorldDATA/search.html', 
+        'WorldData/search.html', 
         {
             TypeOfTable: req.query.TypeOfData,
             Country: req.query.Country,
