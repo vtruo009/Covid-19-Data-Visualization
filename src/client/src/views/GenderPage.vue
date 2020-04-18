@@ -1,5 +1,5 @@
 <template>
-	<div class="GenderPage">
+	<div class="GenderPage fadeIn">
 		<b-overlay v-bind:show="show" rounded="sm">
 			<InputForm
 				InputName="Gender"

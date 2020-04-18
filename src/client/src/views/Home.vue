@@ -1,64 +1,41 @@
 <template>
-	<div class="home">
-		<h1 class="display-5 text-center m-5">Welcome!</h1>
-		<b-row>
-			<b-col class="intro-container">
-				<h5>What is this website?</h5>
-				<span>
-					Place Icon here
-				</span>
-				<p class="text-justify mt-4">
-					Est quis nulla laborum officia ad nisi ex nostrud culpa Lorem
-					excepteur aliquip dolor aliqua irure ex. Nulla ut duis ipsum nisi elit
-					fugiat commodo sunt reprehenderit laborum veniam eu veniam. Eiusmod
-					minim exercitation fugiat irure ex labore incididunt do fugiat commodo
-					aliquip sit id deserunt reprehenderit aliquip nostrud.
-				</p>
-			</b-col>
-			<b-col class="intro-container">
-				<h5>How does it work?</h5>
-				<span class>
-					Place Icon here
-				</span>
-				<p class="text-justify mt-4">
-					Est quis nulla laborum officia ad nisi ex nostrud culpa Lorem
-					excepteur aliquip dolor aliqua irure ex. Nulla ut duis ipsum nisi elit
-					fugiat commodo sunt reprehenderit laborum veniam eu veniam. Eiusmod
-					minim exercitation fugiat irure ex labore incididunt do fugiat commodo
-					aliquip sit id deserunt reprehenderit aliquip nostrud.
-				</p>
-			</b-col>
-			<b-col class="intro-container">
-				<h5>Why did we build it?</h5>
-				<span> Place Icon here </span>
-				<p class="text-justify mt-4">
-					Est quis nulla laborum officia ad nisi ex nostrud culpa Lorem
-					excepteur aliquip dolor aliqua irure ex. Nulla ut duis ipsum nisi elit
-					fugiat commodo sunt reprehenderit laborum veniam eu veniam. Eiusmod
-					minim exercitation fugiat irure ex labore incididunt do fugiat commodo
-					aliquip sit id deserunt reprehenderit aliquip nostrud.
-				</p>
-			</b-col>
-		</b-row>
-	</div>
+  <div class="home fadeIn">
+    <div class="padding text-center">
+      <h1 class="display-2">COVID 19 - DATA</h1>
+      <p class="mt-4">A website that lets you learn from data of the novel COVID-19</p>
+      <p>CS 180 - JVMS</p>
+      <hr />
+
+      <a href="https://www.kaggle.com/sudalairajkumar/novel-corona-virus-2019-dataset">
+        <button type="button" class="m-3 btn btn-dark">
+          Data
+          <font-awesome-icon :icon="['fas', 'database']" />
+        </button>
+      </a>
+      <a href="https://github.com/johan1505/CS180Project">
+        <button type="button" class="m-3 btn btn-dark">
+          Github
+          <i class="fab fa-github"></i>
+        </button>
+      </a>
+    </div>
+    <TechUsed />
+  </div>
 </template>
 
 <script>
-// @ is an alias to /src
-
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { faDatabase } from "@fortawesome/free-solid-svg-icons";
+library.add(faDatabase);
+import TechUsed from "../components/TechUsed";
 export default {
-	name: 'Home',
-	components: {},
+  name: "Home",
+  components: { TechUsed }
 };
 </script>
 
 <style>
-.intro-container {
-	border: 1px;
-	border-radius: 8px;
-	border-color: black;
-	border-style: solid;
-	margin: 20px;
-	padding: 40px;
+.padding {
+  margin: 180px;
 }
 </style>
