@@ -30,10 +30,8 @@ router.get('/search', (req, res) => {
         }
     }
 
-    // console.log(selectedInUS[0].numDeaths);
-    // console.log(selectedInUS[i].country);
-    var row = [];
     if (req.query.TypeOfData == 1) {
+        var row = [];
         for (var key in selectedInUS[0].numConfirmed) {
             var temp_date = new Date(key);
             var date = temp_date.getMonth()+1 + '/' + temp_date.getDate() + '/' + temp_date.getFullYear();
@@ -42,9 +40,15 @@ router.get('/search', (req, res) => {
         }
     }
     else if (req.query.TypeOfData == 2) { //deaths
-
+        var row = [];
+        for (var key in selectedInUS[0].numDeaths) {
+            var temp_date = new Date(key);
+            var date = temp_date.getMonth()+1 + '/' + temp_date.getDate() + '/' + temp_date.getFullYear();
+            var newItem = new USReq.USRowDeaths(date,selectedInUS[0].numDeaths[key]);
+            row.push(newItem);
+        }
     }
-    console.log(row);
+    // console.log(row);
     res.render(
         'USData/search.html', 
         {

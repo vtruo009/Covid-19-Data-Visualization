@@ -112,7 +112,7 @@ module.exports = {
     USRowDeaths : class {
         constructor(date, numDeaths) {
             this.date = date;
-            this.numConfirmed = numConfirmed;
+            this.numDeaths = numDeaths;
         }
     }
 
