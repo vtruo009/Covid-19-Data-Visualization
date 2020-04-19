@@ -102,5 +102,19 @@ module.exports = {
         }
     },
 
+    GenderCountry : class {
+        constructor(country, numConfirmed, numDeaths, numRecovered) {
+            this.country = country;
+            this.numConfirmed = numConfirmed;
+            this.numDeaths = numDeaths;
+            this.numRecovered = numRecovered;
+        }
+    },
 
+    GenderDay : class {
+        constructor(date, numConfirmedCases) {
+            this.date = date;
+            this.numConfirmedCases = numConfirmedCases;
+        }
+    }
 }
