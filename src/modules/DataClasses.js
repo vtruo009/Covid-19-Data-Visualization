@@ -105,21 +105,21 @@ module.exports = {
     WorldRowConfirmed : class {
         constructor(date, numConfirmed) {
             this.date = date;
-            this.numConfirmed = numConfirmed;
+            this.cases = numConfirmed;
         }
     },
 
     WorldRowDeaths : class {
         constructor(date, numDeaths) {
             this.date = date;
-            this.numDeaths = numDeaths;
+            this.cases = numDeaths;
         }
     },
 
     WorldRowRecovered : class {
         constructor(date, numRecovered) {
             this.date = date;
-            this.numRecovered = numRecovered;
+            this.cases = numRecovered;
         }
     },
     
