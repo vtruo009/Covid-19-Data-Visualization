@@ -114,6 +114,42 @@ module.exports = {
             this.date = date;
             this.numDeaths = numDeaths;
         }
-    }
+    },
+    
+    WorldRowConfirmed : class {
+        constructor(date, numConfirmed) {
+            this.date = date;
+            this.cases = numConfirmed;
+        }
+    },
 
+    WorldRowDeaths : class {
+        constructor(date, numDeaths) {
+            this.date = date;
+            this.cases = numDeaths;
+        }
+    },
+
+    WorldRowRecovered : class {
+        constructor(date, numRecovered) {
+            this.date = date;
+            this.cases = numRecovered;
+        }
+    },
+    
+    GenderCountry : class {
+        constructor(country, numConfirmed, numDeaths, numRecovered) {
+            this.country = country;
+            this.numConfirmed = numConfirmed;
+            this.numDeaths = numDeaths;
+            this.numRecovered = numRecovered;
+        }
+    },
+
+    GenderDay : class {
+        constructor(date, numConfirmedCases) {
+            this.date = date;
+            this.numConfirmedCases = numConfirmedCases;
+        }
+    }
 }

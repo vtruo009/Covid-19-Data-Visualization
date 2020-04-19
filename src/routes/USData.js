@@ -48,7 +48,7 @@ router.get('/search', (req, res) => {
             row.push(newItem);
         }
     }
-    // console.log(row);
+    console.log(row);
     res.render(
         'USData/search.html', 
         {
