@@ -1,24 +1,18 @@
 <template>
   <div class="AgePage fadeIn">
-    <b-overlay v-bind:show="show" rounded="sm">
-      <InputForm InputName="AgeRange" v-bind:dynamicOptions="ageOptions" apiEndPoint="/AgeData" />
-      <Table v-bind:data="tableData" />
-    </b-overlay>
+    <AgeBody InputName="AgeRange" v-bind:dynamicOptions="ageOptions" apiEndPoint="/AgeData" />
   </div>
 </template>
 
 <script>
-import InputForm from "../components/Gender_Age_Input_Form";
-import Table from "../components/GlobalTable";
+import AgeBody from "../components/Gender_Age_Body";
 export default {
   name: "AgePage",
   components: {
-    InputForm,
-    Table
+    AgeBody
   },
   data() {
     return {
-      tableData: null,
       ageOptions: [
         { value: null, text: "Please select an age range", disabled: true },
         { value: "1", text: "80+" },
@@ -26,8 +20,7 @@ export default {
         { value: "3", text: "40 - 60" },
         { value: "4", text: "20 - 40" },
         { value: "5", text: "0 - 20" }
-      ],
-      show: false
+      ]
     };
   }
 };

@@ -1,20 +1,17 @@
 <template>
-  <div id="US_World_Body">
+  <div id="Gender_Age_Body">
+    <!-- Input form -->
     <div class="m-5 text-center">
-      <!-- User input form -->
       <b-form @submit="displayData">
         <b-row>
           <b-col>
-            <b-input v-model="firstInput" v-bind:placeholder="this.firstInputName" required></b-input>
-          </b-col>
-          <b-col>
-            <b-input v-model="secondInput" v-bind:placeholder="this.secondInputName" required></b-input>
+            <b-form-select v-model="dynamicOptionSelected" :options="dynamicOptions" required></b-form-select>
           </b-col>
           <b-col>
             <b-form-select v-model="TypeOfDataSelected" :options="TypeOfDataoptions" required></b-form-select>
           </b-col>
           <b-col>
-            <b-button variant="primary" type="submit">
+            <b-button style="margin-right:160px" variant="primary" type="submit">
               <font-awesome-icon :icon="['fas', 'search']" />
             </b-button>
           </b-col>
@@ -22,7 +19,7 @@
       </b-form>
     </div>
     <!-- TABLE DATA-->
-    <Table v-bind:data="tableData" />
+    <Table v-bind:data="tableData"></Table>
     <!-- Errors to display -->
     <div v-if="error">"Some error occurred :C"</div>
   </div>
@@ -33,26 +30,29 @@ import Services from "../Services/Services";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Table from "../components/GlobalTable";
-
 library.add(faSearch);
 
 export default {
-  name: "US_World_Body",
+  name: "Gender_Age_Body",
   props: {
-    firstInputName: String,
-    secondInputName: String,
+    InputName: String,
+    dynamicOptions: Array,
     apiEndPoint: String
   },
   data() {
     return {
-      firstInput: null,
-      secondInput: null,
+      // Selected by user
+      dynamicOptionSelected: null,
       TypeOfDataSelected: null,
+
+      // Options for select
       TypeOfDataoptions: [
         { value: null, text: "Please select an option", disabled: true },
-        { value: "1", text: "Confirmed cases per day" },
-        { value: "2", text: "Deaths per day" },
-        { value: "3", text: "Recovered cases per day" }
+        {
+          value: "1",
+          text: "Number of confirmed, deaths, and recovered for each country"
+        },
+        { value: "2", text: "Number of cases per day" }
       ],
       // Data to used to populate table
       tableData: null,
@@ -62,22 +62,24 @@ export default {
   },
   methods: {
     displayData(e) {
-      e.preventDefault();
       // Send search request to backend
+      e.preventDefault();
       Services.searchData({
         apiEndPoint: this.apiEndPoint,
         params: {
-          [this.firstInputName]: this.firstInput,
-          [this.secondInputName]: this.secondInput,
+          [this.InputName]: this.dynamicOptionSelected,
           TypeOfData: this.TypeOfDataSelected
         }
       })
         .then(response => {
+          console.log(response);
           if (response.status == 200) {
+            // Populates tabledata in grandparent component
             this.setTableData(response.data.data);
             this.setErrorOff();
           } else {
             this.errorHandler();
+
             console.log("Error occurred");
           }
         })
