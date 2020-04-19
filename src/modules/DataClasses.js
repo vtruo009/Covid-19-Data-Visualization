@@ -102,6 +102,20 @@ module.exports = {
         }
     },
 
+    USRowConfirmed : class {
+        constructor(date, numConfirmed) {
+            this.date = date,
+            this.numConfirmed = numConfirmed;
+        }
+    },
+    
+    USRowDeaths : class {
+        constructor(date, numDeaths) {
+            this.date = date;
+            this.numDeaths = numDeaths;
+        }
+    },
+    
     WorldRowConfirmed : class {
         constructor(date, numConfirmed) {
             this.date = date;
