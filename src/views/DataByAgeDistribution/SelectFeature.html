@@ -54,9 +54,9 @@
 					{% for row in data %}
 					<tr>
 					  <td>{{ row.country }}</td>
-					  <td>{{ row.confirmed }}</td>
-					  <td>{{ row.death }}</td>
-					  <td>{{ row.recovered }}</td>
+					  <td>{{ row.numConfirmed }}</td>
+					  <td>{{ row.numDeaths }}</td>
+					  <td>{{ row.numRecovered }}</td>
 					</tr>
 					{% endfor %}
 				  </tbody>
@@ -87,7 +87,7 @@
 					{% for row in data %}
 					<tr>
 					  <td>{{ row.date }}</td>
-					  <td>{{ row.confirmed }}</td>
+					  <td>{{ row.numConfirmedCases }}</td>
 					</tr>
 					{% endfor %}
 				  </tbody>

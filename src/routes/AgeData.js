@@ -6,22 +6,16 @@ router.get('/', (req, res) => {
   res.render('DataByAgeDistribution/SelectFeature.html')
 });
 
-const readCSVModule = require('../modules/ReadCases.js');
-var allCases = readCSVModule.loadAllCases();
-// Now, allCases stores list of Cases read from the csv file.
-
-// Print first 10 countries.
-// for (var i = 0; i < 10; ++i){
-//     console.log(allCases[i].reportingDate);
-// }
-
 // Get request. query paraemeters contain data from form. render search.html passing data
 router.get('/SelectFeature', (req, res) => {
     console.log(req.query);
     // Get respective data using the query parameters
 
+    const readCSVModule = require('../modules/ReadCases.js');
+    var allCases = readCSVModule.loadAllCases();
+    // Now, allCases stores list of Cases read from the csv file.
+
     //get age range input from user, 
-    // console.log("hi");
     var selectedRange = [];
    // allCases.length; size of array
     if (req.query.AgeRange == 1){
@@ -59,7 +53,7 @@ router.get('/SelectFeature', (req, res) => {
             }
         }
     }
-    // console.log(selectedRange);
+
     // From here the selected range of age data is stored in selectedRange[] (array of Cases) now.
     const ageReq = require('../modules/DataClasses.js');
     var row = [];
@@ -118,7 +112,6 @@ router.get('/SelectFeature', (req, res) => {
             else {
                 dayDict[selectedRange[i].reportingDateStr] = 1;
             }
-            // console.log(selectedRange[i].reportingDate.getMonth() + '/' + selectedRange[i].reportingDate.getDate() + '/' + selectedRange[i].reportingDate.getYear());
         }
 
         for (var key in dayDict) {
@@ -126,7 +119,6 @@ router.get('/SelectFeature', (req, res) => {
             row.push(newItem);
         }
     }
-    // console.log(row);
 
     res.render(
         'DataByAgeDistribution/SelectFeature.html', 
@@ -134,29 +126,7 @@ router.get('/SelectFeature', (req, res) => {
             // response with dummy data
             TypeOfTable: req.query.TypeOfData,
             AgeRange: req.query.AgeRange,
-            data: [
-                {
-                    date: '01/02/2020',
-                    country: 'Japan',
-                    confirmed: 4,
-                    recovered: 4,
-                    death: 1
-                },
-                {
-                    date: '01/03/2020',
-                    country: 'China',
-                    confirmed: 5,
-                    recovered: 4,
-                    death: 0
-                },
-                {
-                    date: '01/04/2020',
-                    country: 'US',
-                    confirmed: 6,
-                    recovered: 4,
-                    death: 10
-                }
-            ],
+            data: row,
         
         }
     );
