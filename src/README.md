@@ -1,6 +1,6 @@
 # CS180Project
 
-## Seteps to Set Up Project
+## Steps to Set Up Project
 
 1. At the root directory run:
 ```

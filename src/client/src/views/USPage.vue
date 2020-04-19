@@ -1,28 +1,20 @@
 <template>
   <div class="USPage fadeIn">
-    <b-overlay v-bind:show="show" rounded="sm">
-      <InputForm firstInputName="County" secondInputName="State" apiEndPoint="/USData" />
-      <Table v-bind:data="tableData" />
-    </b-overlay>
+    <USBody firstInputName="County" secondInputName="State" apiEndPoint="/USData" />
   </div>
 </template>
 
 <script>
-import InputForm from "../components/US_World_Input_Form";
-import Table from "../components/GlobalTable";
+import USBody from "../components/US_World_Body";
 
 export default {
   name: "USPage",
   data() {
-    return {
-      tableData: null,
-      show: false
-    };
+    return {};
   },
   methods: {},
   components: {
-    InputForm,
-    Table
+    USBody
   }
 };
 </script>

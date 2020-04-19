@@ -14,10 +14,9 @@ for (var i = 0; i < 10; ++i){
 router.get('/search', (req, res) => {
     console.log(req.query);
     // Get respective data using the query parameters
+
     res.send(
         {
-            TypeOfTable: req.query.TypeOfData,
-            Gender: req.query.Gender,
             data: [
                 {
                     date: '01/02/2020',
