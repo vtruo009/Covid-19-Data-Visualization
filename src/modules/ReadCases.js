@@ -49,6 +49,7 @@ module.exports = {
             var newState = new classModule.USPlace(state, county);
             newState.addNumDeaths(deathDates, parsedDeathData[i].slice(numNonDateColumn));
             statesDict[county + "," + state] = newState;
+            //statesDict[selectedRange[i].reportingDateStr]++
         }
 
         // Organize confirmed data.

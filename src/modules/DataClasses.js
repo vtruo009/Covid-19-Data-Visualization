@@ -5,13 +5,14 @@ module.exports = {
 
             const helperModule = require('../modules/BasicHelpers.js');
             this.reportingDate = helperModule.stringToDate(line[2]);
-
+            this.reportingDateStr = line[2];
             this.country = line[6];
             this.gender = line[7];
             this.age = parseInt(line[8]);
 
             this.dead = (line[16] == '1');
             this.recovered = (line[17] == '1');
+
         }
     },
 
@@ -82,5 +83,24 @@ module.exports = {
                 this.numRecovered[dates[i]] =  parseInt(values[i]);
             }
         }
-    }
+    },
+
+
+    AgeRowCountry : class{
+        constructor(country, numConfirmed, numDeaths, numRecovered) {
+            this.country = country;
+            this.numConfirmed = numConfirmed;
+            this.numDeaths = numDeaths;
+            this.numRecovered = numRecovered;
+        }
+    },
+
+    AgeRowDay : class {
+        constructor(date, numConfirmedCases) {
+            this.date = date;
+            this.numConfirmedCases = numConfirmedCases;
+        }
+    },
+
+
 }
