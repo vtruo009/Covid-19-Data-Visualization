@@ -1,15 +1,16 @@
 {
-  "name": "cs180project",
-  "version": "0.0.0",
-  "private": true,
-  "scripts": {
-    "start": "nodemon app.js"
-  },
-  "dependencies": {
-    "body-parser": "^1.19.0",
-    "express": "~4.16.1",
-    "http-errors": "^1.7.3",
-    "nodemon": "^2.0.3",
-    "swig": "^1.4.2"
-  }
+    "name": "CS180-COVID19-DATA",
+    "version": "0.0.1",
+    "main": "index.js",
+    "repository": "https://github.com/johan1505/CS180Project",
+    "license": "UNLICENSED",
+    "scripts": {
+        "client": "cd client && npm run serve",
+        "server": "cd server && npm start",
+        "start": "concurrently - k \"npm run server\" \"npm run client\""
+    },
+    "dependencies": {
+        "concurrently": "^5.1.0"
+    },
+    "devDependencies": {}
 }
