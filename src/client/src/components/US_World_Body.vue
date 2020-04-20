@@ -24,7 +24,7 @@
     <!-- TABLE DATA-->
     <Table v-bind:data="tableData" />
     <!-- Errors to display -->
-    <div v-if="error">"Some error occurred :C"</div>
+    <Error v-if="error" v-bind:errorMessage="errorMessage" />
   </div>
 </template>
 
@@ -33,6 +33,7 @@ import Services from "../Services/Services";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Table from "../components/GlobalTable";
+import Error from "../components/Error";
 
 library.add(faSearch);
 
@@ -57,7 +58,8 @@ export default {
       // Data to used to populate table
       tableData: null,
       // Boolean used to display errors if any
-      error: false
+      error: false,
+      errorMessage: null
     };
   },
   methods: {
@@ -73,21 +75,23 @@ export default {
         }
       })
         .then(response => {
-          if (response.status == 200) {
+          if (response.data.data == undefined) {
+            this.errorHandler(
+              `No data available for ${this.firstInput}, ${this.secondInput}.`
+            );
+          } else {
             this.setTableData(response.data.data);
             this.setErrorOff();
-          } else {
-            this.errorHandler();
-            console.log("Error occurred");
           }
         })
         .catch(error => {
-          this.errorHandler();
+          this.errorHandler("Some error occurred. Please try again");
           console.log(error);
         });
     },
-    errorHandler() {
+    errorHandler(errorMessage) {
       this.setErrorOn();
+      this.errorMessage = errorMessage;
       // Display no data
       this.setTableData(null);
     },
@@ -101,7 +105,7 @@ export default {
       this.error = true;
     }
   },
-  components: { Table }
+  components: { Table, Error }
 };
 </script>
 

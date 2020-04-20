@@ -21,7 +21,7 @@
     <!-- TABLE DATA-->
     <Table v-bind:data="tableData"></Table>
     <!-- Errors to display -->
-    <div v-if="error">"Some error occurred :C"</div>
+    <Error v-if="error" v-bind:errorMessage="errorMessage" />
   </div>
 </template>
 
@@ -57,7 +57,8 @@ export default {
       // Data to used to populate table
       tableData: null,
       // Boolean used to display errors if any
-      error: false
+      error: false,
+      errorMessage: null
     };
   },
   methods: {
@@ -79,7 +80,6 @@ export default {
             this.setErrorOff();
           } else {
             this.errorHandler();
-
             console.log("Error occurred");
           }
         })
@@ -91,6 +91,7 @@ export default {
     errorHandler() {
       this.setErrorOn();
       // Display no data
+      this.errorMessage = "Some error occurred";
       this.setTableData(null);
     },
     setTableData(data) {
