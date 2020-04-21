@@ -1,11 +1,10 @@
 module.exports = {
 	loadAllCases: function () {
 		// Read values from the CSV, organizes the data into an array of "Case", and returns the array.
+		const fileNamesModule = require('../modules/DatabaseFileNames.js');
 
 		const readCSVModule = require('../modules/ReadCSV.js');
-		let parsedCSV = readCSVModule.readCSV(
-			'../Server/database/COVID19_line_list_data.csv'
-		);
+		let parsedCSV = readCSVModule.readCSV(fileNamesModule.CasesFileName);
 
 		var allCases = [];
 
@@ -22,6 +21,7 @@ module.exports = {
 		// Read values from the CSV, organizes the data into an array of "USPlace" and returns the array.
 
 		// Modules
+		const fileNamesModule = require('../modules/DatabaseFileNames.js');
 		const readCSVModule = require('../modules/ReadCSV.js');
 		const classModule = require('../modules/DataClasses.js');
 		const helperModule = require('../modules/BasicHelpers.js');
@@ -35,9 +35,7 @@ module.exports = {
 		var statesDict = {};
 
 		// Load death data
-		let parsedDeathData = readCSVModule.readCSV(
-			'../Server/database/time_series_covid_19_deaths_US.csv'
-		);
+		let parsedDeathData = readCSVModule.readCSV(fileNamesModule.USDeathsFileNama);
 
 		numNonDateColumn = 12;
 
@@ -61,9 +59,7 @@ module.exports = {
 		}
 
 		// Organize confirmed data.
-		let parsedConfirmedData = readCSVModule.readCSV(
-			'../Server/database/time_series_covid_19_confirmed_US.csv'
-		);
+		let parsedConfirmedData = readCSVModule.readCSV(fileNamesModule.USConfirmedFileName);
 
 		numNonDateColumn = 11;
 
@@ -108,6 +104,7 @@ module.exports = {
 		const readCSVModule = require('../modules/ReadCSV.js');
 		const classModule = require('../modules/DataClasses.js');
 		const helperModule = require('../modules/BasicHelpers.js');
+		const fileNamesModule = require('../modules/DatabaseFileNames.js');
 
 		// The World data csv has columns { /* Country information */, /* Number of deaths for each date */}
 		// numNonDateColumn is the number of columns that contains the country information.
@@ -118,9 +115,7 @@ module.exports = {
 		var statesDict = {};
 
 		// Load death data
-		let parsedDeathData = readCSVModule.readCSV(
-			'../Server/database/time_series_covid_19_deaths.csv'
-		);
+		let parsedDeathData = readCSVModule.readCSV(fileNamesModule.WorldDeathsFileName);
 
 		numNonDateColumn = 4;
 
@@ -144,9 +139,7 @@ module.exports = {
 		}
 
 		// Organize confirmed data.
-		let parsedConfirmedData = readCSVModule.readCSV(
-			'../Server/database/time_series_covid_19_confirmed.csv'
-		);
+		let parsedConfirmedData = readCSVModule.readCSV(fileNamesModule.WorldConfirmedFileName);
 
 		numNonDateColumn = 4;
 
@@ -176,9 +169,7 @@ module.exports = {
 		}
 
 		// Organize recovered data.
-		let parsedRecoveredData = readCSVModule.readCSV(
-			'../Server/database/time_series_covid_19_recovered.csv'
-		);
+		let parsedRecoveredData = readCSVModule.readCSV(fileNamesModule.WorldRecoveredFileName);
 		numNonDateColumn = 4;
 
 		var recoveredDates = [];
