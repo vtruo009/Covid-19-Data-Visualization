@@ -1,11 +1,10 @@
 module.exports = {
 	loadAllCases: function () {
 		// Read values from the CSV, organizes the data into an array of "Case", and returns the array.
+		const fileNamesModule = require('../modules/DatabaseFileNames.js');
 
 		const readCSVModule = require('../modules/ReadCSV.js');
-		let parsedCSV = readCSVModule.readCSV(
-			'../Server/database/COVID19_line_list_data.csv'
-		);
+		let parsedCSV = readCSVModule.readCSV(fileNamesModule.CasesFileName);
 
 		var allCases = [];
 
@@ -22,6 +21,7 @@ module.exports = {
 		// Read values from the CSV, organizes the data into an array of "USPlace" and returns the array.
 
 		// Modules
+		const fileNamesModule = require('../modules/DatabaseFileNames.js');
 		const readCSVModule = require('../modules/ReadCSV.js');
 		const classModule = require('../modules/DataClasses.js');
 		const helperModule = require('../modules/BasicHelpers.js');
@@ -35,9 +35,7 @@ module.exports = {
 		var statesDict = {};
 
 		// Load death data
-		let parsedDeathData = readCSVModule.readCSV(
-			'../Server/database/time_series_covid_19_deaths_US.csv'
-		);
+		let parsedDeathData = readCSVModule.readCSV(fileNamesModule.USDeathsFileNama);
 
 		numNonDateColumn = 12;
 
@@ -53,6 +51,17 @@ module.exports = {
 			var county = parsedDeathData[i][5];
 
 			var newState = new classModule.USPlace(state, county);
+            newState.addExtraInfo(
+                parsedDeathData[i][0], // UID
+                parsedDeathData[i][1], // iso2
+                parsedDeathData[i][2], // iso3
+                parsedDeathData[i][3], // code3
+                parsedDeathData[i][4], // FIPS
+                parsedDeathData[i][7], // Country
+                parsedDeathData[i][8], // Lat
+                parsedDeathData[i][9], // Long
+                parsedDeathData[i][10], // Combined_key
+                parsedDeathData[i][11]); // Population
 			newState.addNumDeaths(
 				deathDates,
 				parsedDeathData[i].slice(numNonDateColumn)
@@ -61,9 +70,7 @@ module.exports = {
 		}
 
 		// Organize confirmed data.
-		let parsedConfirmedData = readCSVModule.readCSV(
-			'../Server/database/time_series_covid_19_confirmed_US.csv'
-		);
+		let parsedConfirmedData = readCSVModule.readCSV(fileNamesModule.USConfirmedFileName);
 
 		numNonDateColumn = 11;
 
@@ -77,14 +84,26 @@ module.exports = {
 
 		// We skip the first row. This is a label.
 		for (var i = 1; i < parsedConfirmedData.length; ++i) {
-			var state = parsedDeathData[i][6];
-			var county = parsedDeathData[i][5];
+			var state = parsedConfirmedData[i][6];
+			var county = parsedConfirmedData[i][5];
 
-			if (!(county + ',' + state in statesDict))
+			if (!(county + ',' + state in statesDict)) {
 				statesDict[county + ',' + state] = new classModule.USPlace(
 					state,
 					county
 				);
+                statesDict[county + ',' + state].addExtraInfo(
+                    parsedConfirmedData[i][0], // UID
+                    parsedConfirmedData[i][1], // iso2
+                    parsedConfirmedData[i][2], // iso3
+                    parsedConfirmedData[i][3], // code3
+                    parsedConfirmedData[i][4], // FIPS
+                    parsedConfirmedData[i][7], // Country
+                    parsedConfirmedData[i][8], // Lat
+                    parsedConfirmedData[i][9], // Long
+                    parsedConfirmedData[i][10], // Combined_key
+                    "NA"); // No population data in the csv with confirmed data.
+            }
 
 			statesDict[county + ',' + state].addNumConfirmed(
 				confirmedDates,
@@ -108,6 +127,7 @@ module.exports = {
 		const readCSVModule = require('../modules/ReadCSV.js');
 		const classModule = require('../modules/DataClasses.js');
 		const helperModule = require('../modules/BasicHelpers.js');
+		const fileNamesModule = require('../modules/DatabaseFileNames.js');
 
 		// The World data csv has columns { /* Country information */, /* Number of deaths for each date */}
 		// numNonDateColumn is the number of columns that contains the country information.
@@ -118,9 +138,7 @@ module.exports = {
 		var statesDict = {};
 
 		// Load death data
-		let parsedDeathData = readCSVModule.readCSV(
-			'../Server/database/time_series_covid_19_deaths.csv'
-		);
+		let parsedDeathData = readCSVModule.readCSV(fileNamesModule.WorldDeathsFileName);
 
 		numNonDateColumn = 4;
 
@@ -135,7 +153,10 @@ module.exports = {
 			var state = parsedDeathData[i][0];
 			var country = parsedDeathData[i][1];
 
-			var newState = new classModule.WorldPlace(country, state);
+            var latitude = parsedDeathData[i][2];
+            var longitude = parsedDeathData[i][3];
+
+			var newState = new classModule.WorldPlace(country, state, latitude, longitude);
 			newState.addNumDeaths(
 				deathDates,
 				parsedDeathData[i].slice(numNonDateColumn)
@@ -144,9 +165,7 @@ module.exports = {
 		}
 
 		// Organize confirmed data.
-		let parsedConfirmedData = readCSVModule.readCSV(
-			'../Server/database/time_series_covid_19_confirmed.csv'
-		);
+		let parsedConfirmedData = readCSVModule.readCSV(fileNamesModule.WorldConfirmedFileName);
 
 		numNonDateColumn = 4;
 
@@ -163,11 +182,13 @@ module.exports = {
 			var state = parsedConfirmedData[i][0];
 			var country = parsedConfirmedData[i][1];
 
-			if (!(state + ',' + country in statesDict))
-				statesDict[state + ',' + country] = new classModule.WorldPlace(
-					country,
-					state
-				);
+			if (!(state + ',' + country in statesDict)) {
+                var latitude = parsedConfirmedData[i][2];
+                var longitude = parsedConfirmedData[i][3];
+
+				statesDict[state + ',' + country] =
+					new classModule.WorldPlace(country, state, latitude, longitude);
+            }
 
 			statesDict[state + ',' + country].addNumConfirmed(
 				confirmedDates,
@@ -176,9 +197,7 @@ module.exports = {
 		}
 
 		// Organize recovered data.
-		let parsedRecoveredData = readCSVModule.readCSV(
-			'../Server/database/time_series_covid_19_recovered.csv'
-		);
+		let parsedRecoveredData = readCSVModule.readCSV(fileNamesModule.WorldRecoveredFileName);
 		numNonDateColumn = 4;
 
 		var recoveredDates = [];
@@ -194,11 +213,14 @@ module.exports = {
 			var state = parsedRecoveredData[i][0];
 			var country = parsedRecoveredData[i][1];
 
-			if (!(state + ',' + country in statesDict))
-				statesDict[state + ',' + country] = new classModule.WorldPlace(
-					country,
-					state
-				);
+			if (!(state + ',' + country in statesDict)) {
+
+				var latitude = parsedRecoveredData[i][2];
+				var longitude = parsedRecoveredData[i][3];
+
+				statesDict[state + ',' + country] =
+					new classModule.WorldPlace(country, state, latitude, longitude);
+			}
 
 			statesDict[state + ',' + country].addNumRecovered(
 				recoveredDates,

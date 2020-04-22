@@ -2,16 +2,38 @@ module.exports = {
 	Case: class {
 		constructor(line) {
 			this.id = parseInt(line[0]);
+            this.caseInCountry = parseInt(line[1]);
 
 			const helperModule = require('../modules/BasicHelpers.js');
+
 			this.reportingDate = helperModule.stringToDate(line[2]);
 			this.reportingDateStr = line[2];
+
+            // Column 3 is blank.
+
+            this.summary = line[4];
+
+            this.location = line[5];
 			this.country = line[6];
 			this.gender = line[7];
 			this.age = parseInt(line[8]);
 
+            this.symptomOnset = line[9];
+            this.ifOnsetApproximated = line[10];
+            this.hospitalVisitDate = line[11];
+
+            this.exposureStart = line[12];
+            this.exposureEnd = line[13];
+
+            this.fromWuhan = line[14];
+            this.visitingWohan = line[15];
+
 			this.dead = line[16] == '1';
 			this.recovered = line[17] == '1';
+
+            if (line.length >= 19) this.symptom = line[18];
+            if (line.length >= 20) this.source = line[19];
+            if (line.length >= 21) this.link = line[20];
 		}
 	},
 
@@ -26,6 +48,18 @@ module.exports = {
 			// Dictionary of { <Date, number of Confirmed cases> }
 			this.numConfirmed = {};
 		}
+        addExtraInfo(uid, iso2, iso3, code3, FIPS, country, latitude, longitude, combinedKey, population){
+            this.uid = uid;
+            this.iso2 = iso2;
+            this.iso3 = iso3;
+            this.core3 = code3;
+            this.FIPS = FIPS;
+            this.country = country;
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.combinedKey = combinedKey;
+            this.population = population;
+        }
 		addNumDeaths(dates, values) {
 			// dates is a list of Date {1/20/20, 1/21/20, 1/22/20, ...}
 			// values contains the number of people died on the corresponding date.
@@ -45,9 +79,12 @@ module.exports = {
 	},
 
 	WorldPlace: class {
-		constructor(country, state) {
+		constructor(country, state, latitude, longitude) {
 			this.country = country;
 			this.state = state;
+        
+            this.latitude = latitude;
+            this.longitude = longitude;
 
 			// Dictionary of { <Date, number of Deaths> }
 			this.numDeaths = {};
