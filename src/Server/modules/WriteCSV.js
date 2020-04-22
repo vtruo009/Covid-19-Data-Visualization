@@ -1,7 +1,13 @@
-function RecordUSData(updatedUSData) {
+const DataType = {
+    CONFIRMED: 1,
+    RECOVERED: 2,
+    DEAD: 3
+};
+
+function UpdateUSDataFile(updatedUSData, dataType) {
     const helperModule = require('../modules/BasicHelpers.js');
 
-    var confirmedLabel = Cell("UID") + // 1
+    var label = Cell("UID") + // 1
         Cell("iso2") + // 2
         Cell("iso3") + // 3
         Cell("code3") + // 4
@@ -13,12 +19,18 @@ function RecordUSData(updatedUSData) {
         Cell("Long_") + // 10
         Cell("Combined_Key"); // 11
 
-    var confirmedDateLabels = [];
-    var confirmedContents = "";
-    updatedUSData.forEach(recordConfirmedDataOnCSV);
+    if (dataType == DataType.DEAD) label += Cell("Population");
 
-    function recordConfirmedDataOnCSV(item) {
-        confirmedContents += Cell(item.uid) + // 1
+    var dateLabels = [];
+    var values = "";
+    updatedUSData.forEach(recordValues);
+
+    function recordValues(item) {
+        var dateValueDict;
+        if (dataType == DataType.CONFIRMED) dateValueDict = item.numComfirmed;
+        else if (dataType == DataType.DEAD) dateValueDict = item.numDeaths;
+
+        values += Cell(item.uid) + // 1
             Cell(item.iso2) + // 2
             Cell(item.iso3) + // 3
             Cell(item.code3) + // 4
@@ -30,41 +42,51 @@ function RecordUSData(updatedUSData) {
             Cell(item.longitude) + // 10
             Cell(item.combinedKey); // 11
 
-        confirmedDateLabels.forEach(recordValuesOnExistingDate);
+        if (dataType == DataType.DEAD) values += Cell(item.population);
+
+        dateLabels.forEach(recordValuesOnExistingDate);
 
         function recordValuesOnExistingDate(dateStr) {
             var date = helperModule.stringToDate(dateStr);
-            if (date in item.numConfirmed) {
-                confirmedContents += Cell(item.numConfirmed[date]);
+            if (date in dateValueDict) {
+                values += Cell(dateValueDict[date]);
             } else {
-                confirmedContents += Cell("");
+                values += Cell("");
             }
         }
 
-        for (var key in item.numConfirmed) {
+        for (var key in dateValueDict) {
             var keyDate = new Date(key);
             var dateStr = (keyDate.getMonth() + 1) + "/" + keyDate.getDate() + "/" + keyDate.getFullYear();
-            if (!confirmedDateLabels.includes(dateStr)) {
-                confirmedDateLabels.push(dateStr);
-                confirmedContents += Cell(item.numConfirmed[key]);
+            if (!dateLabels.includes(dateStr)) {
+                dateLabels.push(dateStr);
+                values += Cell(dateValueDict[key]);
             }
         }
-        confirmedContents += "\n";
+        values += "\n";
     }
 
-    confirmedDateLabels.forEach(appendToLabel);
+    dateLabels.forEach(appendToLabel);
 
     function appendToLabel(date) {
-        confirmedLabel += Cell(date);
+        label += Cell(date);
     }
-    confirmedLabel += "\n";
+    label += "\n";
 
-    var contents = confirmedLabel + confirmedContents;
+    var contents = label + values;
 
     const fs = require('fs');
     const fileNameModule = require('../modules/DatabaseFileNames.js');
-    fs.writeFileSync(fileNameModule.USConfirmedFileName, contents);
-    console.log("Write data done.");
+
+    var fileName;
+    if (dataType == DataType.CONFIRMED) fileName = fileNameModule.USConfirmedFileName;
+    else if (dataType == DataType.DEAD) fileName = fileNameModule.USDeathsFileNama;
+
+    fs.writeFileSync(fileName, contents);
+}
+function RecordUSData(updatedUSData) {
+    UpdateUSDataFile(updatedUSData, DataType.CONFIRMED);
+    UpdateUSDataFile(updatedUSData, DataType.DEAD);
 }
 
 function Cell(content) {
@@ -73,4 +95,5 @@ function Cell(content) {
 
 module.exports = {
     RecordUSData: RecordUSData
+    // Argument: Array of USPlace.
 };

@@ -1,18 +1,6 @@
 var express = require('express');
 var router = express.Router();
 
-const readCSVModule = require('../modules/ReadCases.js');
-var USData = readCSVModule.loadUSData();
-
-for (var i = 0; i < 10; ++i) {
-	date = new Date(2021, 1, 26);
-	console.log("SIZE: " + Object.keys(USData[i].numConfirmed).length)
-	USData[i].numConfirmed[date] = 2;
-}
-
-const writeCSVModule = require('../modules/WriteCSV.js');
-writeCSVModule.RecordUSData(USData);
-
 // Get request. query paraemeters contain data from form. render search.html passing data
 const USReq = require('../modules/DataClasses.js');
 router.get('/search', (req, res) => {
