@@ -6,8 +6,8 @@ router.get('/search', (req, res) => {
 	console.log(req.query);
 	// Get respective data using the query parameters
 
-	const readCSVModule = require('../modules/ReadCases.js');
-	var allCases = readCSVModule.loadAllCases();
+	const readCSVModule = require('../modules/ReadCSV.js');
+	var allCases = readCSVModule.LoadAllCases();
 	// Now, allCases stores list of Cases read from the csv file.
 
 	var selectedGender = [];
