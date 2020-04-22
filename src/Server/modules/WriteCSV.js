@@ -1,4 +1,6 @@
 function RecordUSData(updatedUSData) {
+    const helperModule = require('../modules/BasicHelpers.js');
+
     var confirmedLabel = Cell("UID") + // 1
         Cell("iso2") + // 2
         Cell("iso3") + // 3
@@ -30,7 +32,8 @@ function RecordUSData(updatedUSData) {
 
         confirmedDateLabels.forEach(recordValuesOnExistingDate);
 
-        function recordValuesOnExistingDate(date) {
+        function recordValuesOnExistingDate(dateStr) {
+            var date = helperModule.stringToDate(dateStr);
             if (date in item.numConfirmed) {
                 confirmedContents += Cell(item.numConfirmed[date]);
             } else {
@@ -39,10 +42,11 @@ function RecordUSData(updatedUSData) {
         }
 
         for (var key in item.numConfirmed) {
-            if (!confirmedDateLabels.includes(key)) {
-                var newDate = new Date(key);
-                confirmedDateLabels.push(newDate);
-                confirmedContents += Cell(item.numConfirmed[newDate]);
+            var keyDate = new Date(key);
+            var dateStr = (keyDate.getMonth() + 1) + "/" + keyDate.getDate() + "/" + keyDate.getFullYear();
+            if (!confirmedDateLabels.includes(dateStr)) {
+                confirmedDateLabels.push(dateStr);
+                confirmedContents += Cell(item.numConfirmed[key]);
             }
         }
         confirmedContents += "\n";
@@ -51,8 +55,7 @@ function RecordUSData(updatedUSData) {
     confirmedDateLabels.forEach(appendToLabel);
 
     function appendToLabel(date) {
-        var dateCopy = date;
-        confirmedLabel += Cell((dateCopy.getMonth() + 1) + "/" + dateCopy.getDate() + "/" + dateCopy.getYear());
+        confirmedLabel += Cell(date);
     }
     confirmedLabel += "\n";
 
@@ -61,6 +64,7 @@ function RecordUSData(updatedUSData) {
     const fs = require('fs');
     const fileNameModule = require('../modules/DatabaseFileNames.js');
     fs.writeFileSync(fileNameModule.USConfirmedFileName, contents);
+    console.log("Write data done.");
 }
 
 function Cell(content) {
