@@ -26,14 +26,14 @@ module.exports = {
             this.exposureEnd = line[13];
 
             this.fromWuhan = line[14];
-            this.visitingWohan = line[15];
+            this.visitingWuhan = line[15];
 
 			this.dead = line[16] == '1';
 			this.recovered = line[17] == '1';
 
-            if (line.length >= 19) this.symptom = line[18];
-            if (line.length >= 20) this.source = line[19];
-            if (line.length >= 21) this.link = line[20];
+			this.symptom = (line.length >= 19) ? line[18] : "";
+			this.source = (line.length >= 20) ? line[19] : "";
+			this.link = (line.length >= 21) ? line[20] : "";
 		}
 	},
 
