@@ -1,5 +1,5 @@
 <template>
-  <div id="Gender_Age_Body">
+  <div id="Body">
     <!-- Input form -->
     <div class="m-5 text-center">
       <b-form @submit="displayData">
@@ -26,14 +26,14 @@
 </template>
 
 <script>
-import Services from "../Services/Services";
+import Services from "../../Services/Services";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import Table from "../components/GlobalTable";
+import Table from "./Table";
 library.add(faSearch);
 
 export default {
-  name: "Gender_Age_Body",
+  name: "Body",
   props: {
     InputName: String,
     dynamicOptions: Array,
