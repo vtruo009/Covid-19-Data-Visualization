@@ -1,3 +1,80 @@
+const DataType = {
+    CONFIRMED: 1,
+    RECOVERED: 2,
+    DEAD: 3
+};
+
+function UpdateWorldDataFile(updatedWorldData, dataType) {
+    const helperModule = require('../modules/BasicHelpers.js');
+
+    var label = Cell("Province/State") + // 1
+        Cell("Country/Region") + // 2
+        Cell("Lat") + // 3
+        Cell("Long"); // 4
+
+    var dateLabels = [];
+    var values = "";
+    updatedWorldData.forEach(recordValues);
+
+    function recordValues(item) {
+        var dateValueDict;
+        if (dataType == DataType.CONFIRMED) dateValueDict = item.numComfirmed;
+        else if (dataType == DataType.DEAD) dateValueDict = item.numDeaths;
+        else if (dataType == DataType.RECOVERED) dateValueDict = item.numRecovered;
+
+        values += Cell(item.state) + // 1
+            Cell(item.country) + // 2
+            Cell(item.latitude) + // 3
+            Cell(item.longitude); // 4
+
+        dateLabels.forEach(recordValuesOnExistingDate);
+
+        function recordValuesOnExistingDate(dateStr) {
+            var date = helperModule.stringToDate(dateStr);
+            if (date in dateValueDict) {
+                values += Cell(dateValueDict[date]);
+            } else {
+                values += Cell("");
+            }
+        }
+
+        for (var key in dateValueDict) {
+            var keyDate = new Date(key);
+            var dateStr = (keyDate.getMonth() + 1) + "/" + keyDate.getDate() + "/" + keyDate.getFullYear();
+            if (!dateLabels.includes(dateStr)) {
+                dateLabels.push(dateStr);
+                values += Cell(dateValueDict[key]);
+            }
+        }
+        values += "\n";
+    }
+
+    dateLabels.forEach(appendToLabel);
+
+    function appendToLabel(date) {
+        label += Cell(date);
+    }
+    label += "\n";
+
+    var contents = label + values;
+
+    const fs = require('fs');
+    const fileNameModule = require('../modules/DatabaseFileNames.js');
+
+    var fileName = "";
+    if (dataType == DataType.CONFIRMED) fileName = fileNameModule.WorldConfirmedFileName;
+    else if (dataType == DataType.DEAD) fileName = fileNameModule.WorldDeathsFileName;
+    else if (dataType == DataType.RECOVERED) fileName = fileNameModule.WorldRecoveredFileName;
+
+    fs.writeFileSync(fileName, contents);
+}
+
+function RecordWorldData(updatedWorldData) {
+    UpdateWorldDataFile(updatedWorldData, DataType.CONFIRMED);
+    UpdateWorldDataFile(updatedWorldData, DataType.RECOVERED);
+    UpdateWorldDataFile(updatedWorldData, DataType.DEAD);
+}
+
 function RecordCases(updatedAllCases) {
     var contents = Cell("id") + // 1
         Cell("case_in_country") + // 2
@@ -60,5 +137,9 @@ function Cell(content) {
 }
 
 module.exports = {
-    RecordCases: RecordCases
+    // Argument: Array of Case
+    RecordCases: RecordCases,
+
+    // Argument: Array of WorldPlace
+    RecordWorldData: RecordWorldData
 };
