@@ -1,6 +1,12 @@
 <template>
   <div id="Table">
-    <b-table dark striped hover :items="this.data" :fields="fields">
+    <b-table dark striped hover :items="this.data" :fields="fields" :busy="this.isBusy">
+      <template v-slot:table-busy>
+        <div class="text-center text-danger my-2">
+          <b-spinner class="align-middle"></b-spinner>
+          <strong>Loading...</strong>
+        </div>
+      </template>
       <template v-slot:cell(date)="row">{{row.value}}</template>
       <template v-slot:cell(number)="row">{{row.value}}</template>
       <template v-slot:cell(actions)="row">
@@ -49,7 +55,10 @@
     <b-modal ref="delete-modal" hide-footer hide-title>
       <b-form @submit="sendDeleteRequest">
         <!-- Access cached data from the body parent component -->
-        <h3 class="danger mb-4">Are you sure you want to delete the following record?</h3>
+        <h3 class="mb-4">
+          <span class="text-danger">WARNING</span>
+          : Are you sure you want to delete the following record?
+        </h3>
         <hr />
         <p>
           <b>Location:</b>
@@ -88,7 +97,8 @@ library.add(faTrash, faPen);
 export default {
   name: "Table",
   props: {
-    data: Array
+    data: Array,
+    isBusy: Boolean
   },
   data() {
     return {
