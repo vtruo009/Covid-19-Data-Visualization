@@ -4,18 +4,20 @@
       <template v-slot:cell(date)="row">{{row.value}}</template>
       <template v-slot:cell(number)="row">{{row.value}}</template>
       <template v-slot:cell(actions)="row">
-        <b-button class="btn btn-info mr-4" @click="setUpdate(row.item.date, row.item.number)">
+        <b-button variant="primary" class="mr-4" @click="setUpdate(row.item.date, row.item.number)">
           <font-awesome-icon :icon="['fas', 'pen']" />
         </b-button>
-        <b-button class="btn btn-danger" @click="remove(row.item.date, row.item.number)">
+        <b-button class="btn btn-danger" @click="setRemove(row.item.date, row.item.number)">
           <font-awesome-icon :icon="['fas', 'trash']" />
         </b-button>
       </template>
     </b-table>
 
     <!-- Update Modal -->
-    <b-modal ref="update-modal" hide-footer title="Update Record">
+    <b-modal ref="update-modal" hide-footer hide-title>
       <b-form @submit="sendUpdateRequest">
+        <h3 class="danger mb-4">You are going to edit the following record</h3>
+        <hr />
         <!-- Access cached data from the body parent component -->
         <p>
           <b>Location:</b>
@@ -28,12 +30,12 @@
         <b-row>
           <b-col>
             <b-form-group label="Date:">
-              <b-form-input v-model="updateRecord.date" disabled required></b-form-input>
+              <b-form-input v-model="selectedRecord.date" disabled></b-form-input>
             </b-form-group>
           </b-col>
           <b-col>
             <b-form-group label="Number:">
-              <b-form-input type="number" v-model="updateRecord.number" required></b-form-input>
+              <b-form-input type="number" v-model="selectedRecord.number" required></b-form-input>
             </b-form-group>
           </b-col>
         </b-row>
@@ -44,6 +46,36 @@
     </b-modal>
 
     <!-- Delete Modal -->
+    <b-modal ref="delete-modal" hide-footer hide-title>
+      <b-form @submit="sendDeleteRequest">
+        <!-- Access cached data from the body parent component -->
+        <h3 class="danger mb-4">Are you sure you want to delete the following record?</h3>
+        <hr />
+        <p>
+          <b>Location:</b>
+          {{this.$parent.cacheFirstInput}}, {{this.$parent.cacheSecondInput}}
+        </p>
+        <p>
+          <b>Type of record:</b>
+          {{this.$parent.cacheTypeOFDataString}}
+        </p>
+        <b-row>
+          <b-col>
+            <b-form-group label="Date:">
+              <b-form-input v-bind:value="selectedRecord.date" disabled></b-form-input>
+            </b-form-group>
+          </b-col>
+          <b-col>
+            <b-form-group label="Number:">
+              <b-form-input type="number" v-bind:value="selectedRecord.number" disabled></b-form-input>
+            </b-form-group>
+          </b-col>
+        </b-row>
+        <hr />
+        <b-button type="submit" variant="danger" class="float-right">Yes</b-button>
+        <b-button variant="secondary" class="float-right mr-3" @click="hideDeleteModal">No</b-button>
+      </b-form>
+    </b-modal>
   </div>
 </template>
 
@@ -60,7 +92,7 @@ export default {
   },
   data() {
     return {
-      updateRecord: {
+      selectedRecord: {
         date: null,
         number: null
       },
@@ -72,52 +104,57 @@ export default {
     };
   },
   methods: {
+    // Update Modal methods
     showUpdateModal() {
       this.$refs["update-modal"].show();
     },
+
     hideUpdateModal() {
       this.$refs["update-modal"].hide();
       // Clears values
-      this.updateRecord.date = null;
-      this.updateRecord.number = null;
+      this.clearFields();
+    },
+
+    // Delete Modal methods
+    showDeleteModal() {
+      this.$refs["delete-modal"].show();
+    },
+
+    hideDeleteModal() {
+      this.$refs["delete-modal"].hide();
+      // Clears values
+      this.clearFields();
+    },
+
+    // Helper methods:
+
+    clearFields() {
+      this.selectedRecord.date = null;
+      this.selectedRecord.number = null;
     },
 
     setUpdate(date, number) {
       this.showUpdateModal();
-      console.log(this.$parent.cacheTypeOfData);
-      console.log("Update:");
-      console.log(date);
-      console.log(number);
-      this.updateRecord.date = date;
-      this.updateRecord.number = number;
-      // send information to parent
-      //this.$parent.updateRecord(date, number);
+      this.selectedRecord.date = date;
+      this.selectedRecord.number = number;
     },
-    remove(date, number) {
-      console.log("Delete:");
-      console.log(date);
-      console.log(number);
+
+    setRemove(date, number) {
+      this.showDeleteModal();
+      this.selectedRecord.date = date;
+      this.selectedRecord.number = number;
     },
 
     sendUpdateRequest(e) {
       e.preventDefault();
       this.hideUpdateModal();
-      console.log("Sends request");
-    }
-  },
+      console.log("Sends update request");
+    },
 
-  computed: {
-    getStringTypeOfData: () => {
-      // switch (this.$parent.cacheTypeOfData) {
-      //   case 1:
-      //     return "Confirmed";
-      //   case 2:
-      //     return "Deaths";
-      //   case 3:
-      //     return "Recovered";
-      //   default:
-      //     return "";
-      // }
+    sendDeleteRequest(e) {
+      e.preventDefault();
+      this.hideDeleteModal();
+      console.log("Sends delete request");
     }
   }
 };
