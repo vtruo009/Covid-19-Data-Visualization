@@ -61,13 +61,16 @@ export default {
 
       // Data to used to populate table
       tableData: null,
-      // Boolean used to display errors if any
+
+      // Booleans used to display errors if any
       error: false,
       errorMessage: null,
 
-      // Input values for updating/deleting
-      requestedFirstInput: null,
-      requestedSecondInput: null
+      // cached inputted values for updating/deleting
+      cacheFirstInput: null,
+      cacheSecondInput: null,
+      cacheTypeOfData: null,
+      cacheTypeOFDataString: null
     };
   },
   methods: {
@@ -75,11 +78,6 @@ export default {
       e.preventDefault();
 
       // Send search request to backend
-
-      // Save values for any update/delete request
-      this.requestedFirstInput = this.firstInput;
-      this.requestedSecondInput = this.secondInput;
-
       Services.searchData({
         apiEndPoint: this.apiEndPoint,
         params: {
@@ -97,6 +95,8 @@ export default {
             this.setTableData(response.data.data);
             this.setErrorOff();
           }
+
+          this.cacheInputtedData();
         })
         .catch(error => {
           this.errorHandler("Some error occurred. Please try again");
@@ -124,6 +124,27 @@ export default {
     },
     setErrorOn() {
       this.error = true;
+    },
+
+    cacheInputtedData() {
+      this.cacheFirstInput = this.firstInput;
+      this.cacheSecondInput = this.secondInput;
+      this.cacheTypeOfData = this.TypeOfDataSelected;
+      // Get the string version of the type of data selected
+      switch (this.cacheTypeOfData) {
+        case "1":
+          this.cacheTypeOFDataString = "Confirmed";
+          break;
+        case "2":
+          this.cacheTypeOFDataString = "Deaths";
+          break;
+        case "3":
+          this.cacheTypeOFDataString = "Recovered";
+          break;
+        default:
+          this.cacheTypeOFDataString = "";
+          break;
+      }
     }
   },
   components: { Table, Error }
