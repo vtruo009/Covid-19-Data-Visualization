@@ -1,5 +1,5 @@
 <template>
-  <div id="US_World_Body">
+  <div id="Body">
     <div class="m-5 text-center">
       <!-- User input form -->
       <b-form @submit="displayData">
@@ -29,16 +29,16 @@
 </template>
 
 <script>
-import Services from "../Services/Services";
+import Services from "../../Services/Services";
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import Table from "../components/GlobalTable";
-import Error from "../components/Error";
+import Table from "./Table";
+import Error from "../Error";
 
 library.add(faSearch);
 
 export default {
-  name: "US_World_Body",
+  name: "Body",
   props: {
     firstInputName: String,
     secondInputName: String,
@@ -104,11 +104,11 @@ export default {
         });
     },
 
-    updateRecord(date, number) {
-      console.log("Hello from update record");
-      console.log(date);
-      console.log(number);
-    },
+    // updateRecord(date, number) {
+    //   console.log("Hello from update record");
+    //   console.log(date);
+    //   console.log(number);
+    // },
 
     errorHandler(errorMessage) {
       this.setErrorOn();

@@ -1,11 +1,11 @@
 <template>
   <div class="WorldPge fadeIn">
-    <WorldBody firstInputName="State" secondInputName="Country" apiEndPoint="/WorldData" />
+    <Body firstInputName="State" secondInputName="Country" apiEndPoint="/WorldData" />
   </div>
 </template>
 
 <script>
-import WorldBody from "../components/US_World_Body";
+import Body from "../components/US_World/Body";
 
 export default {
   name: "WorldPage",
@@ -13,7 +13,7 @@ export default {
     return {};
   },
   methods: {},
-  components: { WorldBody }
+  components: { Body }
 };
 </script>
 

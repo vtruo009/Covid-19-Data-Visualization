@@ -1,15 +1,15 @@
 <template>
   <div class="GenderPage fadeIn">
-    <GenderBody InputName="Gender" v-bind:dynamicOptions="genderOptions" apiEndPoint="/GenderData" />
+    <Body InputName="Gender" v-bind:dynamicOptions="genderOptions" apiEndPoint="/GenderData" />
   </div>
 </template>
 
 <script>
-import GenderBody from "../components/Gender_Age_Body";
+import Body from "../components/Gender_Age/Body";
 export default {
   name: "GenderPage",
   components: {
-    GenderBody
+    Body
   },
   data() {
     return {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="Table">
     <b-table dark striped hover :items="this.data" :fields="fields">
       <template v-slot:cell(date)="row">{{row.value}}</template>
       <template v-slot:cell(number)="row">{{row.value}}</template>
@@ -22,7 +22,7 @@ import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
 library.add(faTrash, faPen);
 
 export default {
-  name: "GlobalTable",
+  name: "Table",
   props: {
     data: Array
   },
@@ -41,7 +41,7 @@ export default {
       console.log(date);
       console.log(number);
       // send information to parent
-      this.$parent.updateRecord(date, number);
+      //this.$parent.updateRecord(date, number);
     },
     remove(date, number) {
       console.log("Delete:");
