@@ -46,26 +46,40 @@ export default {
   },
   data() {
     return {
+      // Input values for searching
       firstInput: null,
       secondInput: null,
       TypeOfDataSelected: null,
+
+      // Select options
       TypeOfDataoptions: [
         { value: null, text: "Please select an option", disabled: true },
         { value: "1", text: "Confirmed cases per day" },
         { value: "2", text: "Deaths per day" },
         { value: "3", text: "Recovered cases per day" }
       ],
+
       // Data to used to populate table
       tableData: null,
       // Boolean used to display errors if any
       error: false,
-      errorMessage: null
+      errorMessage: null,
+
+      // Input values for updating/deleting
+      requestedFirstInput: null,
+      requestedSecondInput: null
     };
   },
   methods: {
     displayData(e) {
       e.preventDefault();
+
       // Send search request to backend
+
+      // Save values for any update/delete request
+      this.requestedFirstInput = this.firstInput;
+      this.requestedSecondInput = this.secondInput;
+
       Services.searchData({
         apiEndPoint: this.apiEndPoint,
         params: {
@@ -89,6 +103,13 @@ export default {
           console.log(error);
         });
     },
+
+    updateRecord(date, number) {
+      console.log("Hello from update record");
+      console.log(date);
+      console.log(number);
+    },
+
     errorHandler(errorMessage) {
       this.setErrorOn();
       this.errorMessage = errorMessage;
