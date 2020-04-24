@@ -2,6 +2,7 @@
   <div class="USPage fadeIn">
     <USBody firstInputName="County" secondInputName="State" apiEndPoint="/USData" />
   </div>
+  
 </template>
 
 <script>

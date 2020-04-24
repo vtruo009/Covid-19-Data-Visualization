@@ -14,6 +14,9 @@
             <b-form-select v-model="TypeOfDataSelected" :options="TypeOfDataoptions" required></b-form-select>
           </b-col>
           <b-col>
+            <button type="button" class="btn btn-primary" @click = "showModal" data-toggle="modal" data-target="#exampleModal"> Insert </button>
+          </b-col>
+          <b-col>
             <b-button variant="primary" type="submit">
               <font-awesome-icon :icon="['fas', 'search']" />
             </b-button>
@@ -25,7 +28,6 @@
     <Table v-bind:data="tableData" />
     <!-- Errors to display -->
     <Error v-if="error" v-bind:errorMessage="errorMessage" />
-  </div>
 </template>
 
 <script>
@@ -34,6 +36,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import Table from "../components/GlobalTable";
 import Error from "../components/Error";
+import exampleModal from './exampleModal.vue';
 
 library.add(faSearch);
 
@@ -104,8 +107,12 @@ export default {
     setErrorOn() {
       this.error = true;
     }
+    showModal(){
+      let element = this.$refs.modal.$el;
+      $(element).modal('show');
+    }
   },
-  components: { Table, Error }
+  components: { Table, Error, exampleModal }
 };
 </script>
 

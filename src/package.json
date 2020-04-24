@@ -6,7 +6,7 @@
     "license": "UNLICENSED",
     "scripts": {
         "client": "cd client && npm run serve",
-        "server": "cd server && npm start",
+        "server": "cd Server && npm start",
         "start": "concurrently - k \"npm run server\" \"npm run client\""
     },
     "dependencies": {
