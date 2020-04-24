@@ -10,7 +10,11 @@
       <template v-slot:cell(date)="row">{{row.value}}</template>
       <template v-slot:cell(number)="row">{{row.value}}</template>
       <template v-slot:cell(actions)="row">
-        <b-button variant="primary" class="mr-4" @click="setUpdate(row.item.date, row.item.number)">
+        <b-button
+          variant="primary"
+          class="mr-4"
+          @click="setUpdate(row.item.date, row.item.number, row.index)"
+        >
           <font-awesome-icon :icon="['fas', 'pen']" />
         </b-button>
         <b-button class="btn btn-danger" @click="setRemove(row.item.date, row.item.number)">
@@ -144,7 +148,8 @@ export default {
       this.selectedRecord.number = null;
     },
 
-    setUpdate(date, number) {
+    setUpdate(date, number, rowIndex) {
+      console.log(rowIndex);
       this.showUpdateModal();
       this.selectedRecord.date = date;
       this.selectedRecord.number = number;
