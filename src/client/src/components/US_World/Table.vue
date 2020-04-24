@@ -91,6 +91,7 @@
 <script>
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
+import Services from "../../Services/Services";
 
 library.add(faTrash, faPen);
 
@@ -155,16 +156,49 @@ export default {
       this.selectedRecord.number = number;
     },
 
-    sendUpdateRequest(e) {
+    // Sends update request to the backend
+    async sendUpdateRequest(e) {
       e.preventDefault();
-      this.hideUpdateModal();
       console.log("Sends update request");
+      try {
+        const response = await Services.updateData({
+          apiEndPoint: this.$parent.apiEndPoint,
+          body: {
+            [this.$parent.firstInputName]: this.$parent.cacheFirstInput,
+            [this.$parent.secondInputName]: this.$parent.cacheSecondInput,
+            TypeOfData: this.$parent.cacheTypeOfData,
+            date: this.selectedRecord.date,
+            number: this.selectedRecord.number
+          }
+        });
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
+      // Hides the udpate modal
+      this.hideUpdateModal();
     },
 
-    sendDeleteRequest(e) {
+    // Sends delete request to the server
+    async sendDeleteRequest(e) {
       e.preventDefault();
-      this.hideDeleteModal();
       console.log("Sends delete request");
+      try {
+        const response = await Services.deleteData({
+          apiEndPoint: this.$parent.apiEndPoint,
+          body: {
+            [this.$parent.firstInputName]: this.$parent.cacheFirstInput,
+            [this.$parent.secondInputName]: this.$parent.cacheSecondInput,
+            TypeOfData: this.$parent.cacheTypeOfData,
+            date: this.selectedRecord.date,
+            number: this.selectedRecord.number
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+      // Hides the delete modal
+      this.hideDeleteModal();
     }
   }
 };
