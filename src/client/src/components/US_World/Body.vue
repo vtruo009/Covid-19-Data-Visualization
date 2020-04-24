@@ -22,7 +22,7 @@
       </b-form>
     </div>
     <!-- TABLE DATA-->
-    <Table v-bind:data="tableData" />
+    <Table v-show="isTableVisible" :data="tableData" :isBusy="tableBusy" />
     <!-- Errors to display -->
     <Error v-if="error" v-bind:errorMessage="errorMessage" />
   </div>
@@ -46,6 +46,7 @@ export default {
   },
   data() {
     return {
+      isTableVisible: false,
       // Input values for searching
       firstInput: null,
       secondInput: null,
@@ -61,25 +62,27 @@ export default {
 
       // Data to used to populate table
       tableData: null,
-      // Boolean used to display errors if any
+      tableBusy: false,
+
+      // Booleans used to display errors if any
       error: false,
       errorMessage: null,
 
-      // Input values for updating/deleting
-      requestedFirstInput: null,
-      requestedSecondInput: null
+      // cached inputted values for updating/deleting
+      cacheFirstInput: null,
+      cacheSecondInput: null,
+      cacheTypeOfData: null,
+      cacheTypeOFDataString: null
     };
   },
   methods: {
     displayData(e) {
       e.preventDefault();
-
+      this.showTable();
+      // Hide errors
+      this.setErrorOff();
       // Send search request to backend
-
-      // Save values for any update/delete request
-      this.requestedFirstInput = this.firstInput;
-      this.requestedSecondInput = this.secondInput;
-
+      this.toggleTableBusy();
       Services.searchData({
         apiEndPoint: this.apiEndPoint,
         params: {
@@ -95,26 +98,25 @@ export default {
             );
           } else {
             this.setTableData(response.data.data);
-            this.setErrorOff();
           }
+          this.cacheInputtedData();
+          this.toggleTableBusy();
         })
         .catch(error => {
           this.errorHandler("Some error occurred. Please try again");
           console.log(error);
+          this.toggleTableBusy();
         });
     },
 
-    // updateRecord(date, number) {
-    //   console.log("Hello from update record");
-    //   console.log(date);
-    //   console.log(number);
-    // },
-
+    // Helper methods
     errorHandler(errorMessage) {
       this.setErrorOn();
       this.errorMessage = errorMessage;
-      // Display no data
+      // clear the data
       this.setTableData(null);
+      // If there are errors then hide table
+      this.hideTable();
     },
     setTableData(data) {
       this.tableData = data;
@@ -124,6 +126,40 @@ export default {
     },
     setErrorOn() {
       this.error = true;
+    },
+
+    cacheInputtedData() {
+      this.cacheFirstInput = this.firstInput;
+      this.cacheSecondInput = this.secondInput;
+      this.cacheTypeOfData = this.TypeOfDataSelected;
+      // Get the string version of the type of data selected
+      switch (this.cacheTypeOfData) {
+        case "1":
+          this.cacheTypeOFDataString = "Confirmed";
+          break;
+        case "2":
+          this.cacheTypeOFDataString = "Deaths";
+          break;
+        case "3":
+          this.cacheTypeOFDataString = "Recovered";
+          break;
+        default:
+          this.cacheTypeOFDataString = "";
+          break;
+      }
+    },
+
+    // Toggle the state of the table
+    toggleTableBusy() {
+      this.tableBusy = !this.tableBusy;
+    },
+
+    showTable() {
+      this.isTableVisible = true;
+    },
+
+    hideTable() {
+      this.isTableVisible = false;
     }
   },
   components: { Table, Error }
