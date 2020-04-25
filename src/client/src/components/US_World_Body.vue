@@ -14,7 +14,7 @@
             <b-form-select v-model="TypeOfDataSelected" :options="TypeOfDataoptions" required></b-form-select>
           </b-col>
           <b-col>
-            <button type="button" class="btn btn-primary" @click = "showModal" data-toggle="modal" data-target="#exampleModal"> Insert </button>
+            <button type="button" class="btn btn-primary" @click="showModal()" > Insert </button>
           </b-col>
           <b-col>
             <b-button variant="primary" type="submit">
@@ -28,6 +28,32 @@
     <Table v-bind:data="tableData" />
     <!-- Errors to display -->
     <Error v-if="error" v-bind:errorMessage="errorMessage" />
+    <!-- Modal -->
+    <b-modal ref="insert-modal" hide-footer hide-title>
+      <h1>hello</h1>
+    </b-modal>
+  </div>
+   <!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Please Enter the Information Below</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            Hello World!
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+        </div>
+    </div>
+    </div>
+     -->
+
 </template>
 
 <script>
@@ -106,10 +132,13 @@ export default {
     },
     setErrorOn() {
       this.error = true;
-    }
-    showModal(){
-      let element = this.$refs.modal.$el;
-      $(element).modal('show');
+    },
+    showModal() {
+      // let element = this.$refs.modal.$el;
+      // $(element).modal('show');
+      console.log("hi");
+      this.$refs["insert-modal"].show();
+
     }
   },
   components: { Table, Error, exampleModal }
