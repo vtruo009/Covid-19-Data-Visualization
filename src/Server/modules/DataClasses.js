@@ -2,7 +2,7 @@ module.exports = {
 	Case: class {
 		constructor(line) {
 			this.id = parseInt(line[0]);
-			this.caseInCountry = parseInt(line[1]);
+			this.caseInCountry = line[1];
 
 			const helperModule = require('../modules/BasicHelpers.js');
 
