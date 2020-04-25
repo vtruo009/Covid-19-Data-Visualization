@@ -20,7 +20,7 @@ function DeleteUSData(county, state, date, USData, tod) {
 			}
 		}
     }
-    else {
+    else if (tod ==2) {
         for (var i = 0; i < USData.length; ++i) {
 			if (county == USData[i].county && state == USData[i].state) {
 				for (var key in USData[i].numDeaths) {
