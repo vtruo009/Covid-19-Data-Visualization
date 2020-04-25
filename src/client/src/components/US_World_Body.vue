@@ -115,7 +115,6 @@ export default {
     showModal() {
       // let element = this.$refs.modal.$el;
       // $(element).modal('show');
-      console.log("hi");
       this.$refs["insert-modal"].show();
 
     }
