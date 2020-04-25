@@ -43,6 +43,7 @@
 		<!-- Errors to display -->
 		<Error v-if="error" v-bind:errorMessage="errorMessage" />
 
+		<!-- Implement Insert Modal -->
 		<b-modal ref="insert-modal" hide-footer hide-title>
 			<h1>hello</h1>
 		</b-modal>
