@@ -1,15 +1,18 @@
 var express = require('express');
 var router = express.Router();
 
+const readCSVModule = require('../modules/ReadCSV.js');
+var USData = readCSVModule.LoadUSData();
+// Now, USData stores list of USPlace read from the csv file.
+
+const ModModule = require('../modules/ModifyData.js');
+// ModModule.DeleteUSData("Bibb", "Alabama", "4/13/2020", USData, 1);
+
 // Get request. query paraemeters contain data from form. render search.html passing data
 const USReq = require('../modules/DataClasses.js');
 router.get('/search', (req, res) => {
 	console.log(req.query);
 	// Get respective data using the query parameters
-
-	const readCSVModule = require('../modules/ReadCSV.js');
-	var USData = readCSVModule.LoadUSData();
-	// Now, USData stores list of USPlace read from the csv file.
 
 	var selectedInUS = [];
 	for (var i = 0; i < USData.length; ++i) {
@@ -22,7 +25,7 @@ router.get('/search', (req, res) => {
 		}
 	}
 
-	console.log(selectedInUS);
+	// console.log(selectedInUS);
 	if (selectedInUS.length > 0) {
 		if (req.query.TypeOfData == 1) {
 			var row = [];
@@ -42,7 +45,6 @@ router.get('/search', (req, res) => {
 				row.push(newItem);
 			}
 		} else if (req.query.TypeOfData == 2) {
-			//deaths
 			var row = [];
 			for (var key in selectedInUS[0].numDeaths) {
 				var temp_date = new Date(key);
@@ -65,6 +67,12 @@ router.get('/search', (req, res) => {
 	res.send({
 		data: row,
 	});
+});
+
+router.post('delete/', (req, res) => {
+	res.send({
+		success: DeleteUSData(req.body.County, req.body.State, req.body.date, USData, req.body.TypeOfData)
+	})
 });
 
 module.exports = router;
