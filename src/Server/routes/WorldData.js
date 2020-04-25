@@ -2,13 +2,12 @@ var express = require('express');
 var router = express.Router();
 
 const worldReq = require('../modules/DataClasses.js');
-
 router.get('/search', (req, res) => {
 	console.log(req.query);
 	// Get respective data using the query parameters
 	var selectedCountry = [];
-	const readCSVModule = require('../modules/ReadCases.js');
-	var WorldData = readCSVModule.loadWorldData();
+	const readCSVModule = require('../modules/ReadCSV.js');
+	var WorldData = readCSVModule.LoadWorldData();
 	// Now, WorldData stores list of WorldPlace read from the csv file.
 
 	// console.log(WorldData);

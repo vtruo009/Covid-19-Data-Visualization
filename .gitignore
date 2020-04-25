@@ -1,6 +1,8 @@
 bin
 package-lock.json
 node_modules/
+src/Server/database/
+
 
 # Visual Studio auto generated files
 .vscode

@@ -7,8 +7,8 @@ router.get('/search', (req, res) => {
 	console.log(req.query);
 	// Get respective data using the query parameters
 
-	const readCSVModule = require('../modules/ReadCases.js');
-	var USData = readCSVModule.loadUSData();
+	const readCSVModule = require('../modules/ReadCSV.js');
+	var USData = readCSVModule.LoadUSData();
 	// Now, USData stores list of USPlace read from the csv file.
 
 	var selectedInUS = [];

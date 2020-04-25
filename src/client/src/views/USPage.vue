@@ -1,12 +1,12 @@
 <template>
   <div class="USPage fadeIn">
-    <USBody firstInputName="County" secondInputName="State" apiEndPoint="/USData" />
+    <Body firstInputName="County" secondInputName="State" apiEndPoint="/USData" />
   </div>
   
 </template>
 
 <script>
-import USBody from "../components/US_World_Body";
+import Body from "../components/US_World/Body";
 
 export default {
   name: "USPage",
@@ -15,7 +15,7 @@ export default {
   },
   methods: {},
   components: {
-    USBody
+    Body
   }
 };
 </script>

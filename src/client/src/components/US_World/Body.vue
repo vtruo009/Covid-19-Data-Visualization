@@ -1,5 +1,5 @@
 <template>
-	<div id="US_World_Body">
+	<div id="Body">
 		<div class="m-5 text-center">
 			<!-- User input form -->
 			<b-form @submit="displayData">
@@ -42,7 +42,7 @@
 		<Table v-bind:data="tableData" />
 		<!-- Errors to display -->
 		<Error v-if="error" v-bind:errorMessage="errorMessage" />
-		<!-- Modal -->
+
 		<b-modal ref="insert-modal" hide-footer hide-title>
 			<h1>hello</h1>
 		</b-modal>
@@ -50,17 +50,16 @@
 </template>
 
 <script>
-import Services from '../Services/Services';
+import Services from '../../Services/Services';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import Table from '../components/GlobalTable';
-import Error from '../components/Error';
-import exampleModal from './exampleModal.vue';
+import Table from './Table';
+import Error from '../Error';
 
 library.add(faSearch);
 
 export default {
-	name: 'US_World_Body',
+	name: 'Body',
 	props: {
 		firstInputName: String,
 		secondInputName: String,
@@ -68,26 +67,40 @@ export default {
 	},
 	data() {
 		return {
+			// Input values for searching
 			firstInput: null,
 			secondInput: null,
 			TypeOfDataSelected: null,
+
+			// Select options
 			TypeOfDataoptions: [
 				{ value: null, text: 'Please select an option', disabled: true },
 				{ value: '1', text: 'Confirmed cases per day' },
 				{ value: '2', text: 'Deaths per day' },
 				{ value: '3', text: 'Recovered cases per day' },
 			],
+
 			// Data to used to populate table
 			tableData: null,
 			// Boolean used to display errors if any
 			error: false,
 			errorMessage: null,
+
+			// Input values for updating/deleting
+			requestedFirstInput: null,
+			requestedSecondInput: null,
 		};
 	},
 	methods: {
 		displayData(e) {
 			e.preventDefault();
+
 			// Send search request to backend
+
+			// Save values for any update/delete request
+			this.requestedFirstInput = this.firstInput;
+			this.requestedSecondInput = this.secondInput;
+
 			Services.searchData({
 				apiEndPoint: this.apiEndPoint,
 				params: {
@@ -111,6 +124,7 @@ export default {
 					console.log(error);
 				});
 		},
+
 		errorHandler(errorMessage) {
 			this.setErrorOn();
 			this.errorMessage = errorMessage;
@@ -130,7 +144,7 @@ export default {
 			this.$refs['insert-modal'].show();
 		},
 	},
-	components: { Table, Error, exampleModal },
+	components: { Table, Error },
 };
 </script>
 
