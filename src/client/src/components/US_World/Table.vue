@@ -17,7 +17,10 @@
         >
           <font-awesome-icon :icon="['fas', 'pen']" />
         </b-button>
-        <b-button class="btn btn-danger" @click="setRemove(row.item.date, row.item.number)">
+        <b-button
+          class="btn btn-danger"
+          @click="setRemove(row.item.date, row.item.number, row.index)"
+        >
           <font-awesome-icon :icon="['fas', 'trash']" />
         </b-button>
       </template>
@@ -109,7 +112,8 @@ export default {
     return {
       selectedRecord: {
         date: null,
-        number: null
+        number: null,
+        index: null
       },
       fields: [
         { key: "date", label: "Date" },
@@ -146,6 +150,7 @@ export default {
     clearFields() {
       this.selectedRecord.date = null;
       this.selectedRecord.number = null;
+      this.selectedRecord.index = null;
     },
 
     setUpdate(date, number, rowIndex) {
@@ -153,12 +158,14 @@ export default {
       this.showUpdateModal();
       this.selectedRecord.date = date;
       this.selectedRecord.number = number;
+      this.selectedRecord.index = rowIndex;
     },
 
-    setRemove(date, number) {
+    setRemove(date, number, rowIndex) {
       this.showDeleteModal();
       this.selectedRecord.date = date;
       this.selectedRecord.number = number;
+      this.selectedRecord.index = rowIndex;
     },
 
     // Sends update request to the backend
@@ -176,7 +183,10 @@ export default {
             number: this.selectedRecord.number
           }
         });
-        console.log(response);
+        // Update the selected row on the table
+        this.data[
+          this.selectedRecord.index
+        ].number = this.selectedRecord.number;
       } catch (error) {
         console.log(error);
       }
@@ -199,6 +209,8 @@ export default {
             number: this.selectedRecord.number
           }
         });
+        // Delete the selected row from the table
+        this.data.splice(this.selectedRecord.index, 1);
       } catch (error) {
         console.log(error);
       }
