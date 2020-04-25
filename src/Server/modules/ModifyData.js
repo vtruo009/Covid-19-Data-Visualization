@@ -85,6 +85,6 @@ module.exports = {
     // Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), id
     AddCase: AddCase,
 
-    // Argument: id of the Case the user wants to delete.
+    // Argument: Array of Case,  id of the Case the user wants to delete.
     RemoveCase: RemoveCase,
 };
