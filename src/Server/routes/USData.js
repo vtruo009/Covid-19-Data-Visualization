@@ -75,4 +75,10 @@ router.post('delete/', (req, res) => {
 	})
 });
 
+router.post('edit/', (req, res) => {
+	res.send({
+		success: ModModule.EditUSData(req.body.County, req.body.State, req.body.date, USData, req.body.TypeOfData, req.body.number)
+	})
+})
+
 module.exports = router;
