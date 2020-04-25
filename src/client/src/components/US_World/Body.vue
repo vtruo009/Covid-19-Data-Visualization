@@ -45,9 +45,36 @@
 
 		<!-- Implement Insert Modal -->
 		<b-modal ref="insert-modal" hide-footer hide-title>
-			<h1>hello</h1>
+			<h3 class="danger mb-4">Please Enter the Information Below</h3>
+			<b-col>	
+            <b-form-group label="County: ">
+				<b-form-input type="insertCounty"> </b-form-input>
+            </b-form-group>
+            <b-form-group label="State: ">
+				<b-form-input type="insertState"> </b-form-input>
+            </b-form-group>
+			<b-form-group label="Date: ">
+				<b-form-input type="insertDate"> </b-form-input>
+            </b-form-group>
+			<b-form-group label="Option">
+				<b-form-select
+				v-model="TypeOfDataSelected"
+				:options="TypeOfDataoptions"
+				required
+				></b-form-select>
+            </b-form-group>
+			
+			</b-col>
+			<hr />
+			<b-button variant="primary" class="float-right " type="cancel" @click="hideInsertModal()">
+				cancel
+			</b-button>
+			<b-button variant="primary" class="float-right mr-3" type="submit">
+				submit
+			</b-button>			
+			
 		</b-modal>
-	</div>
+		</div>
 </template>
 
 <script>
@@ -186,6 +213,11 @@ export default {
 		showModal() {
 			this.$refs['insert-modal'].show();
 		},
+		hideInsertModal() {
+      		this.$refs["insert-modal"].hide();
+     		 // Clears values
+      		this.clearFields();
+    }
 	},
 	components: { Table, Error },
 };
