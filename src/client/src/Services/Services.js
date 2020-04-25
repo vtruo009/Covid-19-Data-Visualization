@@ -20,7 +20,6 @@ export default {
 	// calls update endpoint of any of the routes in the backend server
 	updateData(payload) {
 		console.log(payload);
-		return 'lol';
 		// Implements create request to server
 		// return API()
 		// 	.post(`${payload.apiEndPoint}/update`, payload.body)
