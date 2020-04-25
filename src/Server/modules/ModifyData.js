@@ -20,6 +20,25 @@ function DeleteUSData(county, state, date, USData, tod) {
 			}
 		}
     }
+    else {
+        for (var i = 0; i < USData.length; ++i) {
+			if (county == USData[i].county && state == USData[i].state) {
+				for (var key in USData[i].numDeaths) {
+					var temp = new Date(key);
+					var d = temp.getMonth() + 1 +
+					'/' +
+					temp.getDate() +
+					'/' +
+					temp.getFullYear();
+					if (d == date) {
+						delete USData[i].numDeaths[key];
+                        result = true;
+                        break;
+					}
+				}
+			}
+		}
+    }
 
     const writeCSVModule = require('../modules/WriteCSV.js');
     writeCSVModule.RecordUSData(USData);
