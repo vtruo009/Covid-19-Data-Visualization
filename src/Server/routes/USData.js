@@ -71,7 +71,7 @@ router.get('/search', (req, res) => {
 
 router.post('delete/', (req, res) => {
 	res.send({
-		success: DeleteUSData(req.body.County, req.body.State, req.body.date, USData, req.body.TypeOfData)
+		success: ModModule.DeleteUSData(req.body.County, req.body.State, req.body.date, USData, req.body.TypeOfData)
 	})
 });
 
