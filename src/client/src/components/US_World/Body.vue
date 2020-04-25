@@ -39,7 +39,7 @@
 			</b-form>
 		</div>
 		<!-- TABLE DATA-->
-		<Table v-bind:data="tableData" />
+		<Table v-show="isTableVisible" :data="tableData" :isBusy="tableBusy" />
 		<!-- Errors to display -->
 		<Error v-if="error" v-bind:errorMessage="errorMessage" />
 
@@ -98,37 +98,37 @@ export default {
 		};
 	},
 	methods: {
-		displayData(e) {
+		async displayData(e) {
 			e.preventDefault();
 			this.showTable();
 			// Hide errors
 			this.setErrorOff();
 			// Send search request to backend
 			this.toggleTableBusy();
-			Services.searchData({
-				apiEndPoint: this.apiEndPoint,
-				params: {
-					[this.firstInputName]: this.firstInput,
-					[this.secondInputName]: this.secondInput,
-					TypeOfData: this.TypeOfDataSelected,
-				},
-			})
-				.then((response) => {
-					if (response.data.data == undefined) {
-						this.errorHandler(
-							`No data available for ${this.firstInput}, ${this.secondInput}.`
-						);
-					} else {
-						this.setTableData(response.data.data);
-					}
-					this.cacheInputtedData();
-					this.toggleTableBusy();
-				})
-				.catch((error) => {
-					this.errorHandler('Some error occurred. Please try again');
-					console.log(error);
-					this.toggleTableBusy();
+			try {
+				const response = await Services.searchData({
+					apiEndPoint: this.apiEndPoint,
+					params: {
+						[this.firstInputName]: this.firstInput,
+						[this.secondInputName]: this.secondInput,
+						TypeOfData: this.TypeOfDataSelected,
+					},
 				});
+				if (response.data.data == undefined) {
+					this.errorHandler(
+						`No data available for ${this.firstInput}, ${this.secondInput}.`
+					);
+				} else {
+					this.setTableData(response.data.data);
+				}
+				// Save data for future requests
+				this.cacheInputtedData();
+			} catch (error) {
+				this.errorHandler('Some error occurred. Please try again');
+				console.log(error);
+			}
+			//  Sets loading spinner off
+			this.toggleTableBusy();
 		},
 
 		// Helper methods
