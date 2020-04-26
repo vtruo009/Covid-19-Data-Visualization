@@ -93,7 +93,7 @@ router.post('/delete', (req, res) => {
 
 router.post('/update', (req, res) => {
 	res.send({
-		success: ModModule.WorldUpdate(req.body.Country, req.body.State, req.body.date, WorldData, req.body.TypeOfData, req.body.number)
+		success: ModModule.UpdateWorldData(req.body.Country, req.body.State, req.body.date, WorldData, req.body.TypeOfData, req.body.number)
 	})
 })
 module.exports = router;

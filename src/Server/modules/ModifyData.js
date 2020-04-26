@@ -338,7 +338,7 @@ function DeleteWorldData(country, state, date, WorldData, tod) {
     return result;
 }
 
-function WorldUpdate(country, state, date, WorldData, tod, number) {
+function UpdateWorldData(country, state, date, WorldData, tod, number) {
 	var result = false;
 	if (tod == 1) {
         console.log(WorldData.length);
@@ -421,6 +421,9 @@ module.exports = {
 
     //World Add
     DeleteWorldData: DeleteWorldData,
+
+    //World Update
+    UpdateWorldData: UpdateWorldData,
 	// Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), id
 	EditCase: EditCase,
 
