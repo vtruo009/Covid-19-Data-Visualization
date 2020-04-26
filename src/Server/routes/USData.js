@@ -77,7 +77,7 @@ router.post('delete/', (req, res) => {
 	})
 });
 
-router.post('/add', (req, res) => {
+router.post('/insert', (req, res) => {
 	res.send({
 		success: ModModule.AddUSData(req.body.County, req.body.State, req.body.date, USData, req.body.TypeOfData, req.body.number)
 	})
