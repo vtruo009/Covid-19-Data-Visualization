@@ -39,7 +39,7 @@
 			</b-form>
 		</div>
 		<!-- TABLE DATA-->
-		<Table v-show="isTableVisible" :data="tableData" :isBusy="tableBusy" />
+		<Table v-show="table.isVisible" :data="table.data" :isBusy="table.Busy" />
 		<!-- Errors to display -->
 		<Error v-if="error" v-bind:errorMessage="errorMessage" />
 
@@ -48,17 +48,30 @@
 			<h3 class="mb-4">Please Enter the Information Below</h3>
 			<b-col>
 				<b-form-group :label="firstInputName">
-					<b-form-input v-model="insertFirstInput" required> </b-form-input>
+					<b-form-input v-model="insertData.FirstInput" required>
+					</b-form-input>
 				</b-form-group>
 				<b-form-group :label="secondInputName">
-					<b-form-input v-model="insertSecondInput" required> </b-form-input>
+					<b-form-input v-model="insertData.SecondInput" required>
+					</b-form-input>
 				</b-form-group>
 				<b-form-group label="Date">
-					<b-form-input v-model="insertDate" required> </b-form-input>
+					<b-form-datepicker
+						required
+						:min="minDate"
+						:max="maxDate"
+						v-model="insertData.Date"
+						:date-format-options="{
+							year: 'numeric',
+							month: 'numeric',
+							day: 'numeric',
+						}"
+					>
+					</b-form-datepicker>
 				</b-form-group>
 				<b-form-group label="Option">
 					<b-form-select
-						v-model="inserTypeOfData"
+						v-model="insertData.TypeOfData"
 						:options="TypeOfDataoptions"
 						required
 					>
@@ -94,18 +107,22 @@ export default {
 	},
 	data() {
 		return {
-			isTableVisible: false,
+			// Min and maxx date for the forms
+			maxDate: new Date(), // today
+			minDate: new Date('01/20/2020'),
+
 			// Input values for searching
 			firstInput: null,
 			secondInput: null,
 			TypeOfDataSelected: null,
 
 			// Insert US/World data
-			insertFirstInput: null,
-			insertSecondInput: null,
-			insertDate: null,
-			inserTypeOfData: null,
-
+			insertData: {
+				FirstInput: null,
+				SecondInput: null,
+				Date: null,
+				TypeOfData: null,
+			},
 			// Select options
 			TypeOfDataoptions: [
 				{ value: null, text: 'Please select an option', disabled: true },
@@ -115,8 +132,11 @@ export default {
 			],
 
 			// Data to used to populate table
-			tableData: null,
-			tableBusy: false,
+			table: {
+				Data: null,
+				Busy: false,
+				isVisible: false,
+			},
 
 			// Booleans used to display errors if any
 			error: false,
@@ -173,7 +193,7 @@ export default {
 			this.hideTable();
 		},
 		setTableData(data) {
-			this.tableData = data;
+			this.table.data = data;
 		},
 		setErrorOff() {
 			this.error = false;
@@ -205,15 +225,15 @@ export default {
 
 		// Toggle the state of the table
 		toggleTableBusy() {
-			this.tableBusy = !this.tableBusy;
+			this.table.Busy = !this.table.Busy;
 		},
 
 		showTable() {
-			this.isTableVisible = true;
+			this.table.isVisible = true;
 		},
 
 		hideTable() {
-			this.isTableVisible = false;
+			this.table.isVisible = false;
 		},
 		showModal() {
 			this.$refs['insert-modal'].show();

@@ -32,6 +32,7 @@
 								label="Reporting Date"
 							>
 								<b-form-datepicker
+									required
 									:min="minDate"
 									:max="maxDate"
 									v-model="caseInformation.ReportingDate"
