@@ -161,6 +161,53 @@ function DeleteUSData(county, state, date, USData, tod) {
 	return true;
 }
 
+function EditUSData(county, state, date, USData, tod, number) {
+    var result = false;
+    if (tod == 1) {
+        console.log(USData.length);
+		for (var i = 0; i < USData.length; ++i) {
+			if (county == USData[i].county && state == USData[i].state) {
+				for (var key in USData[i].numConfirmed) {
+					var temp = new Date(key);
+					var d = temp.getMonth() + 1 +
+					'/' +
+					temp.getDate() +
+					'/' +
+					temp.getFullYear();
+					if (d == date) {
+						USData[i].numConfirmed[key] = number;
+                        result = true;
+                        break;
+					}
+				}
+			}
+		}
+    }
+    else if (tod == 2) {
+        for (var i = 0; i < USData.length; ++i) {
+			if (county == USData[i].county && state == USData[i].state) {
+				for (var key in USData[i].numDeaths) {
+					var temp = new Date(key);
+					var d = temp.getMonth() + 1 +
+					'/' +
+					temp.getDate() +
+					'/' +
+					temp.getFullYear();
+					if (d == date) {
+						USData[i].numDeaths[key] = number;
+                        result = true;
+                        break;
+					}
+				}
+			}
+		}
+    }
+
+    const writeCSVModule = require('../modules/WriteCSV.js');
+    writeCSVModule.RecordUSData(USData);
+    return result;
+}
+
 const helper = require('../modules/BasicHelpers.js');
 function AddUSData(county, state, date, USData, tod, number) {
 	var result = false;
@@ -224,10 +271,10 @@ module.exports = {
 	//Delete function
 	DeleteUSData: DeleteUSData,
 
-	// Argument: Array of WorldPlace.
-	// EditCases: EditUSData,
+    // Argument: Array of WorldPlace.
+    EditUSData: EditUSData,
 
-	// // Argument: Array of USPlace.
+	// Argument: Array of USPlace.
 	AddUSData: AddUSData,
 
 	// Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), id

@@ -77,6 +77,12 @@ router.post('/delete', (req, res) => {
 	})
 });
 
+router.post('/update', (req, res) => {
+	res.send({
+		success: ModModule.EditUSData(req.body.County, req.body.State, req.body.date, USData, req.body.TypeOfData, req.body.number)
+	})
+})
+
 router.post('/insert', (req, res) => {
 	res.send({
 		success: ModModule.AddUSData(req.body.County, req.body.State, req.body.date, USData, req.body.TypeOfData, req.body.number)
