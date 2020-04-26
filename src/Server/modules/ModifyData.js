@@ -99,6 +99,25 @@ function DeleteUSData(county, state, date, USData, tod) {
 			}
 		}
     }
+    else if (tod == 2) {
+        for (var i = 0; i < USData.length; ++i) {
+			if (county == USData[i].county && state == USData[i].state) {
+				for (var key in USData[i].numDeaths) {
+					var temp = new Date(key);
+					var d = temp.getMonth() + 1 +
+					'/' +
+					temp.getDate() +
+					'/' +
+					temp.getFullYear();
+					if (d == date) {
+						delete USData[i].numDeaths[key];
+                        result = true;
+                        break;
+					}
+				}
+			}
+		}
+    }
 
     const writeCSVModule = require('../modules/WriteCSV.js');
     writeCSVModule.RecordUSData(USData);
@@ -156,6 +175,66 @@ function EditUSData(county, state, date, USData, tod, number) {
     return result;
 }
 
+const helper = require('../modules/BasicHelpers.js');
+function AddUSData(county, state, date, USData, tod, number) {
+	var result = false;
+    if (tod == 1) {
+        for (var i = 0; i < USData.length; ++i) {
+            if (county == USData[i].county && state == USData[i].state) {
+                for (var key in USData[i].numConfirmed) {
+					var temp_date = new Date(key);
+					var d =
+					temp_date.getMonth() +
+					1 +
+					'/' +
+					temp_date.getDate() +
+					'/' +
+					temp_date.getFullYear();
+					if (d == date) {
+						console.log("ERROOOOOOOR");
+						return result;
+					}
+				}
+				var temp_date = helper.stringToDate(date);
+				USData[i].numConfirmed[temp_date] = number;
+				result = true;
+				break; 
+            }
+        }
+    }
+	else if (tod == 2) {
+        for (var i = 0; i < USData.length; ++i) {
+            if (county == USData[i].county && state == USData[i].state) {
+                for (var key in USData[i].numDeaths) {
+					var temp_date = new Date(key);
+					var d =
+					temp_date.getMonth() +
+					1 +
+					'/' +
+					temp_date.getDate() +
+					'/' +
+					temp_date.getFullYear();
+					if (d == date) {
+						console.log("ERROOOOOOOR");
+						return result;
+					}
+				}
+				var temp_date = helper.stringToDate(date);
+				USData[i].numDeaths[temp_date] = number;
+				result = true;
+				break; 
+            }
+        }
+    }
+    const writeCSVModule = require('../modules/WriteCSV.js');
+    writeCSVModule.RecordUSData(USData);
+    // for (var i = 7; i < 10; ++i) {
+    //     console.log("hihi");
+    //     console.log(USData[i]);
+    // }
+    return result;
+}
+
 module.exports = {
     //Delete function
     DeleteUSData: DeleteUSData,
@@ -164,9 +243,9 @@ module.exports = {
     EditUSData: EditUSData,
 
     // // Argument: Array of USPlace.
-	// AddCases: AddUSData
+	AddUSData: AddUSData
 
-	// Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), id
+	Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), id
 	EditCase: EditCase,
 
 	// Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), id
