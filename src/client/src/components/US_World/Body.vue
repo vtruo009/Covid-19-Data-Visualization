@@ -100,6 +100,11 @@ export default {
 			firstInput: null,
 			secondInput: null,
 			TypeOfDataSelected: null,
+			insertCounty: null,
+			insertState: null,
+			insertDate: null,
+			
+
 
 			// Select options
 			TypeOfDataoptions: [
