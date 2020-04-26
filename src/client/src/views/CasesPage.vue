@@ -14,6 +14,13 @@
 				:disabled="waitingForResponse"
 				>Search</b-button
 			>
+			<b-button
+				class="ml-3"
+				variant="primary"
+				@click="showInsertModal"
+				:disabled="waitingForResponse"
+				>Insert Case</b-button
+			>
 			<b-spinner class="ml-4" v-if="waitingForResponse"></b-spinner>
 		</b-form>
 
@@ -35,7 +42,7 @@
 									required
 									:min="minDate"
 									:max="maxDate"
-									v-model="caseInformation.ReportingDate"
+									v-model="caseInformation.Date"
 									:date-format-options="{
 										year: 'numeric',
 										month: 'numeric',
@@ -80,6 +87,7 @@
 								<b-form-select
 									:disabled="waitingForResponse"
 									v-model="caseInformation.Gender"
+									aria-required=""
 								>
 									<b-form-select-option value="1">Male</b-form-select-option>
 									<b-form-select-option value="2">Female</b-form-select-option>
@@ -144,6 +152,86 @@
 				</div>
 			</b-form>
 		</b-modal>
+
+		<!-- Insert Modal -->
+		<b-modal ref="insert-modal" hide-footer hide-title>
+			<b-form @submit="sendInsertRequest">
+				<h3 class="mb-4">Please Enter the Information Below</h3>
+				<b-row>
+					<b-col>
+						<b-form-group label="Case ID">
+							<b-form-input type="number" v-model="insertCase.ID" required>
+							</b-form-input>
+						</b-form-group>
+					</b-col>
+					<b-col>
+						<b-form-group label="Reporting Date">
+							<b-form-datepicker
+								required
+								:min="minDate"
+								:max="maxDate"
+								v-model="insertCase.Date"
+								:date-format-options="{
+									year: 'numeric',
+									month: 'numeric',
+									day: 'numeric',
+								}"
+							>
+							</b-form-datepicker>
+						</b-form-group>
+					</b-col>
+				</b-row>
+				<b-row>
+					<b-col
+						><b-form-group label="Country">
+							<b-form-input v-model="insertCase.Country" required>
+							</b-form-input>
+						</b-form-group>
+					</b-col>
+					<b-col>
+						<b-form-group label="State">
+							<b-form-input v-model="insertCase.State" required> </b-form-input>
+						</b-form-group>
+					</b-col>
+				</b-row>
+				<b-row>
+					<b-col>
+						<b-form-group label="Age">
+							<b-form-input type="number" v-model="insertCase.Age" required>
+							</b-form-input>
+						</b-form-group>
+					</b-col>
+					<b-col>
+						<b-form-group label="Gender">
+							<b-form-select v-model="insertCase.Gender" required>
+								<b-form-select-option value="1">Male</b-form-select-option>
+								<b-form-select-option value="2">Female</b-form-select-option>
+							</b-form-select>
+						</b-form-group>
+					</b-col>
+				</b-row>
+				<b-row>
+					<b-col>
+						<b-form-group label="Type of Case">
+							<b-form-select v-model="insertCase.TypeOfCase" required>
+								<b-form-select-option value="1">Dead</b-form-select-option>
+								<b-form-select-option value="2">Recovered</b-form-select-option>
+							</b-form-select>
+						</b-form-group>
+					</b-col>
+				</b-row>
+				<hr />
+				<b-button
+					variant="secondary"
+					class="float-right"
+					@click="hideInsertModal"
+					>Cancel
+				</b-button>
+				<b-button type="submit" variant="primary" class="float-right mr-3">
+					Submit
+				</b-button>
+			</b-form>
+		</b-modal>
 	</div>
 </template>
 
@@ -176,9 +264,19 @@ export default {
 
 			// Used to store changes by the user
 			caseInformation: {
-				ReportingDate: null,
+				Date: null,
 				State: null,
 				Country: null,
+				Age: null,
+				Gender: null,
+				TypeOfCase: null,
+			},
+
+			insertCase: {
+				ID: null,
+				Country: null,
+				State: null,
+				Date: null,
 				Age: null,
 				Gender: null,
 				TypeOfCase: null,
@@ -197,8 +295,8 @@ export default {
 				// const response = await Services.insertData({
 				// 	apiEndPoint: '/CaseData',
 				// 	params: {
-				// 		ReportingDate: Helpers.convertDateFromClient(
-				// 			this.caseInformation.ReportingDate
+				// 		Date: Helpers.convertDateFromClient(
+				// 			this.caseInformation.Date
 				// 		),
 				// 		State: this.caseInformation.State,
 				// 		Country: this.caseInformation.Country,
@@ -213,6 +311,7 @@ export default {
 				};
 				if (response.success) {
 					// Display update was successful
+					this.clearCaseInformation();
 				} else {
 					// Display error message
 					this.handleError('Case could not be updated. Please try again');
@@ -243,7 +342,7 @@ export default {
 
 				const response = {
 					success: true,
-					ReportingDate: '01/20/2020',
+					Date: '01/20/2020',
 					Country: 'Peru',
 					State: 'Lima',
 					Age: 10,
@@ -254,9 +353,7 @@ export default {
 					// Decompose response object
 					this.caseInformation = {
 						// Convert date so that is properly formated
-						ReportingDate: Helpers.convertDateFromServer(
-							response.ReportingDate
-						),
+						Date: Helpers.convertDateFromServer(response.Date),
 						State: response.State,
 						Country: response.Country,
 						Age: response.Age,
@@ -296,6 +393,7 @@ export default {
 
 					// Hide case from screen
 					this.caseFound = false;
+					this.clearCaseInformation();
 				} else {
 					// Display error message
 					this.handleError('Case could not be deleted. Please try again');
@@ -307,6 +405,11 @@ export default {
 			// Hides delete modal
 			this.hideDeleteModal();
 			// stop loading bar in modal
+		},
+
+		async sendInsertRequest(e) {
+			e.preventDefault();
+			console.log('HI');
 		},
 
 		toggleWaitingForResponse() {
@@ -330,6 +433,30 @@ export default {
 			this.error = true;
 			// Set error message
 			this.errorMessage = errorMessage;
+		},
+		showInsertModal() {
+			this.$refs['insert-modal'].show();
+		},
+		hideInsertModal() {
+			this.$refs['insert-modal'].hide();
+			this.clearInsertData();
+		},
+		clearInsertData() {
+			this.insertCase.Country = null;
+			this.insertCase.State = null;
+			this.insertCase.Date = null;
+			this.insertCase.Age = null;
+			this.insertCase.Gender = null;
+			this.insertCase.TypeOfCase = null;
+			this.insertCase.ID = null;
+		},
+		clearCaseInformation() {
+			this.caseInformation.Country = null;
+			this.caseInformation.State = null;
+			this.caseInformation.Date = null;
+			this.caseInformation.Age = null;
+			this.caseInformation.Gender = null;
+			this.caseInformation.TypeOfCase = null;
 		},
 	},
 	components: {
