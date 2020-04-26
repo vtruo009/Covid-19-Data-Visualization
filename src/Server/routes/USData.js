@@ -64,8 +64,6 @@ router.get('/search', (req, res) => {
 		}
 	}
 
-
-
 	res.send({
 		data: row,
 	});
@@ -73,19 +71,39 @@ router.get('/search', (req, res) => {
 
 router.post('/delete', (req, res) => {
 	res.send({
-		success: ModModule.DeleteUSData(req.body.County, req.body.State, req.body.date, USData, req.body.TypeOfData)
-	})
+		success: ModModule.DeleteUSData(
+			req.body.County,
+			req.body.State,
+			req.body.Date,
+			USData,
+			req.body.TypeOfData
+		),
+	});
 });
 
 router.post('/update', (req, res) => {
 	res.send({
-		success: ModModule.EditUSData(req.body.County, req.body.State, req.body.date, USData, req.body.TypeOfData, req.body.number)
-	})
-})
+		success: ModModule.EditUSData(
+			req.body.County,
+			req.body.State,
+			req.body.Date,
+			USData,
+			req.body.TypeOfData,
+			req.body.Number
+		),
+	});
+});
 
 router.post('/insert', (req, res) => {
 	res.send({
-		success: ModModule.AddUSData(req.body.County, req.body.State, req.body.date, USData, req.body.TypeOfData, req.body.number)
-	})
-})
+		success: ModModule.AddUSData(
+			req.body.County,
+			req.body.State,
+			req.body.Date,
+			USData,
+			req.body.TypeOfData,
+			req.body.Number
+		),
+	});
+});
 module.exports = router;

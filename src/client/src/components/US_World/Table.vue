@@ -4,6 +4,7 @@
 			dark
 			striped
 			hover
+			ref="table"
 			:items="this.data"
 			:fields="fields"
 			:busy="this.isBusy"
@@ -214,17 +215,17 @@ export default {
 		},
 
 		// Sends update request to the backend
-		sendUpdateRequest(e) {
+		async sendUpdateRequest(e) {
 			e.preventDefault();
 			try {
-				const response = Services.updateData({
+				const response = await Services.updateData({
 					apiEndPoint: this.$parent.apiEndPoint,
 					body: {
 						[this.$parent.firstInputName]: this.$parent.cacheFirstInput,
 						[this.$parent.secondInputName]: this.$parent.cacheSecondInput,
 						TypeOfData: this.$parent.cacheTypeOfData,
-						date: this.selectedRecord.date,
-						number: this.selectedRecord.number,
+						Date: this.selectedRecord.date,
+						Number: this.selectedRecord.number,
 					},
 				});
 				// Update the selected row on the table
@@ -239,22 +240,25 @@ export default {
 		},
 
 		// Sends delete request to the server
-		sendDeleteRequest(e) {
+		async sendDeleteRequest(e) {
 			e.preventDefault();
 			console.log('Sends delete request');
 			try {
-				const response = Services.deleteData({
+				const response = await Services.deleteData({
 					apiEndPoint: this.$parent.apiEndPoint,
 					body: {
 						[this.$parent.firstInputName]: this.$parent.cacheFirstInput,
 						[this.$parent.secondInputName]: this.$parent.cacheSecondInput,
 						TypeOfData: this.$parent.cacheTypeOfData,
-						date: this.selectedRecord.date,
-						number: this.selectedRecord.number,
+						Date: this.selectedRecord.date,
 					},
 				});
+				console.log(this.data);
 				// Delete the selected row from the table
 				this.data.splice(this.selectedRecord.index, 1);
+				// refresh table
+				this.$refs.table.refresh();
+				console.log(this.data);
 			} catch (error) {
 				console.log(error);
 			}

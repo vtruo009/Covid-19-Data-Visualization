@@ -45,52 +45,62 @@
 
 		<!-- Implement Insert Modal -->
 		<b-modal ref="insert-modal" hide-footer hide-title>
-			<h3 class="mb-4">Please Enter the Information Below</h3>
-			<b-col>
-				<b-form-group :label="firstInputName">
-					<b-form-input v-model="insertData.FirstInput" required>
-					</b-form-input>
-				</b-form-group>
-				<b-form-group :label="secondInputName">
-					<b-form-input v-model="insertData.SecondInput" required>
-					</b-form-input>
-				</b-form-group>
-				<b-form-group label="Date">
-					<b-form-datepicker
-						required
-						:min="minDate"
-						:max="maxDate"
-						v-model="insertData.Date"
-						:date-format-options="{
-							year: 'numeric',
-							month: 'numeric',
-							day: 'numeric',
-						}"
-					>
-					</b-form-datepicker>
-				</b-form-group>
-				<b-form-group label="Option">
-					<b-form-select
-						v-model="insertData.TypeOfData"
-						:options="TypeOfDataoptions"
-						required
-					>
-					</b-form-select>
-				</b-form-group>
-			</b-col>
-			<hr />
-			<b-button variant="secondary" class="float-right" @click="hideInsertModal"
-				>Cancel
-			</b-button>
-			<b-button type="submit" variant="primary" class="float-right mr-3">
-				Submit
-			</b-button>
+			<b-form @submit="sendInsertRequest">
+				<h3 class="mb-4">Please Enter the Information Below</h3>
+				<b-col>
+					<b-form-group :label="firstInputName">
+						<b-form-input v-model="insertData.FirstInput" required>
+						</b-form-input>
+					</b-form-group>
+					<b-form-group :label="secondInputName">
+						<b-form-input v-model="insertData.SecondInput" required>
+						</b-form-input>
+					</b-form-group>
+					<b-form-group label="Date">
+						<b-form-datepicker
+							required
+							:min="minDate"
+							:max="maxDate"
+							v-model="insertData.Date"
+							:date-format-options="{
+								year: 'numeric',
+								month: 'numeric',
+								day: 'numeric',
+							}"
+						>
+						</b-form-datepicker>
+					</b-form-group>
+					<b-form-group label="Number of Cases">
+						<b-input v-model="insertData.Number" type="number" required>
+						</b-input>
+					</b-form-group>
+					<b-form-group label="Option">
+						<b-form-select
+							v-model="insertData.TypeOfData"
+							:options="TypeOfDataoptions"
+							required
+						>
+						</b-form-select>
+					</b-form-group>
+				</b-col>
+				<hr />
+				<b-button
+					variant="secondary"
+					class="float-right"
+					@click="hideInsertModal"
+					>Cancel
+				</b-button>
+				<b-button type="submit" variant="primary" class="float-right mr-3">
+					Submit
+				</b-button>
+			</b-form>
 		</b-modal>
 	</div>
 </template>
 
 <script>
 import Services from '../../Services/Services';
+import Helpers from '../../Services/Helpers';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Table from './Table';
@@ -120,6 +130,7 @@ export default {
 			insertData: {
 				FirstInput: null,
 				SecondInput: null,
+				Number: null,
 				Date: null,
 				TypeOfData: null,
 			},
@@ -183,6 +194,37 @@ export default {
 			this.toggleTableBusy();
 		},
 
+		async sendInsertRequest(e) {
+			e.preventDefault();
+			// Send search request to backend
+			try {
+				const response = await Services.insertData({
+					apiEndPoint: this.apiEndPoint,
+					body: {
+						[this.firstInputName]: this.insertData.FirstInput,
+						[this.secondInputName]: this.insertData.SecondInput,
+						Number: this.insertData.Number,
+						Date: Helpers.convertDateFromClient(this.insertData.Date),
+						TypeOfData: this.insertData.TypeOfData,
+					},
+				});
+				console.log(response);
+				if (response.data.success == true) {
+					console.log('Success');
+				} else {
+					// TO DO: Make server receive error message
+					this.errorHandler(
+						`Information for ${this.insertData.Date} : ${this.insertData.FirstInput}, ${this.insertData.SecondInput} already exists.`
+					);
+				}
+				// Save data for future requests
+			} catch (error) {
+				this.errorHandler('Some error occurred. Please try again');
+				console.log(error);
+			}
+			//  Hider insert modal
+			this.hideInsertModal();
+		},
 		// Helper methods
 		errorHandler(errorMessage) {
 			this.setErrorOn();
