@@ -14,6 +14,7 @@ const USDataRouter = require('./routes/USData');
 const WorldDataRouter = require('./routes/WorldData');
 const AgeDataRouter = require('./routes/AgeData');
 const GenderDataRouter = require('./routes/GenderData');
+const CaseDataRouter = require('./routes/CaseData');
 
 // App set up
 
@@ -37,6 +38,7 @@ app.use('/USData', USDataRouter);
 app.use('/WorldData', WorldDataRouter);
 app.use('/AgeData', AgeDataRouter);
 app.use('/GenderData', GenderDataRouter);
+app.use('/CaseData', CaseDataRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
