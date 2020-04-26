@@ -179,12 +179,12 @@ module.exports = {
     // // Argument: Array of USPlace.
 	AddUSData: AddUSData
 
+	Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), id
+	EditCase: EditCase,
+
 	// Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), id
-	// EditCase: EditCase,
+	AddCase: AddCase,
 
-	// // Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), id
-	// AddCase: AddCase,
-
-	// // Argument: Array of Case,  id of the Case the user wants to delete.
-	// RemoveCase: RemoveCase
+	// Argument: Array of Case,  id of the Case the user wants to delete.
+	RemoveCase: RemoveCase
 };
