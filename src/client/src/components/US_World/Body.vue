@@ -47,13 +47,13 @@
 		<b-modal ref="insert-modal" hide-footer hide-title>
 			<h3 class="mb-4">Please Enter the Information Below</h3>
 			<b-col>
-				<b-form-group label="County: ">
-					<b-form-input v-model="insertCounty" required> </b-form-input>
+				<b-form-group :label="firstInputName">
+					<b-form-input v-model="insertFirstInput" required> </b-form-input>
 				</b-form-group>
-				<b-form-group label="State: ">
-					<b-form-input v-model="insertState" required> </b-form-input>
+				<b-form-group :label="secondInputName">
+					<b-form-input v-model="insertSecondInput" required> </b-form-input>
 				</b-form-group>
-				<b-form-group label="Date: ">
+				<b-form-group label="Date">
 					<b-form-input v-model="insertDate" required> </b-form-input>
 				</b-form-group>
 				<b-form-group label="Option">
@@ -101,8 +101,8 @@ export default {
 			TypeOfDataSelected: null,
 
 			// Insert US/World data
-			insertCounty: null,
-			insertState: null,
+			insertFirstInput: null,
+			insertSecondInput: null,
 			insertDate: null,
 			inserTypeOfData: null,
 
