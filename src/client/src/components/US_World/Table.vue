@@ -214,10 +214,10 @@ export default {
 		},
 
 		// Sends update request to the backend
-		async sendUpdateRequest(e) {
+		sendUpdateRequest(e) {
 			e.preventDefault();
 			try {
-				const response = await Services.updateData({
+				const response = Services.updateData({
 					apiEndPoint: this.$parent.apiEndPoint,
 					body: {
 						[this.$parent.firstInputName]: this.$parent.cacheFirstInput,
@@ -239,11 +239,11 @@ export default {
 		},
 
 		// Sends delete request to the server
-		async sendDeleteRequest(e) {
+		sendDeleteRequest(e) {
 			e.preventDefault();
 			console.log('Sends delete request');
 			try {
-				const response = await Services.deleteData({
+				const response = Services.deleteData({
 					apiEndPoint: this.$parent.apiEndPoint,
 					body: {
 						[this.$parent.firstInputName]: this.$parent.cacheFirstInput,
