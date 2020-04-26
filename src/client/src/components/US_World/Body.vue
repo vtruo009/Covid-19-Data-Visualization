@@ -44,9 +44,36 @@
 		<Error v-if="error" v-bind:errorMessage="errorMessage" />
 
 		<!-- Implement Insert Modal -->
-		<b-modal ref="insert-modal" hide-footer hide-title>
-			<h1>hello</h1>
-		</b-modal>
+		<b-modal ref="insert-modal" hide-footer hide-title>
+            <h3 class="danger mb-4">Please Enter the Information Below</h3>
+            <b-col> 
+            <b-form-group label="County: ">
+                <b-form-input v-model="insertCounty"> </b-form-input>
+            </b-form-group>
+            <b-form-group label="State: ">
+                <b-form-input v-model="insertState"> </b-form-input>
+            </b-form-group>
+            <b-form-group label="Date: ">
+                <b-form-input v-model="insertDate"> </b-form-input>
+            </b-form-group>
+            <b-form-group label="Option">
+                <b-form-select
+                v-model="TypeOfDataSelected"
+                :options="TypeOfDataoptions"
+                required
+                ></b-form-select>
+            </b-form-group>
+            
+            </b-col>
+            <hr />
+            <b-button variant="primary" class="float-right " type="cancel" @click="hideInsertModal()">
+                cancel
+            </b-button>
+            <b-button variant="primary" class="float-right mr-3" type="submit">
+                submit
+            </b-button>         
+            
+        </b-modal>
 	</div>
 </template>
 
@@ -185,6 +212,9 @@ export default {
 		},
 		showModal() {
 			this.$refs['insert-modal'].show();
+		},
+		hideInsertModal(){
+			this.$refs['insert-modal'].hide();
 		},
 	},
 	components: { Table, Error },
