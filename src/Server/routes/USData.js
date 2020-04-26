@@ -64,6 +64,8 @@ router.get('/search', (req, res) => {
 		}
 	}
 
+
+
 	res.send({
 		data: row,
 	});
@@ -75,4 +77,9 @@ router.post('delete/', (req, res) => {
 	})
 });
 
+router.post('add/', (req, res) => {
+	res.send({
+		success: ModModule.AddUSData(req.body.County, req.body.State, req.body.date, USData, req.body.TypeOfData, req.body.number)
+	})
+})
 module.exports = router;
