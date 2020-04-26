@@ -10,13 +10,18 @@ import Body from "../components/US_World/Body";
 
 export default {
   name: "USPage",
-  data() {
-    return {};
-  },
-  methods: {},
+  //methods: {},
   components: {
     Body
-  }
+  },
+  data() {
+    return {
+      USOptions: [
+        { value: "1", text: "Confirmeeeeed"},
+        { value: "2", text: "Deeeeaaddd"}
+      ]
+    };
+  },
 };
 </script>
 
