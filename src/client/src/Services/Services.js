@@ -10,28 +10,10 @@ export default {
 			})
 			.then((response) => response)
 			.catch((error) => error.status);
-		// return {
-		// 	success: false,
-		// 	ReportingDate: '01/20/20',
-		// 	Country: 'Peru',
-		// 	State: 'Lima',
-		// 	Age: 10,
-		// 	Gender: 1,
-		// 	TypeOfCase: 1,
-		// };
 	},
 	// calls insert endpoint of any of the routes in the backend server
 	insertData(payload) {
 		console.log(payload);
-		// return {
-		// 	success: true,
-		// 	ReportingDate: '01/20/20',
-		// 	Country: 'Peru',
-		// 	State: 'Lima',
-		// 	Age: 10,
-		// 	Gender: 1,
-		// 	TypeOfCase: 1,
-		// };
 		return API()
 			.post(`${payload.apiEndPoint}/insert`, payload.body)
 			.then((response) => response)

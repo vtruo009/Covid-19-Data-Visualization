@@ -31,7 +31,17 @@
 								:disabled="waitingForResponse"
 								label="Reporting Date"
 							>
-								<b-input v-model="caseInformation.ReportingDate"> </b-input>
+								<b-form-datepicker
+									:min="minDate"
+									:max="maxDate"
+									v-model="caseInformation.ReportingDate"
+									:date-format-options="{
+										year: 'numeric',
+										month: 'numeric',
+										day: 'numeric',
+									}"
+								>
+								</b-form-datepicker>
 							</b-form-group>
 						</b-col>
 						<b-col>
@@ -138,12 +148,17 @@
 
 <script>
 import Services from '../Services/Services';
+import Helpers from '../Services/Helpers';
 import Error from '../components/Error';
 import { faServer } from '@fortawesome/free-solid-svg-icons';
 export default {
 	name: 'CasesPage',
 	data() {
 		return {
+			// Min and maxx date for the forms
+			maxDate: new Date(), // today
+			minDate: new Date('01/20/2020'),
+
 			// Error ingformation:
 			error: false,
 			errorMessage: null,
@@ -160,12 +175,12 @@ export default {
 
 			// Used to store changes by the user
 			caseInformation: {
-				ReportingDate: '01/20/20',
-				State: 'California',
-				Country: 'United States',
-				Age: 10,
-				Gender: 1,
-				TypeOfCase: 1,
+				ReportingDate: null,
+				State: null,
+				Country: null,
+				Age: null,
+				Gender: null,
+				TypeOfCase: null,
 			},
 		};
 	},
@@ -178,13 +193,23 @@ export default {
 			this.toggleWaitingForResponse();
 
 			try {
-				const response = await Services.insertData({
-					apiEndPoint: '/CaseData',
-					params: {
-						...this.caseInformation,
-					},
-				});
-				console.log(response);
+				// const response = await Services.insertData({
+				// 	apiEndPoint: '/CaseData',
+				// 	params: {
+				// 		ReportingDate: Helpers.convertDateFromClient(
+				// 			this.caseInformation.ReportingDate
+				// 		),
+				// 		State: this.caseInformation.State,
+				// 		Country: this.caseInformation.Country,
+				// 		Age: this.caseInformation.Age,
+				// 		Gender: this.caseInformation.Gender,
+				// 		TypeOfCase: this.caseInformation.TypeOfCase,
+				// 	},
+				// });
+
+				const response = {
+					success: true,
+				};
 				if (response.success) {
 					// Display update was successful
 				} else {
@@ -208,16 +233,35 @@ export default {
 			// Show loading spinner
 			this.toggleWaitingForResponse();
 			try {
-				const response = await Services.searchData({
-					apiEndPoint: '/CaseData',
-					params: {
-						caseId: this.caseId,
-					},
-				});
+				// const response = await Services.searchData({
+				// 	apiEndPoint: '/CaseData',
+				// 	params: {
+				// 		caseId: this.caseId,
+				// 	},
+				// });
+
+				const response = {
+					success: true,
+					ReportingDate: '01/20/2020',
+					Country: 'Peru',
+					State: 'Lima',
+					Age: 10,
+					Gender: 1,
+					TypeOfCase: 1,
+				};
 				if (response.success) {
 					// Decompose response object
-					this.caseInformation = { ...response };
-					this.caseFromRequest = { ...response };
+					this.caseInformation = {
+						// Convert date so that is properly formated
+						ReportingDate: Helpers.convertDateFromServer(
+							response.ReportingDate
+						),
+						State: response.State,
+						Country: response.Country,
+						Age: response.Age,
+						Gender: response.Gender,
+						TypeOfCase: response.TypeOfCase,
+					};
 					// Show Case information
 					this.caseFound = true;
 				} else {
@@ -237,12 +281,15 @@ export default {
 			this.setErrorOff();
 			// show loading bar in modal
 			try {
-				const response = await Services.deleteData({
-					apiEndPoint: '/CaseData',
-					params: {
-						caseId: this.cacheCaseId,
-					},
-				});
+				// const response = await Services.deleteData({
+				// 	apiEndPoint: '/CaseData',
+				// 	params: {
+				// 		caseId: this.cacheCaseId,
+				// 	},
+				// });
+				const response = {
+					success: true,
+				};
 				if (response.success) {
 					// TO DO: Display delete was successful
 
