@@ -2,7 +2,7 @@
 	<div id="Body">
 		<div class="m-5 text-center">
 			<!-- User input form -->
-			<b-form @submit="displayData">
+			<b-form @submit="displayData" inline>
 				<b-row>
 					<b-col>
 						<b-input
@@ -26,14 +26,14 @@
 						></b-form-select>
 					</b-col>
 					<b-col>
-						<button type="button" class="btn btn-primary" @click="showModal()">
-							Insert
-						</button>
-					</b-col>
-					<b-col>
 						<b-button variant="primary" type="submit">
 							<font-awesome-icon :icon="['fas', 'search']" />
 						</b-button>
+					</b-col>
+					<b-col>
+						<button type="button" class="btn btn-primary" @click="showModal()">
+							Insert
+						</button>
 					</b-col>
 				</b-row>
 			</b-form>
