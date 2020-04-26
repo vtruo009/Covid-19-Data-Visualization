@@ -118,7 +118,7 @@ function UpdateUSDataFile(updatedUSData, dataType) {
         }
 
         dateLabels.forEach(recordValuesOnExistingDate);
-        if (dataType == DataType.CONFIRMED) console.log(dateLabels.length);
+        // if (dataType == DataType.CONFIRMED) console.log(dateLabels.length);
 
         function recordValuesOnExistingDate(dateStr) {
             var date = helperModule.stringToDate(dateStr);
@@ -133,7 +133,7 @@ function UpdateUSDataFile(updatedUSData, dataType) {
             var keyDate = new Date(key);
             var dateStr = (keyDate.getMonth() + 1) + "/" + keyDate.getDate() + "/" + keyDate.getFullYear();
             if (!dateLabels.includes(dateStr)) {
-                if (dataType == DataType.CONFIRMED) console.log("?");
+                // if (dataType == DataType.CONFIRMED) console.log("?");
                 dateLabels.push(dateStr);
                 values += Cell(dateValueDict[key]);
             }

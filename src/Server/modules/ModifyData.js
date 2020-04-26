@@ -338,6 +338,27 @@ function DeleteWorldData(country, state, date, WorldData, tod) {
     return result;
 }
 
+<<<<<<< HEAD
+function UpdateWorldData(country, state, date, WorldData, tod, number) {
+	var result = false;
+	if (tod == 1) {
+        console.log(WorldData.length);
+		for (var i = 0; i < WorldData.length; ++i) {
+			if (country == WorldData[i].country && state == WorldData[i].state) {
+				for (var key in WorldData[i].numConfirmed) {
+					var temp = new Date(key);
+					var d = temp.getMonth() + 1 +
+					'/' +
+					temp.getDate() +
+					'/' +
+					temp.getFullYear();
+					if (d == date) {
+						WorldData[i].numConfirmed[key] = number;
+                        result = true;
+                        break;
+					}
+				}
+=======
 function InsertWorldData(country, state, date, WorldData, tod, number) {
 	var result = false;
 	if (tod == 1) {
@@ -361,10 +382,29 @@ function InsertWorldData(country, state, date, WorldData, tod, number) {
 				WorldData[i].numConfirmed[temp_date] = number;
 				result = true;
 				break;
+>>>>>>> master
 			}
 		}
 	}
 	else if (tod == 2) {
+<<<<<<< HEAD
+		console.log(WorldData.length);
+		for (var i = 0; i < WorldData.length; ++i) {
+			if (country == WorldData[i].country && state == WorldData[i].state) {
+				for (var key in WorldData[i].numDeaths) {
+					var temp = new Date(key);
+					var d = temp.getMonth() + 1 +
+					'/' +
+					temp.getDate() +
+					'/' +
+					temp.getFullYear();
+					if (d == date) {
+						WorldData[i].numDeaths[key] = number;
+                        result = true;
+                        break;
+					}
+				}
+=======
 		for (var i = 0; i < WorldData.length; ++i) {
 			if (country == WorldData[i].country && state == WorldData[i].state) {
 				for (var key in WorldData[i].numDeaths) {
@@ -385,10 +425,29 @@ function InsertWorldData(country, state, date, WorldData, tod, number) {
 				WorldData[i].numDeaths[temp_date] = number;
 				result = true;
 				break;
+>>>>>>> master
 			}
 		}
 	}
 	else if (tod == 3) {
+<<<<<<< HEAD
+		console.log(WorldData.length);
+		for (var i = 0; i < WorldData.length; ++i) {
+			if (country == WorldData[i].country && state == WorldData[i].state) {
+				for (var key in WorldData[i].numRecovered) {
+					var temp = new Date(key);
+					var d = temp.getMonth() + 1 +
+					'/' +
+					temp.getDate() +
+					'/' +
+					temp.getFullYear();
+					if (d == date) {
+						WorldData[i].numRecovered[key] = number;
+                        result = true;
+                        break;
+					}
+				}
+=======
 		for (var i = 0; i < WorldData.length; ++i) {
 			if (country == WorldData[i].country && state == WorldData[i].state) {
 				for (var key in WorldData[i].numRecovered) {
@@ -409,6 +468,7 @@ function InsertWorldData(country, state, date, WorldData, tod, number) {
 				WorldData[i].numRecovered[temp_date] = number;
 				result = true;
 				break;
+>>>>>>> master
 			}
 		}
     }
@@ -433,9 +493,16 @@ module.exports = {
 
     //World Add
     DeleteWorldData: DeleteWorldData,
+<<<<<<< HEAD
+
+    //World Update
+    UpdateWorldData: UpdateWorldData,
+	// Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), id
+=======
     
     InsertWorldData: InsertWorldData,
     // Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), id
+>>>>>>> master
 	EditCase: EditCase,
 
 	// Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), id

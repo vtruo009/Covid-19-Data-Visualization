@@ -91,6 +91,12 @@ router.post('/delete', (req, res) => {
 	})
 })
 
+router.post('/update', (req, res) => {
+	res.send({
+		success: ModModule.UpdateWorldData(req.body.Country, req.body.State, req.body.date, WorldData, req.body.TypeOfData, req.body.number)
+	})
+})
+
 router.post('/insert', (req, res) => {
 	res.send({
 		success: ModModule.InsertWorldData(req.body.Country, req.body.State, req.body.date, WorldData, req.body.TypeOfData, req.body.number)
