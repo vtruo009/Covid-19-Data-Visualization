@@ -2,7 +2,7 @@
 	<div id="Body">
 		<div class="m-5 text-center">
 			<!-- User input form -->
-			<b-form @submit="displayData">
+			<b-form @submit="displayData" inline>
 				<b-row>
 					<b-col>
 						<b-input
@@ -26,14 +26,14 @@
 						></b-form-select>
 					</b-col>
 					<b-col>
-						<button type="button" class="btn btn-primary" @click="showModal()">
-							Insert
-						</button>
-					</b-col>
-					<b-col>
 						<b-button variant="primary" type="submit">
 							<font-awesome-icon :icon="['fas', 'search']" />
 						</b-button>
+					</b-col>
+					<b-col>
+						<button type="button" class="btn btn-primary" @click="showModal()">
+							Insert
+						</button>
 					</b-col>
 				</b-row>
 			</b-form>
@@ -45,7 +45,33 @@
 
 		<!-- Implement Insert Modal -->
 		<b-modal ref="insert-modal" hide-footer hide-title>
-			<h1>hello</h1>
+			<h3 class="mb-4">Please Enter the Information Below</h3>
+			<b-col>
+				<b-form-group :label="firstInputName">
+					<b-form-input v-model="insertFirstInput" required> </b-form-input>
+				</b-form-group>
+				<b-form-group :label="secondInputName">
+					<b-form-input v-model="insertSecondInput" required> </b-form-input>
+				</b-form-group>
+				<b-form-group label="Date">
+					<b-form-input v-model="insertDate" required> </b-form-input>
+				</b-form-group>
+				<b-form-group label="Option">
+					<b-form-select
+						v-model="inserTypeOfData"
+						:options="TypeOfDataoptions"
+						required
+					>
+					</b-form-select>
+				</b-form-group>
+			</b-col>
+			<hr />
+			<b-button variant="secondary" class="float-right" @click="hideInsertModal"
+				>Cancel
+			</b-button>
+			<b-button type="submit" variant="primary" class="float-right mr-3">
+				Submit
+			</b-button>
 		</b-modal>
 	</div>
 </template>
@@ -73,6 +99,12 @@ export default {
 			firstInput: null,
 			secondInput: null,
 			TypeOfDataSelected: null,
+
+			// Insert US/World data
+			insertFirstInput: null,
+			insertSecondInput: null,
+			insertDate: null,
+			inserTypeOfData: null,
 
 			// Select options
 			TypeOfDataoptions: [
@@ -185,6 +217,9 @@ export default {
 		},
 		showModal() {
 			this.$refs['insert-modal'].show();
+		},
+		hideInsertModal() {
+			this.$refs['insert-modal'].hide();
 		},
 	},
 	components: { Table, Error },

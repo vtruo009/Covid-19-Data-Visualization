@@ -1,13 +1,16 @@
 var express = require('express');
 var router = express.Router();
 
+const ModModule = require('../modules/ModifyData.js');
+
+const readCSVModule = require('../modules/ReadCSV.js');
+var WorldData = readCSVModule.LoadWorldData();
+
 const worldReq = require('../modules/DataClasses.js');
 router.get('/search', (req, res) => {
 	console.log(req.query);
 	// Get respective data using the query parameters
 	var selectedCountry = [];
-	const readCSVModule = require('../modules/ReadCSV.js');
-	var WorldData = readCSVModule.LoadWorldData();
 	// Now, WorldData stores list of WorldPlace read from the csv file.
 
 	// console.log(WorldData);
@@ -82,4 +85,15 @@ router.get('/search', (req, res) => {
 	});
 });
 
+router.post('/delete', (req, res) => {
+	res.send({
+		success: ModModule.DeleteWorldData(req.body.Country, req.body.State, req.body.date, WorldData, req.body.TypeOfData)
+	})
+})
+
+router.post('/insert', (req, res) => {
+	res.send({
+		success: ModModule.InsertWorldData(req.body.Country, req.body.State, req.body.date, WorldData, req.body.TypeOfData, req.body.number)
+	})
+})
 module.exports = router;

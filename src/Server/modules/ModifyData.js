@@ -158,7 +158,7 @@ function DeleteUSData(county, state, date, USData, tod) {
 	//     console.log("hihi");
 	//     console.log(USData[i]);
 	// }
-	return true;
+	return result;
 }
 
 function EditUSData(county, state, date, USData, tod, number) {
@@ -267,6 +267,160 @@ function AddUSData(county, state, date, USData, tod, number) {
 	return result;
 }
 
+function DeleteWorldData(country, state, date, WorldData, tod) {
+	var result = false;
+    if (tod == 1) {
+        for (var i = 0; i < WorldData.length; ++i) {
+            if (country == WorldData[i].country && state == WorldData[i].state) {
+				for (var key in WorldData[i].numConfirmed) {
+					var temp = new Date(key);
+					var d = temp.getMonth() + 1 +
+					'/' +
+					temp.getDate() +
+					'/' +
+					temp.getFullYear();
+					if (d == date) {
+						delete WorldData[i].numConfirmed[key];
+						console.log("DELETED");
+                        result = true;
+                        break;
+					}
+				}
+			}
+        }
+	}
+	else if (tod == 2) {
+		for (var i = 0; i < WorldData.length; ++i) {
+            if (country == WorldData[i].country && state == WorldData[i].state) {
+				for (var key in WorldData[i].numDeaths) {
+					var temp = new Date(key);
+					var d = temp.getMonth() + 1 +
+					'/' +
+					temp.getDate() +
+					'/' +
+					temp.getFullYear();
+					if (d == date) {
+						delete WorldData[i].numDeaths[key];
+						console.log("DELETED DEATH");
+                        result = true;
+                        break;
+					}
+				}
+			}
+        }
+	}
+	else if (tod == 3) {
+		for (var i = 0; i < WorldData.length; ++i) {
+            if (country == WorldData[i].country && state == WorldData[i].state) {
+				for (var key in WorldData[i].numRecovered) {
+					var temp = new Date(key);
+					var d = temp.getMonth() + 1 +
+					'/' +
+					temp.getDate() +
+					'/' +
+					temp.getFullYear();
+					if (d == date) {
+						delete WorldData[i].numRecovered[key];
+						console.log("DELETED RECOVERED");
+                        result = true;
+                        break;
+					}
+				}
+			}
+        }
+	}
+    const writeCSVModule = require('../modules/WriteCSV.js');
+	writeCSVModule.RecordUSData(WorldData);
+	// for (var i = 7; i < 10; ++i) {
+	//     console.log("hihi");
+	//     console.log(WorldData[i]);
+	// }
+    return result;
+}
+
+function InsertWorldData(country, state, date, WorldData, tod, number) {
+	var result = false;
+	if (tod == 1) {
+		for (var i = 0; i < WorldData.length; ++i) {
+			if (country == WorldData[i].country && state == WorldData[i].state) {
+				for (var key in WorldData[i].numConfirmed) {
+					var temp_date = new Date(key);
+					var d =
+						temp_date.getMonth() +
+						1 +
+						'/' +
+						temp_date.getDate() +
+						'/' +
+						temp_date.getFullYear();
+					if (d == date) {
+						console.log('ERROOOOOOOR');
+						return result;
+					}
+				}
+				var temp_date = helper.stringToDate(date);
+				WorldData[i].numConfirmed[temp_date] = number;
+				result = true;
+				break;
+			}
+		}
+	}
+	else if (tod == 2) {
+		for (var i = 0; i < WorldData.length; ++i) {
+			if (country == WorldData[i].country && state == WorldData[i].state) {
+				for (var key in WorldData[i].numDeaths) {
+					var temp_date = new Date(key);
+					var d =
+						temp_date.getMonth() +
+						1 +
+						'/' +
+						temp_date.getDate() +
+						'/' +
+						temp_date.getFullYear();
+					if (d == date) {
+						console.log('ERROOOOOOOR');
+						return result;
+					}
+				}
+				var temp_date = helper.stringToDate(date);
+				WorldData[i].numDeaths[temp_date] = number;
+				result = true;
+				break;
+			}
+		}
+	}
+	else if (tod == 3) {
+		for (var i = 0; i < WorldData.length; ++i) {
+			if (country == WorldData[i].country && state == WorldData[i].state) {
+				for (var key in WorldData[i].numRecovered) {
+					var temp_date = new Date(key);
+					var d =
+						temp_date.getMonth() +
+						1 +
+						'/' +
+						temp_date.getDate() +
+						'/' +
+						temp_date.getFullYear();
+					if (d == date) {
+						console.log('ERROOOOOOOR');
+						return result;
+					}
+				}
+				var temp_date = helper.stringToDate(date);
+				WorldData[i].numRecovered[temp_date] = number;
+				result = true;
+				break;
+			}
+		}
+    }
+    const writeCSVModule = require('../modules/WriteCSV.js');
+	writeCSVModule.RecordUSData(WorldData);
+	// for (var i = 7; i < 10; ++i) {
+	//     console.log("hihi");
+	//     console.log(WorldData[i]);
+	// }
+    return result;
+}
+
 module.exports = {
 	//Delete function
 	DeleteUSData: DeleteUSData,
@@ -277,7 +431,11 @@ module.exports = {
 	// Argument: Array of USPlace.
 	AddUSData: AddUSData,
 
-	// Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), id
+    //World Add
+    DeleteWorldData: DeleteWorldData,
+    
+    InsertWorldData: InsertWorldData,
+    // Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), id
 	EditCase: EditCase,
 
 	// Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), id
