@@ -1,6 +1,6 @@
 <template>
 	<div id="Error">
-		<div class="alert alert-danger width" role="alert">
+		<div class="alert alert-danger text-center" role="alert">
 			{{ this.errorMessage }}
 		</div>
 	</div>
@@ -15,9 +15,4 @@ export default {
 };
 </script>
 
-<style>
-.width {
-	display: inline-block;
-  
-}
-</style>
+<style></style>
