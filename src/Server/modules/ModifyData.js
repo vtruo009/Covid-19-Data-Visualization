@@ -406,86 +406,98 @@ function UpdateWorldData(country, state, date, WorldData, tod, number) {
 }
 
 function InsertWorldData(country, state, date, WorldData, tod, number) {
-	var result = false;
-	if (tod == 1) {
-		for (var i = 0; i < WorldData.length; ++i) {
-			if (country == WorldData[i].country && state == WorldData[i].state) {
-				for (var key in WorldData[i].numConfirmed) {
-					var temp_date = new Date(key);
-					var d =
-						temp_date.getMonth() +
-						1 +
-						'/' +
-						temp_date.getDate() +
-						'/' +
-						temp_date.getFullYear();
-					if (d == date) {
-						console.log('ERROOOOOOOR');
-						return result;
-					}
-				}
-				var temp_date = helper.stringToDate(date);
-				WorldData[i].numConfirmed[temp_date] = number;
-				result = true;
-				break;
-			}
-		}
-	}
-	else if (tod == 2) {
-		for (var i = 0; i < WorldData.length; ++i) {
-			if (country == WorldData[i].country && state == WorldData[i].state) {
-				for (var key in WorldData[i].numDeaths) {
-					var temp_date = new Date(key);
-					var d =
-						temp_date.getMonth() +
-						1 +
-						'/' +
-						temp_date.getDate() +
-						'/' +
-						temp_date.getFullYear();
-					if (d == date) {
-						console.log('ERROOOOOOOR');
-						return result;
-					}
-				}
-				var temp_date = helper.stringToDate(date);
-				WorldData[i].numDeaths[temp_date] = number;
-				result = true;
-				break;
-			}
-		}
-	}
-	else if (tod == 3) {
-		for (var i = 0; i < WorldData.length; ++i) {
-			if (country == WorldData[i].country && state == WorldData[i].state) {
-				for (var key in WorldData[i].numRecovered) {
-					var temp_date = new Date(key);
-					var d =
-						temp_date.getMonth() +
-						1 +
-						'/' +
-						temp_date.getDate() +
-						'/' +
-						temp_date.getFullYear();
-					if (d == date) {
-						console.log('ERROOOOOOOR');
-						return result;
-					}
-				}
-				var temp_date = helper.stringToDate(date);
-				WorldData[i].numRecovered[temp_date] = number;
-				result = true;
-				break;
-			}
-		}
+    var errormsg = "no error";
+    if (tod == 1) {
+        for (var i = 0; i < WorldData.length; ++i) {
+            if (country == WorldData[i].country && state == WorldData[i].state) {
+                for (var key in WorldData[i].numConfirmed) {
+                    var temp_date = new Date(key);
+                    var d =
+                        temp_date.getMonth() +
+                        1 +
+                        '/' +
+                        temp_date.getDate() +
+                        '/' +
+                        temp_date.getFullYear();
+                    if (d == date) {
+                        console.log('ERROOOOOOOR');
+                        errormsg = "date exists";
+                        return errormsg;
+                    }
+                }
+                var temp_date = helper.stringToDate(date);
+                WorldData[i].numConfirmed[temp_date] = number;
+                break;
+            }
+            else if (i == WorldData.length-1) {
+                errormsg = "wrong place";
+                break;
+            }
+        }
+    }
+    else if (tod == 2) {
+        for (var i = 0; i < WorldData.length; ++i) {
+            if (country == WorldData[i].country && state == WorldData[i].state) {
+                for (var key in WorldData[i].numDeaths) {
+                    var temp_date = new Date(key);
+                    var d =
+                        temp_date.getMonth() +
+                        1 +
+                        '/' +
+                        temp_date.getDate() +
+                        '/' +
+                        temp_date.getFullYear();
+                    if (d == date) {
+                        console.log('ERROOOOOOOR');
+                        errormsg = "date exists";
+                        return errormsg;
+                    }
+                }
+                var temp_date = helper.stringToDate(date);
+                WorldData[i].numDeaths[temp_date] = number;
+                break;
+            }
+            else if (i == WorldData.length-1) {
+                errormsg = "wrong place";
+                break;
+            }
+        }
+    }
+    else if (tod == 3) {
+        for (var i = 0; i < WorldData.length; ++i) {
+            if (country == WorldData[i].country && state == WorldData[i].state) {
+                for (var key in WorldData[i].numRecovered) {
+                    var temp_date = new Date(key);
+                    var d =
+                        temp_date.getMonth() +
+                        1 +
+                        '/' +
+                        temp_date.getDate() +
+                        '/' +
+                        temp_date.getFullYear();
+                    if (d == date) {
+                        console.log('ERROOOOOOOR');
+                        errormsg = "date exists";
+                        return errormsg;
+                    }
+                }
+                var temp_date = helper.stringToDate(date);
+                WorldData[i].numRecovered[temp_date] = number;
+                break;
+            }
+            else if (i == WorldData.length-1) {
+                errormsg = "wrong place";
+                break;
+            }
+        }
     }
     const writeCSVModule = require('../modules/WriteCSV.js');
-	writeCSVModule.RecordUSData(WorldData);
-	// for (var i = 7; i < 10; ++i) {
-	//     console.log("hihi");
-	//     console.log(WorldData[i]);
-	// }
-    return result;
+    writeCSVModule.RecordUSData(WorldData);
+    // for (var i = 7; i < 10; ++i) {
+    //     console.log("hihi");
+    //     console.log(WorldData[i]);
+    // }
+    return errormsg;
 }
 
 module.exports = {
