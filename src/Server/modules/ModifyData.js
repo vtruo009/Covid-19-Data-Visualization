@@ -338,6 +338,70 @@ function DeleteWorldData(country, state, date, WorldData, tod) {
     return result;
 }
 
+function UpdateWorldData(country, state, date, WorldData, tod, number) {
+	var result = false;
+	if (tod == 1) {
+        console.log(WorldData.length);
+		for (var i = 0; i < WorldData.length; ++i) {
+			if (country == WorldData[i].country && state == WorldData[i].state) {
+				for (var key in WorldData[i].numConfirmed) {
+					var temp = new Date(key);
+					var d = temp.getMonth() + 1 +
+					'/' +
+					temp.getDate() +
+					'/' +
+					temp.getFullYear();
+					if (d == date) {
+						WorldData[i].numConfirmed[key] = number;
+                        result = true;
+                        break;
+					}
+				}
+			}
+		}
+	}
+	else if (tod == 2) {
+		console.log(WorldData.length);
+		for (var i = 0; i < WorldData.length; ++i) {
+			if (country == WorldData[i].country && state == WorldData[i].state) {
+				for (var key in WorldData[i].numDeaths) {
+					var temp = new Date(key);
+					var d = temp.getMonth() + 1 +
+					'/' +
+					temp.getDate() +
+					'/' +
+					temp.getFullYear();
+					if (d == date) {
+						WorldData[i].numDeaths[key] = number;
+						result = true;
+						break;
+					}
+				}
+			}
+		}
+	}
+	else if (tod == 3) {
+		console.log(WorldData.length);
+		for (var i = 0; i < WorldData.length; ++i) {
+			if (country == WorldData[i].country && state == WorldData[i].state) {
+				for (var key in WorldData[i].numRecovered) {
+					var temp = new Date(key);
+					var d = temp.getMonth() + 1 +
+					'/' +
+					temp.getDate() +
+					'/' +
+					temp.getFullYear();
+					if (d == date) {
+						WorldData[i].numRecovered[key] = number;
+						result = true;
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+
 function InsertWorldData(country, state, date, WorldData, tod, number) {
 	var result = false;
 	if (tod == 1) {
@@ -433,7 +497,11 @@ module.exports = {
 
     //World Add
     DeleteWorldData: DeleteWorldData,
-    
+
+    //World Update
+    UpdateWorldData: UpdateWorldData,
+	
+    //World Insert
     InsertWorldData: InsertWorldData,
     // Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), id
 	EditCase: EditCase,
