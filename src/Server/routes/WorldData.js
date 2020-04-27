@@ -111,15 +111,29 @@ router.post('/update', (req, res) => {
 });
 
 router.post('/insert', (req, res) => {
-	res.send({
-		success: ModModule.InsertWorldData(
-			req.body.Country,
-			req.body.State,
-			req.body.Date,
-			WorldData,
-			req.body.TypeOfData,
-			req.body.Number
-		),
-	});
+	var msg = ModModule.InsertWorldData(
+		req.body.Country,
+		req.body.State,
+		req.body.date,
+		WorldData,
+		req.body.TypeOfData,
+		req.body.number
+	);
+	if (msg == 'date exists') {
+		res.send({
+			success: false,
+			message: `Date: ${req.body.date} already exists.`,
+		});
+	} else if (msg == 'wrong place') {
+		res.send({
+			success: false,
+			message: `${req.body.state}, ${req.body.country} does not exists.`,
+		});
+	} else if (msg == 'no error') {
+		res.send({
+			success: true,
+			message: '',
+		});
+	}
 });
 module.exports = router;
