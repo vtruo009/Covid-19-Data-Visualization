@@ -84,8 +84,24 @@ router.post('/update', (req, res) => {
 })
 
 router.post('/insert', (req, res) => {
-	res.send({
-		success: ModModule.AddUSData(req.body.County, req.body.State, req.body.date, USData, req.body.TypeOfData, req.body.number)
-	})
+	var msg = ModModule.AddUSData(req.body.County, req.body.State, req.body.date, USData, req.body.TypeOfData, req.body.number);
+	if (msg == "date exists") {
+		res.send({
+			success: false,
+			message: `Date: ${req.body.date} already exists.`
+		})
+	}
+	else if (msg == "wrong place") {
+		res.send({
+			success: false,
+			message: `${req.body.county}, ${req.body.state} does not exist.`
+		})
+	}
+	else if (msg == "no error") {
+		res.send({
+			success: true,
+			message: ''
+		})
+	}
 })
 module.exports = router;
