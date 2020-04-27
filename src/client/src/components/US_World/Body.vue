@@ -90,6 +90,7 @@ export default {
 	props: {
 		firstInputName: String,
 		secondInputName: String,
+		TypeOfDataoptions: Array,
 		apiEndPoint: String,
 	},
 	data() {
@@ -105,14 +106,6 @@ export default {
 			insertSecondInput: null,
 			insertDate: null,
 			inserTypeOfData: null,
-
-			// Select options
-			TypeOfDataoptions: [
-				{ value: null, text: 'Please select an option', disabled: true },
-				{ value: '1', text: 'Confirmed cases per day' },
-				{ value: '2', text: 'Deaths per day' },
-				{ value: '3', text: 'Recovered cases per day' },
-			],
 
 			// Data to used to populate table
 			tableData: null,
