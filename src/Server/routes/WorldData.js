@@ -87,35 +87,53 @@ router.get('/search', (req, res) => {
 
 router.post('/delete', (req, res) => {
 	res.send({
-		success: ModModule.DeleteWorldData(req.body.Country, req.body.State, req.body.date, WorldData, req.body.TypeOfData)
-	})
-})
+		success: ModModule.DeleteWorldData(
+			req.body.Country,
+			req.body.State,
+			req.body.Date,
+			WorldData,
+			req.body.TypeOfData
+		),
+	});
+});
 
 router.post('/update', (req, res) => {
 	res.send({
-		success: ModModule.UpdateWorldData(req.body.Country, req.body.State, req.body.date, WorldData, req.body.TypeOfData, req.body.number)
-	})
-})
+		success: ModModule.UpdateWorldData(
+			req.body.Country,
+			req.body.State,
+			req.body.Date,
+			WorldData,
+			req.body.TypeOfData,
+			req.body.Number
+		),
+	});
+});
 
 router.post('/insert', (req, res) => {
-	var msg = ModModule.InsertWorldData(req.body.Country, req.body.State, req.body.date, WorldData, req.body.TypeOfData, req.body.number);
-	if (msg == "date exists") {
+	var msg = ModModule.InsertWorldData(
+		req.body.Country,
+		req.body.State,
+		req.body.Date,
+		WorldData,
+		req.body.TypeOfData,
+		req.body.Number
+	);
+	if (msg == 'date exists') {
 		res.send({
 			success: false,
-			message: `Date: ${req.body.date} already exists.`
-		})
-	}
-	else if (msg == "wrong place") {
+			message: `Date: ${req.body.Date} already exists.`,
+		});
+	} else if (msg == 'wrong place') {
 		res.send({
 			success: false,
-			message: `${req.body.state}, ${req.body.country} does not exists.`
-		})
-	}
-	else if (msg == "no error") {
+			message: `${req.body.State}, ${req.body.Country} does not exists.`,
+		});
+	} else if (msg == 'no error') {
 		res.send({
 			success: true,
-			message: ''
-		})
+			message: '',
+		});
 	}
-})
+});
 module.exports = router;

@@ -5,7 +5,7 @@ import USPage from '../views/USPage.vue';
 import WorldPage from '../views/WorldPage';
 import GenderPage from '../views/GenderPage';
 import AgePage from '../views/AgePage';
-
+import CasePage from '../views/CasesPage';
 Vue.use(VueRouter);
 
 const routes = [
@@ -33,6 +33,11 @@ const routes = [
 		path: '/Age',
 		name: 'AgePage',
 		component: AgePage,
+	},
+	{
+		path: '/Cases',
+		name: 'CasesPage',
+		component: CasePage,
 	},
 ];
 

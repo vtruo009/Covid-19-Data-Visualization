@@ -13,7 +13,6 @@ const USReq = require('../modules/DataClasses.js');
 router.get('/search', (req, res) => {
 	console.log(req.query);
 	// Get respective data using the query parameters
-
 	var selectedInUS = [];
 	for (var i = 0; i < USData.length; ++i) {
 		// console.log(USData[i].county);
@@ -64,8 +63,6 @@ router.get('/search', (req, res) => {
 		}
 	}
 
-
-
 	res.send({
 		data: row,
 	});
@@ -73,35 +70,53 @@ router.get('/search', (req, res) => {
 
 router.post('/delete', (req, res) => {
 	res.send({
-		success: ModModule.DeleteUSData(req.body.County, req.body.State, req.body.date, USData, req.body.TypeOfData)
-	})
+		success: ModModule.DeleteUSData(
+			req.body.County,
+			req.body.State,
+			req.body.Date,
+			USData,
+			req.body.TypeOfData
+		),
+	});
 });
 
 router.post('/update', (req, res) => {
 	res.send({
-		success: ModModule.EditUSData(req.body.County, req.body.State, req.body.date, USData, req.body.TypeOfData, req.body.number)
-	})
-})
+		success: ModModule.EditUSData(
+			req.body.County,
+			req.body.State,
+			req.body.Date,
+			USData,
+			req.body.TypeOfData,
+			req.body.Number
+		),
+	});
+});
 
 router.post('/insert', (req, res) => {
-	var msg = ModModule.AddUSData(req.body.County, req.body.State, req.body.date, USData, req.body.TypeOfData, req.body.number);
-	if (msg == "date exists") {
+	var msg = ModModule.AddUSData(
+		req.body.County,
+		req.body.State,
+		req.body.Date,
+		USData,
+		req.body.TypeOfData,
+		req.body.Number
+	);
+	if (msg == 'date exists') {
 		res.send({
 			success: false,
-			message: `Date: ${req.body.date} already exists.`
-		})
-	}
-	else if (msg == "wrong place") {
+			message: `Date: ${req.body.Date} already exists.`,
+		});
+	} else if (msg == 'wrong place') {
 		res.send({
 			success: false,
-			message: `${req.body.county}, ${req.body.state} does not exist.`
-		})
-	}
-	else if (msg == "no error") {
+			message: `${req.body.County}, ${req.body.State} does not exist.`,
+		});
+	} else if (msg == 'no error') {
 		res.send({
 			success: true,
-			message: ''
-		})
+			message: '',
+		});
 	}
-})
+});
 module.exports = router;

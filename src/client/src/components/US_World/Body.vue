@@ -31,7 +31,11 @@
 						</b-button>
 					</b-col>
 					<b-col>
-						<button type="button" class="btn btn-primary" @click="showModal()">
+						<button
+							type="button"
+							class="btn btn-primary"
+							@click="showInsertModal()"
+						>
 							Insert
 						</button>
 					</b-col>
@@ -39,49 +43,82 @@
 			</b-form>
 		</div>
 		<!-- TABLE DATA-->
-		<Table v-show="isTableVisible" :data="tableData" :isBusy="tableBusy" />
+		<Table v-show="table.isVisible" :data="table.data" :isBusy="table.Busy" />
 		<!-- Errors to display -->
 		<Error v-if="error" v-bind:errorMessage="errorMessage" />
+		<Success v-if="success" v-bind:successMessage="successMessage" />
 
 		<!-- Implement Insert Modal -->
 		<b-modal ref="insert-modal" hide-footer hide-title>
-			<h3 class="mb-4">Please Enter the Information Below</h3>
-			<b-col>
-				<b-form-group :label="firstInputName">
-					<b-form-input v-model="insertFirstInput" required> </b-form-input>
-				</b-form-group>
-				<b-form-group :label="secondInputName">
-					<b-form-input v-model="insertSecondInput" required> </b-form-input>
-				</b-form-group>
-				<b-form-group label="Date">
-					<b-form-input v-model="insertDate" required> </b-form-input>
-				</b-form-group>
-				<b-form-group label="Option">
-					<b-form-select
-						v-model="inserTypeOfData"
-						:options="TypeOfDataoptions"
-						required
+			<b-overlay :show="formIsBusy" rounded="sm">
+				<b-form @submit="sendInsertRequest">
+					<h3 class="mb-4">Please Enter the Information Below</h3>
+					<b-col>
+						<b-form-group :label="firstInputName">
+							<b-form-input v-model="insertData.FirstInput" required>
+							</b-form-input>
+						</b-form-group>
+						<b-form-group :label="secondInputName">
+							<b-form-input v-model="insertData.SecondInput" required>
+							</b-form-input>
+						</b-form-group>
+						<b-form-group label="Date">
+							<b-form-datepicker
+								required
+								:min="minDate"
+								:max="maxDate"
+								v-model="insertData.Date"
+								:date-format-options="{
+									year: 'numeric',
+									month: 'numeric',
+									day: 'numeric',
+								}"
+							>
+							</b-form-datepicker>
+						</b-form-group>
+						<b-form-group label="Number of Cases">
+							<b-input v-model="insertData.Number" type="number" required>
+							</b-input>
+						</b-form-group>
+						<b-form-group label="Option">
+							<b-form-select
+								v-model="insertData.TypeOfData"
+								:options="TypeOfDataoptions"
+								required
+							>
+							</b-form-select>
+						</b-form-group>
+					</b-col>
+					<hr />
+					<b-button
+						variant="secondary"
+						class="float-right"
+						:disabled="formIsBusy"
+						@click="hideInsertModal"
+						>Cancel
+					</b-button>
+					<b-button
+						:disabled="formIsBusy"
+						type="submit"
+						variant="primary"
+						class="float-right mr-3"
 					>
-					</b-form-select>
-				</b-form-group>
-			</b-col>
-			<hr />
-			<b-button variant="secondary" class="float-right" @click="hideInsertModal"
-				>Cancel
-			</b-button>
-			<b-button type="submit" variant="primary" class="float-right mr-3">
-				Submit
-			</b-button>
+						Submit
+					</b-button>
+				</b-form>
+			</b-overlay>
 		</b-modal>
 	</div>
 </template>
 
 <script>
 import Services from '../../Services/Services';
+import Helpers from '../../Services/Helpers';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Table from './Table';
 import Error from '../Error';
+import Success from '../Success';
 
 library.add(faSearch);
 
@@ -94,18 +131,24 @@ export default {
 	},
 	data() {
 		return {
-			isTableVisible: false,
+			formIsBusy: null,
+			// Min and maxx date for the forms
+			maxDate: new Date(), // today
+			minDate: new Date('01/20/2020'),
+
 			// Input values for searching
 			firstInput: null,
 			secondInput: null,
 			TypeOfDataSelected: null,
 
 			// Insert US/World data
-			insertFirstInput: null,
-			insertSecondInput: null,
-			insertDate: null,
-			inserTypeOfData: null,
-
+			insertData: {
+				FirstInput: null,
+				SecondInput: null,
+				Number: null,
+				Date: null,
+				TypeOfData: null,
+			},
 			// Select options
 			TypeOfDataoptions: [
 				{ value: null, text: 'Please select an option', disabled: true },
@@ -115,12 +158,19 @@ export default {
 			],
 
 			// Data to used to populate table
-			tableData: null,
-			tableBusy: false,
+			table: {
+				Data: null,
+				Busy: false,
+				isVisible: false,
+			},
 
 			// Booleans used to display errors if any
 			error: false,
 			errorMessage: null,
+
+			// Data to display success
+			success: false,
+			successMessage: null,
 
 			// cached inputted values for updating/deleting
 			cacheFirstInput: null,
@@ -133,8 +183,10 @@ export default {
 		async displayData(e) {
 			e.preventDefault();
 			this.showTable();
-			// Hide errors
+			// Hide Messages
 			this.setErrorOff();
+			this.setSuccessOff();
+
 			// Send search request to backend
 			this.toggleTableBusy();
 			try {
@@ -146,6 +198,7 @@ export default {
 						TypeOfData: this.TypeOfDataSelected,
 					},
 				});
+				console.log(response);
 				if (response.data.data == undefined) {
 					this.errorHandler(
 						`No data available for ${this.firstInput}, ${this.secondInput}.`
@@ -163,6 +216,40 @@ export default {
 			this.toggleTableBusy();
 		},
 
+		async sendInsertRequest(e) {
+			e.preventDefault();
+			// Hide Messages
+			this.setErrorOff();
+			this.setSuccessOff();
+			this.toggleFormBussy();
+			// Send search request to backend
+			try {
+				const response = await Services.insertData({
+					apiEndPoint: this.apiEndPoint,
+					body: {
+						[this.firstInputName]: this.insertData.FirstInput,
+						[this.secondInputName]: this.insertData.SecondInput,
+						Number: this.insertData.Number,
+						Date: Helpers.convertDateFromClient(this.insertData.Date),
+						TypeOfData: this.insertData.TypeOfData,
+					},
+				});
+				console.log(response);
+				if (response.data.success == true) {
+					console.log('Success');
+					this.successHandler('Data successfully saved');
+				} else {
+					this.errorHandler(response.data.message);
+				}
+				// Save data for future requests
+			} catch (error) {
+				this.errorHandler('Some error occurred. Please try again');
+				console.log(error);
+			}
+			//  Hider insert modal
+			this.hideInsertModal();
+			this.toggleFormBussy();
+		},
 		// Helper methods
 		errorHandler(errorMessage) {
 			this.setErrorOn();
@@ -172,8 +259,16 @@ export default {
 			// If there are errors then hide table
 			this.hideTable();
 		},
+		successHandler(successMessage) {
+			this.setSuccessOn();
+			this.successMessage = successMessage;
+			// clear the data
+			this.setTableData(null);
+			// If there are errors then hide table
+			this.hideTable();
+		},
 		setTableData(data) {
-			this.tableData = data;
+			this.table.data = data;
 		},
 		setErrorOff() {
 			this.error = false;
@@ -181,7 +276,12 @@ export default {
 		setErrorOn() {
 			this.error = true;
 		},
-
+		setSuccessOff() {
+			this.success = false;
+		},
+		setSuccessOn() {
+			this.success = true;
+		},
 		cacheInputtedData() {
 			this.cacheFirstInput = this.firstInput;
 			this.cacheSecondInput = this.secondInput;
@@ -205,24 +305,35 @@ export default {
 
 		// Toggle the state of the table
 		toggleTableBusy() {
-			this.tableBusy = !this.tableBusy;
+			this.table.Busy = !this.table.Busy;
 		},
 
 		showTable() {
-			this.isTableVisible = true;
+			this.table.isVisible = true;
 		},
 
 		hideTable() {
-			this.isTableVisible = false;
+			this.table.isVisible = false;
 		},
-		showModal() {
+		showInsertModal() {
 			this.$refs['insert-modal'].show();
 		},
 		hideInsertModal() {
 			this.$refs['insert-modal'].hide();
+			this.clearInserDataFields();
+		},
+		toggleFormBussy() {
+			this.formIsBusy = !this.formIsBusy;
+		},
+		clearInserDataFields() {
+			this.insertData.FirstInput = null;
+			this.insertData.SecondInput = null;
+			this.insertData.Number = null;
+			this.insertData.Date = null;
+			this.insertData.TypeOfData = null;
 		},
 	},
-	components: { Table, Error },
+	components: { Table, Error, Success },
 };
 </script>
 
