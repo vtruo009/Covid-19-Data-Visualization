@@ -210,7 +210,7 @@ function EditUSData(county, state, date, USData, tod, number) {
 
 const helper = require('../modules/BasicHelpers.js');
 function AddUSData(county, state, date, USData, tod, number) {
-	var result = false;
+	var errormsg = "no error";
 	if (tod == 1) {
 		for (var i = 0; i < USData.length; ++i) {
 			if (county == USData[i].county && state == USData[i].state) {
@@ -225,13 +225,17 @@ function AddUSData(county, state, date, USData, tod, number) {
 						temp_date.getFullYear();
 					if (d == date) {
 						console.log('ERROOOOOOOR');
-						return result;
+						//return result;
+						errormsg = "date exists";
+						return errormsg;
 					}
 				}
 				var temp_date = helper.stringToDate(date);
 				USData[i].numConfirmed[temp_date] = number;
-				result = true;
 				break;
+			}
+			else if (i == USData.length-1) { // if its the last element & prog didn't go into the 1st if -> place doesn't exist
+				errormsg = "wrong place";
 			}
 		}
 	} else if (tod == 2) {
@@ -248,13 +252,17 @@ function AddUSData(county, state, date, USData, tod, number) {
 						temp_date.getFullYear();
 					if (d == date) {
 						console.log('ERROOOOOOOR');
-						return result;
+						errormsg = "date exists";
+						return errormsg;
 					}
 				}
 				var temp_date = helper.stringToDate(date);
 				USData[i].numDeaths[temp_date] = number;
-				result = true;
 				break;
+			}
+			else if (i == USData.length-1) { // if its the last element & prog didn't go into the 1st if -> place doesn't exist
+				errormsg = "wrong place";
+				break; //just in case
 			}
 		}
 	}
@@ -264,7 +272,8 @@ function AddUSData(county, state, date, USData, tod, number) {
 	//     console.log("hihi");
 	//     console.log(USData[i]);
 	// }
-	return result;
+	//return result;
+	return errormsg;
 }
 
 function DeleteWorldData(country, state, date, WorldData, tod) {
