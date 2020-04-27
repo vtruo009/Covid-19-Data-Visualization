@@ -133,104 +133,122 @@
 
 		<!-- Delete Modal -->
 		<b-modal ref="delete-modal" hide-footer hide-title>
-			<b-form @submit="deleteCase">
-				<!-- Access cached data from the body parent component -->
-				<div class="mb-4">
-					<h3 class="text-danger text-center">WARNING</h3>
-					<h4 class="mt-4">Are you sure you want to delete this case?</h4>
-				</div>
-				<div class="mt-5">
-					<b-button type="submit" variant="danger" class="float-right"
-						>Yes</b-button
-					>
-					<b-button
-						variant="secondary"
-						class="float-right mr-3"
-						@click="hideDeleteModal"
-						>No</b-button
-					>
-				</div>
-			</b-form>
+			<b-overlay :show="formIsBusy" rounded="sm">
+				<b-form @submit="deleteCase">
+					<!-- Access cached data from the body parent component -->
+					<div class="mb-4">
+						<h3 class="text-danger text-center">WARNING</h3>
+						<h4 class="mt-4">Are you sure you want to delete this case?</h4>
+					</div>
+					<div class="mt-5">
+						<b-button
+							:disabled="formIsBusy"
+							type="submit"
+							variant="danger"
+							class="float-right"
+							>Yes</b-button
+						>
+						<b-button
+							:disabled="formIsBusy"
+							variant="secondary"
+							class="float-right mr-3"
+							@click="hideDeleteModal"
+							>No</b-button
+						>
+					</div>
+				</b-form>
+			</b-overlay>
 		</b-modal>
 
 		<!-- Insert Modal -->
 		<b-modal ref="insert-modal" hide-footer hide-title>
-			<b-form @submit="sendInsertRequest">
-				<h3 class="mb-4">Please Enter the Information Below</h3>
-				<b-row>
-					<b-col>
-						<b-form-group label="Case ID">
-							<b-form-input type="number" v-model="insertCase.ID" required>
-							</b-form-input>
-						</b-form-group>
-					</b-col>
-					<b-col>
-						<b-form-group label="Reporting Date">
-							<b-form-datepicker
-								required
-								:min="minDate"
-								:max="maxDate"
-								v-model="insertCase.Date"
-								:date-format-options="{
-									year: 'numeric',
-									month: 'numeric',
-									day: 'numeric',
-								}"
-							>
-							</b-form-datepicker>
-						</b-form-group>
-					</b-col>
-				</b-row>
-				<b-row>
-					<b-col
-						><b-form-group label="Country">
-							<b-form-input v-model="insertCase.Country" required>
-							</b-form-input>
-						</b-form-group>
-					</b-col>
-					<b-col>
-						<b-form-group label="State">
-							<b-form-input v-model="insertCase.State" required> </b-form-input>
-						</b-form-group>
-					</b-col>
-				</b-row>
-				<b-row>
-					<b-col>
-						<b-form-group label="Age">
-							<b-form-input type="number" v-model="insertCase.Age" required>
-							</b-form-input>
-						</b-form-group>
-					</b-col>
-					<b-col>
-						<b-form-group label="Gender">
-							<b-form-select v-model="insertCase.Gender" required>
-								<b-form-select-option value="1">Male</b-form-select-option>
-								<b-form-select-option value="2">Female</b-form-select-option>
-							</b-form-select>
-						</b-form-group>
-					</b-col>
-				</b-row>
-				<b-row>
-					<b-col>
-						<b-form-group label="Type of Case">
-							<b-form-select v-model="insertCase.TypeOfCase" required>
-								<b-form-select-option value="1">Dead</b-form-select-option>
-								<b-form-select-option value="2">Recovered</b-form-select-option>
-							</b-form-select>
-						</b-form-group>
-					</b-col>
-				</b-row>
-				<hr />
-				<b-button
-					variant="secondary"
-					class="float-right"
-					@click="hideInsertModal"
-					>Cancel
-				</b-button>
-				<b-button type="submit" variant="primary" class="float-right mr-3">
-					Submit
-				</b-button>
-			</b-form>
+			<b-overlay :show="formIsBusy" rounded="sm">
+				<b-form @submit="sendInsertRequest">
+					<h3 class="mb-4">Please Enter the Information Below</h3>
+					<b-row>
+						<b-col>
+							<b-form-group label="Case ID">
+								<b-form-input type="number" v-model="insertCase.ID" required>
+								</b-form-input>
+							</b-form-group>
+						</b-col>
+						<b-col>
+							<b-form-group label="Reporting Date">
+								<b-form-datepicker
+									required
+									:min="minDate"
+									:max="maxDate"
+									v-model="insertCase.Date"
+									:date-format-options="{
+										year: 'numeric',
+										month: 'numeric',
+										day: 'numeric',
+									}"
+								>
+								</b-form-datepicker>
+							</b-form-group>
+						</b-col>
+					</b-row>
+					<b-row>
+						<b-col
+							><b-form-group label="Country">
+								<b-form-input v-model="insertCase.Country" required>
+								</b-form-input>
+							</b-form-group>
+						</b-col>
+						<b-col>
+							<b-form-group label="State">
+								<b-form-input v-model="insertCase.State" required>
+								</b-form-input>
+							</b-form-group>
+						</b-col>
+					</b-row>
+					<b-row>
+						<b-col>
+							<b-form-group label="Age">
+								<b-form-input type="number" v-model="insertCase.Age" required>
+								</b-form-input>
+							</b-form-group>
+						</b-col>
+						<b-col>
+							<b-form-group label="Gender">
+								<b-form-select v-model="insertCase.Gender" required>
+									<b-form-select-option value="1">Male</b-form-select-option>
+									<b-form-select-option value="2">Female</b-form-select-option>
+								</b-form-select>
+							</b-form-group>
+						</b-col>
+					</b-row>
+					<b-row>
+						<b-col>
+							<b-form-group label="Type of Case">
+								<b-form-select v-model="insertCase.TypeOfCase" required>
+									<b-form-select-option value="1">Dead</b-form-select-option>
+									<b-form-select-option value="2"
+										>Recovered</b-form-select-option
+									>
+								</b-form-select>
+							</b-form-group>
+						</b-col>
+					</b-row>
+					<hr />
+					<b-button
+						variant="secondary"
+						:disabled="formIsBusy"
+						class="float-right"
+						@click="hideInsertModal"
+						>Cancel
+					</b-button>
+					<b-button
+						:disabled="formIsBusy"
+						type="submit"
+						variant="primary"
+						class="float-right mr-3"
+					>
+						Submit
+					</b-button>
+				</b-form>
+			</b-overlay>
 		</b-modal>
 	</div>
 </template>
@@ -244,6 +262,7 @@ export default {
 	name: 'CasesPage',
 	data() {
 		return {
+			formIsBusy: false,
 			// Min and maxx date for the forms
 			maxDate: new Date(), // today
 			minDate: new Date('01/20/2020'),
@@ -310,19 +329,19 @@ export default {
 					success: true,
 				};
 				if (response.success) {
-					// Display update was successful
-					this.clearCaseInformation();
+					// TO DO: Display update was successful
 				} else {
 					// Display error message
 					this.handleError('Case could not be updated. Please try again');
 				}
-				this.caseFound = false;
 			} catch (error) {
 				console.log(error);
 				// Display error occurred
 				this.handleError('Some error occurred. Please try again');
 			}
 
+			this.caseFound = false;
+			this.clearCaseInformation();
 			// Stop loading spinner
 			this.toggleWaitingForResponse();
 		},
@@ -370,6 +389,8 @@ export default {
 				console.log(error);
 				this.handleError('Some error occurred. Please try again');
 			}
+
+			this.clearCaseInformation();
 			this.toggleWaitingForResponse();
 		},
 
@@ -377,7 +398,8 @@ export default {
 			e.preventDefault();
 			// Turn off errors if any
 			this.setErrorOff();
-			// show loading bar in modal
+			// show loading  spinner in modal
+			this.toggleFormBussy();
 			try {
 				// const response = await Services.deleteData({
 				// 	apiEndPoint: '/CaseData',
@@ -390,10 +412,6 @@ export default {
 				};
 				if (response.success) {
 					// TO DO: Display delete was successful
-
-					// Hide case from screen
-					this.caseFound = false;
-					this.clearCaseInformation();
 				} else {
 					// Display error message
 					this.handleError('Case could not be deleted. Please try again');
@@ -402,15 +420,21 @@ export default {
 				console.log(error);
 				this.handleError('Some error occurred. Please try again');
 			}
+
+			// stop loading spinner in modal
+			this.toggleFormBussy();
+			// Hide case from screen
+			this.caseFound = false;
+			this.clearCaseInformation();
 			// Hides delete modal
 			this.hideDeleteModal();
-			// stop loading bar in modal
 		},
 
 		async sendInsertRequest(e) {
 			e.preventDefault();
 			console.log('HI');
 			// To do: Show Laoading
+			this.toggleFormBussy();
 			try {
 				// const response = await Services.insertData({
 				// 	apiEndpoint: '/CaseData',
@@ -441,11 +465,9 @@ export default {
 				console.log(error);
 				// TO DO: DIsplay error message
 			}
+			this.toggleFormBussy();
 			this.hideInsertModal();
-
-			// To do: Hide Laoading
 		},
-
 		toggleWaitingForResponse() {
 			this.waitingForResponse = !this.waitingForResponse;
 		},
@@ -491,6 +513,9 @@ export default {
 			this.caseInformation.Age = null;
 			this.caseInformation.Gender = null;
 			this.caseInformation.TypeOfCase = null;
+		},
+		toggleFormBussy() {
+			this.formIsBusy = !this.formIsBusy;
 		},
 	},
 	components: {
