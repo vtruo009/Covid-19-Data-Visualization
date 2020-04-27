@@ -31,7 +31,11 @@
 						</b-button>
 					</b-col>
 					<b-col>
-						<button type="button" class="btn btn-primary" @click="showModal()">
+						<button
+							type="button"
+							class="btn btn-primary"
+							@click="showInsertModal()"
+						>
 							Insert
 						</button>
 					</b-col>
@@ -45,55 +49,63 @@
 
 		<!-- Implement Insert Modal -->
 		<b-modal ref="insert-modal" hide-footer hide-title>
-			<b-form @submit="sendInsertRequest">
-				<h3 class="mb-4">Please Enter the Information Below</h3>
-				<b-col>
-					<b-form-group :label="firstInputName">
-						<b-form-input v-model="insertData.FirstInput" required>
-						</b-form-input>
-					</b-form-group>
-					<b-form-group :label="secondInputName">
-						<b-form-input v-model="insertData.SecondInput" required>
-						</b-form-input>
-					</b-form-group>
-					<b-form-group label="Date">
-						<b-form-datepicker
-							required
-							:min="minDate"
-							:max="maxDate"
-							v-model="insertData.Date"
-							:date-format-options="{
-								year: 'numeric',
-								month: 'numeric',
-								day: 'numeric',
-							}"
-						>
-						</b-form-datepicker>
-					</b-form-group>
-					<b-form-group label="Number of Cases">
-						<b-input v-model="insertData.Number" type="number" required>
-						</b-input>
-					</b-form-group>
-					<b-form-group label="Option">
-						<b-form-select
-							v-model="insertData.TypeOfData"
-							:options="TypeOfDataoptions"
-							required
-						>
-						</b-form-select>
-					</b-form-group>
-				</b-col>
-				<hr />
-				<b-button
-					variant="secondary"
-					class="float-right"
-					@click="hideInsertModal"
-					>Cancel
-				</b-button>
-				<b-button type="submit" variant="primary" class="float-right mr-3">
-					Submit
-				</b-button>
-			</b-form>
+			<b-overlay :show="formIsBusy" rounded="sm">
+				<b-form @submit="sendInsertRequest">
+					<h3 class="mb-4">Please Enter the Information Below</h3>
+					<b-col>
+						<b-form-group :label="firstInputName">
+							<b-form-input v-model="insertData.FirstInput" required>
+							</b-form-input>
+						</b-form-group>
+						<b-form-group :label="secondInputName">
+							<b-form-input v-model="insertData.SecondInput" required>
+							</b-form-input>
+						</b-form-group>
+						<b-form-group label="Date">
+							<b-form-datepicker
+								required
+								:min="minDate"
+								:max="maxDate"
+								v-model="insertData.Date"
+								:date-format-options="{
+									year: 'numeric',
+									month: 'numeric',
+									day: 'numeric',
+								}"
+							>
+							</b-form-datepicker>
+						</b-form-group>
+						<b-form-group label="Number of Cases">
+							<b-input v-model="insertData.Number" type="number" required>
+							</b-input>
+						</b-form-group>
+						<b-form-group label="Option">
+							<b-form-select
+								v-model="insertData.TypeOfData"
+								:options="TypeOfDataoptions"
+								required
+							>
+							</b-form-select>
+						</b-form-group>
+					</b-col>
+					<hr />
+					<b-button
+						variant="secondary"
+						class="float-right"
+						:disabled="formIsBusy"
+						@click="hideInsertModal"
+						>Cancel
+					</b-button>
+					<b-button
+						:disabled="formIsBusy"
+						type="submit"
+						variant="primary"
+						class="float-right mr-3"
+					>
+						Submit
+					</b-button>
+				</b-form>
+			</b-overlay>
 		</b-modal>
 	</div>
 </template>
@@ -117,6 +129,7 @@ export default {
 	},
 	data() {
 		return {
+			formIsBusy: null,
 			// Min and maxx date for the forms
 			maxDate: new Date(), // today
 			minDate: new Date('01/20/2020'),
@@ -196,6 +209,9 @@ export default {
 
 		async sendInsertRequest(e) {
 			e.preventDefault();
+			// Hide errors
+			this.setErrorOff();
+			this.toggleFormBussy();
 			// Send search request to backend
 			try {
 				const response = await Services.insertData({
@@ -212,10 +228,7 @@ export default {
 				if (response.data.success == true) {
 					console.log('Success');
 				} else {
-					// TO DO: Make server receive error message
-					this.errorHandler(
-						`Information for ${this.insertData.Date} : ${this.insertData.FirstInput}, ${this.insertData.SecondInput} already exists.`
-					);
+					this.errorHandler(response.data.message);
 				}
 				// Save data for future requests
 			} catch (error) {
@@ -224,6 +237,7 @@ export default {
 			}
 			//  Hider insert modal
 			this.hideInsertModal();
+			this.toggleFormBussy();
 		},
 		// Helper methods
 		errorHandler(errorMessage) {
@@ -277,11 +291,22 @@ export default {
 		hideTable() {
 			this.table.isVisible = false;
 		},
-		showModal() {
+		showInsertModal() {
 			this.$refs['insert-modal'].show();
 		},
 		hideInsertModal() {
 			this.$refs['insert-modal'].hide();
+			this.clearInserDataFields();
+		},
+		toggleFormBussy() {
+			this.formIsBusy = !this.formIsBusy;
+		},
+		clearInserDataFields() {
+			this.insertData.FirstInput = null;
+			this.insertData.SecondInput = null;
+			this.insertData.Number = null;
+			this.insertData.Date = null;
+			this.insertData.TypeOfData = null;
 		},
 	},
 	components: { Table, Error },

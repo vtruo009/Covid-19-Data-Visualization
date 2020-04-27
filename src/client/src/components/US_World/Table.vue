@@ -35,104 +35,120 @@
 		</b-table>
 
 		<!-- Update Modal -->
-		<b-modal ref="update-modal" hide-footer hide-title>
-			<b-form @submit="sendUpdateRequest">
-				<h3 class="danger mb-4">You are going to edit the following record</h3>
-				<hr />
-				<!-- Access cached data from the body parent component -->
-				<p>
-					<font-awesome-icon :icon="['fas', 'globe']" />
-					<b> Location:</b>
-					{{ this.$parent.cacheFirstInput }},
-					{{ this.$parent.cacheSecondInput }}
-				</p>
-				<p>
-					<font-awesome-icon :icon="['fas', 'file-medical']" />
-					<b> Type of record:</b>
-					{{ this.$parent.cacheTypeOFDataString }}
-				</p>
-				<b-row>
-					<b-col>
-						<b-form-group label="Date:">
-							<b-form-input
-								v-model="selectedRecord.date"
-								disabled
-							></b-form-input>
-						</b-form-group>
-					</b-col>
-					<b-col>
-						<b-form-group label="Number:">
-							<b-form-input
-								type="number"
-								v-model="selectedRecord.number"
-								required
-							></b-form-input>
-						</b-form-group>
-					</b-col>
-				</b-row>
-				<hr />
-				<b-button type="submit" variant="primary" class="float-right"
-					>Update</b-button
-				>
-				<b-button
-					variant="secondary"
-					class="float-right mr-3"
-					@click="hideUpdateModal"
-					>Close</b-button
-				>
-			</b-form>
+		<b-modal :busy="formIsBusy" ref="update-modal" hide-footer hide-title>
+			<b-overlay :show="formIsBusy" rounded="sm">
+				<b-form @submit="sendUpdateRequest">
+					<h3 class="danger mb-4">
+						You are going to edit the following record
+					</h3>
+					<hr />
+					<!-- Access cached data from the body parent component -->
+					<p>
+						<font-awesome-icon :icon="['fas', 'globe']" />
+						<b> Location:</b>
+						{{ this.$parent.cacheFirstInput }},
+						{{ this.$parent.cacheSecondInput }}
+					</p>
+					<p>
+						<font-awesome-icon :icon="['fas', 'file-medical']" />
+						<b> Type of record:</b>
+						{{ this.$parent.cacheTypeOFDataString }}
+					</p>
+					<b-row>
+						<b-col>
+							<b-form-group label="Date:">
+								<b-form-input
+									v-model="selectedRecord.date"
+									disabled
+								></b-form-input>
+							</b-form-group>
+						</b-col>
+						<b-col>
+							<b-form-group label="Number:">
+								<b-form-input
+									type="number"
+									v-model="selectedRecord.number"
+									required
+								></b-form-input>
+							</b-form-group>
+						</b-col>
+					</b-row>
+					<hr />
+					<b-button
+						type="submit"
+						:disabled="formIsBusy"
+						variant="primary"
+						class="float-right"
+						>Update</b-button
+					>
+					<b-button
+						:disabled="formIsBusy"
+						variant="secondary"
+						class="float-right mr-3"
+						@click="hideUpdateModal"
+						>Close</b-button
+					>
+				</b-form>
+			</b-overlay>
 		</b-modal>
 
 		<!-- Delete Modal -->
 		<b-modal ref="delete-modal" hide-footer hide-title>
-			<b-form @submit="sendDeleteRequest">
-				<!-- Access cached data from the body parent component -->
-				<div class="mb-4">
-					<h3 class="text-danger text-center">WARNING</h3>
-					<h4>Are you sure you want to delete the following record?</h4>
-				</div>
-				<hr />
-				<p>
-					<font-awesome-icon :icon="['fas', 'globe']" />
-					<b> Location:</b>
-					{{ this.$parent.cacheFirstInput }},
-					{{ this.$parent.cacheSecondInput }}
-				</p>
-				<p>
-					<font-awesome-icon :icon="['fas', 'file-medical']" />
-					<b> Type of record:</b>
-					{{ this.$parent.cacheTypeOFDataString }}
-				</p>
-				<b-row>
-					<b-col>
-						<b-form-group label="Date:">
-							<b-form-input
-								v-bind:value="selectedRecord.date"
-								disabled
-							></b-form-input>
-						</b-form-group>
-					</b-col>
-					<b-col>
-						<b-form-group label="Number:">
-							<b-form-input
-								type="number"
-								v-bind:value="selectedRecord.number"
-								disabled
-							></b-form-input>
-						</b-form-group>
-					</b-col>
-				</b-row>
-				<hr />
-				<b-button type="submit" variant="danger" class="float-right"
-					>Yes</b-button
-				>
-				<b-button
-					variant="secondary"
-					class="float-right mr-3"
-					@click="hideDeleteModal"
-					>No</b-button
-				>
-			</b-form>
+			<b-overlay :show="formIsBusy" rounded="sm">
+				<b-form @submit="sendDeleteRequest">
+					<!-- Access cached data from the body parent component -->
+					<div class="mb-4">
+						<h3 class="text-danger text-center">WARNING</h3>
+						<h4>Are you sure you want to delete the following record?</h4>
+					</div>
+					<hr />
+					<p>
+						<font-awesome-icon :icon="['fas', 'globe']" />
+						<b> Location:</b>
+						{{ this.$parent.cacheFirstInput }},
+						{{ this.$parent.cacheSecondInput }}
+					</p>
+					<p>
+						<font-awesome-icon :icon="['fas', 'file-medical']" />
+						<b> Type of record:</b>
+						{{ this.$parent.cacheTypeOFDataString }}
+					</p>
+					<b-row>
+						<b-col>
+							<b-form-group label="Date:">
+								<b-form-input
+									v-bind:value="selectedRecord.date"
+									disabled
+								></b-form-input>
+							</b-form-group>
+						</b-col>
+						<b-col>
+							<b-form-group label="Number:">
+								<b-form-input
+									type="number"
+									v-bind:value="selectedRecord.number"
+									disabled
+								></b-form-input>
+							</b-form-group>
+						</b-col>
+					</b-row>
+					<hr />
+					<b-button
+						:disabled="formIsBusy"
+						type="submit"
+						variant="danger"
+						class="float-right"
+						>Yes</b-button
+					>
+					<b-button
+						:disabled="formIsBusy"
+						variant="secondary"
+						class="float-right mr-3"
+						@click="hideDeleteModal"
+						>No</b-button
+					>
+				</b-form>
+			</b-overlay>
 		</b-modal>
 	</div>
 </template>
@@ -157,11 +173,14 @@ export default {
 	},
 	data() {
 		return {
+			formIsBusy: false,
+
 			selectedRecord: {
 				date: null,
 				number: null,
 				index: null,
 			},
+
 			fields: [
 				{ key: 'date', label: 'Date' },
 				{ key: 'number', label: 'Number' },
@@ -217,6 +236,7 @@ export default {
 		// Sends update request to the backend
 		async sendUpdateRequest(e) {
 			e.preventDefault();
+			this.toggleFormBussy();
 			try {
 				const response = await Services.updateData({
 					apiEndPoint: this.$parent.apiEndPoint,
@@ -236,12 +256,14 @@ export default {
 				console.log(error);
 			}
 			// Hides the udpate modal
+			this.toggleFormBussy();
 			this.hideUpdateModal();
 		},
 
 		// Sends delete request to the server
 		async sendDeleteRequest(e) {
 			e.preventDefault();
+			this.toggleFormBussy();
 			console.log('Sends delete request');
 			try {
 				const response = await Services.deleteData({
@@ -261,7 +283,11 @@ export default {
 				console.log(error);
 			}
 			// Hides the delete modal
+			this.toggleFormBussy();
 			this.hideDeleteModal();
+		},
+		toggleFormBussy() {
+			this.formIsBusy = !this.formIsBusy;
 		},
 	},
 };
