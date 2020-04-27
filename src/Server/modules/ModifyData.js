@@ -6,6 +6,7 @@ function AddCase(
 	gender,
 	recovered,
 	dead,
+	location,
 	id
 ) {
 	for (var i = 0; i < allCases.length; ++i) {
@@ -28,7 +29,7 @@ function AddCase(
 		dateString, // 2: reporting date
 		'', // 3: blacnk column
 		'', // 4: summary
-		'', // 5: location
+		location, // 5: location
 		country, // 6: country
 		gender, // 7: gender
 		age, // 8: age
@@ -60,6 +61,7 @@ function EditCase(
 	gender,
 	recovered,
 	dead,
+	location,
 	id
 ) {
 	for (var i = 0; i < allCases.length; ++i) {
@@ -79,6 +81,7 @@ function EditCase(
 			allCases[i].gender = gender;
 			allCases[i].recovered = recovered;
 			allCases[i].dead = dead;
+			allCases[i].location = location;
 
 			const writeCSVModule = require('../modules/WriteCSV.js');
 			writeCSVModule.RecordCases(allCases);
@@ -503,10 +506,10 @@ module.exports = {
 	
     //World Insert
     InsertWorldData: InsertWorldData,
-    // Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), id
+    // Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), location, id
 	EditCase: EditCase,
 
-	// Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), id
+	// Argument: Array of Case,  reportingDate (Date), country, age, gender, recovered (Bool), dead (Bool), location, id
 	AddCase: AddCase,
 
 	// Argument: Array of Case,  id of the Case the user wants to delete.
