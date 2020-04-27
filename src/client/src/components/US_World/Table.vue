@@ -253,12 +253,10 @@ export default {
 						Date: this.selectedRecord.date,
 					},
 				});
-				console.log(this.data);
 				// Delete the selected row from the table
 				this.data.splice(this.selectedRecord.index, 1);
 				// refresh table
 				this.$refs.table.refresh();
-				console.log(this.data);
 			} catch (error) {
 				console.log(error);
 			}
