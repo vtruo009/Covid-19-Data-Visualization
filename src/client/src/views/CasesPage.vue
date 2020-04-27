@@ -410,6 +410,40 @@ export default {
 		async sendInsertRequest(e) {
 			e.preventDefault();
 			console.log('HI');
+			// To do: Show Laoading
+			try {
+				// const response = await Services.insertData({
+				// 	apiEndpoint: '/CaseData',
+				// 	body: {
+				// 		ID: this.insertCase.ID,
+				// 		Country: this.insertCase.Country,
+				// 		State: this.insertCase.State,
+				// 		Date: Helpers.convertDateFromClient(this.insertCase.Date),
+				// 		Age: this.insertCase.Age,
+				// 		Gender: this.insertCase.Gender,
+				// 		TypeOfCase: this.insertCase.TypeOfCase,
+				// 	},
+				// });
+
+				const response = {
+					data: {
+						success: true,
+					},
+				};
+				if (response.data.success == true) {
+					console.log('Success');
+					// TO DO: Display success message
+				} else {
+					console.log('Error: Case alredy exists OR Location is not valid');
+					// TO DO: DIsplay error message
+				}
+			} catch (error) {
+				console.log(error);
+				// TO DO: DIsplay error message
+			}
+			this.hideInsertModal();
+
+			// To do: Hide Laoading
 		},
 
 		toggleWaitingForResponse() {
