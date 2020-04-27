@@ -7,6 +7,7 @@ const AccessDataModule = require('../modules/AccessData');
 
 router.get('/search', (req, res) => {
 	var searchCase = AccessDataModule.GetCaseById(req.query.caseId);
+	console.log('Search:', searchCase);
 	if (searchCase == null) {
 		res.send({
 			success: false,
@@ -68,8 +69,10 @@ router.post('/update', (req, res) => {
 });
 
 router.post('/insert', (req, res) => {
+	console.log(req.body);
 	var allCases = readCSVModule.LoadAllCases();
-	var date = BasicHelpersModule.stringToDate(req.body.ReportingDate);
+	// var date = BasicHelpersModule.stringToDate(req.body.ReportingDate);
+	// console.log('From insert', date);
 	var stringOfGender;
 	if (req.body.Gender == 1) {
 		stringOfGender = 'male';
@@ -78,7 +81,7 @@ router.post('/insert', (req, res) => {
 	}
 	var insertCase = ModifyDataModule.AddCase(
 		allCases,
-		date, //convert string to date
+		req.body.ReportingDate, //convert string to date
 		req.body.Country,
 		req.body.Age,
 		stringOfGender,
