@@ -46,6 +46,7 @@
 		<Table v-show="table.isVisible" :data="table.data" :isBusy="table.Busy" />
 		<!-- Errors to display -->
 		<Error v-if="error" v-bind:errorMessage="errorMessage" />
+		<Success v-if="success" v-bind:successMessage="successMessage" />
 
 		<!-- Implement Insert Modal -->
 		<b-modal ref="insert-modal" hide-footer hide-title>
@@ -117,6 +118,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Table from './Table';
 import Error from '../Error';
+import Success from '../Success';
 
 library.add(faSearch);
 
@@ -166,6 +168,10 @@ export default {
 			error: false,
 			errorMessage: null,
 
+			// Data to display success
+			success: false,
+			successMessage: null,
+
 			// cached inputted values for updating/deleting
 			cacheFirstInput: null,
 			cacheSecondInput: null,
@@ -177,8 +183,10 @@ export default {
 		async displayData(e) {
 			e.preventDefault();
 			this.showTable();
-			// Hide errors
+			// Hide Messages
 			this.setErrorOff();
+			this.setSuccessOff();
+
 			// Send search request to backend
 			this.toggleTableBusy();
 			try {
@@ -190,6 +198,7 @@ export default {
 						TypeOfData: this.TypeOfDataSelected,
 					},
 				});
+				console.log(response);
 				if (response.data.data == undefined) {
 					this.errorHandler(
 						`No data available for ${this.firstInput}, ${this.secondInput}.`
@@ -209,8 +218,9 @@ export default {
 
 		async sendInsertRequest(e) {
 			e.preventDefault();
-			// Hide errors
+			// Hide Messages
 			this.setErrorOff();
+			this.setSuccessOff();
 			this.toggleFormBussy();
 			// Send search request to backend
 			try {
@@ -227,6 +237,7 @@ export default {
 				console.log(response);
 				if (response.data.success == true) {
 					console.log('Success');
+					this.successHandler('Data successfully saved');
 				} else {
 					this.errorHandler(response.data.message);
 				}
@@ -248,6 +259,14 @@ export default {
 			// If there are errors then hide table
 			this.hideTable();
 		},
+		successHandler(successMessage) {
+			this.setSuccessOn();
+			this.successMessage = successMessage;
+			// clear the data
+			this.setTableData(null);
+			// If there are errors then hide table
+			this.hideTable();
+		},
 		setTableData(data) {
 			this.table.data = data;
 		},
@@ -257,7 +276,12 @@ export default {
 		setErrorOn() {
 			this.error = true;
 		},
-
+		setSuccessOff() {
+			this.success = false;
+		},
+		setSuccessOn() {
+			this.success = true;
+		},
 		cacheInputtedData() {
 			this.cacheFirstInput = this.firstInput;
 			this.cacheSecondInput = this.secondInput;
@@ -309,7 +333,7 @@ export default {
 			this.insertData.TypeOfData = null;
 		},
 	},
-	components: { Table, Error },
+	components: { Table, Error, Success },
 };
 </script>
 

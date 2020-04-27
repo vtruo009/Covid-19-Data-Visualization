@@ -223,8 +223,11 @@
 						<b-col>
 							<b-form-group label="Type of Case">
 								<b-form-select v-model="insertCase.TypeOfCase" required>
-									<b-form-select-option value="1">Dead</b-form-select-option>
-									<b-form-select-option value="2"
+									<b-form-select-option value="1"
+										>Confirmed</b-form-select-option
+									>
+									<b-form-select-option value="2">Dead</b-form-select-option>
+									<b-form-select-option value="3"
 										>Recovered</b-form-select-option
 									>
 								</b-form-select>
@@ -314,7 +317,7 @@ export default {
 				// const response = await Services.insertData({
 				// 	apiEndPoint: '/CaseData',
 				// 	params: {
-				// 		Date: Helpers.convertDateFromClient(
+				// 		ReportingDate: Helpers.convertDateFromClient(
 				// 			this.caseInformation.Date
 				// 		),
 				// 		State: this.caseInformation.State,
@@ -322,6 +325,7 @@ export default {
 				// 		Age: this.caseInformation.Age,
 				// 		Gender: this.caseInformation.Gender,
 				// 		TypeOfCase: this.caseInformation.TypeOfCase,
+				//      CaseId:
 				// 	},
 				// });
 
@@ -360,25 +364,36 @@ export default {
 				// });
 
 				const response = {
-					success: true,
-					Date: '01/20/2020',
-					Country: 'Peru',
-					State: 'Lima',
-					Age: 10,
-					Gender: 1,
-					TypeOfCase: 1,
+					data: {
+						success: true,
+						case: {
+							CaseId: 1,
+							ReportingDate: '01/20/2020',
+							Country: 'wevvwe',
+							State: 'Lima',
+							Age: 10,
+							Gender: 1,
+							TypeOfCase: 1,
+						},
+					},
 				};
-				if (response.success) {
+				if (response.data.success) {
+					console.log(response);
 					// Decompose response object
+					console.log(response.data.case);
 					this.caseInformation = {
 						// Convert date so that is properly formated
-						Date: Helpers.convertDateFromServer(response.Date),
-						State: response.State,
-						Country: response.Country,
-						Age: response.Age,
-						Gender: response.Gender,
-						TypeOfCase: response.TypeOfCase,
+						Date: Helpers.convertDateFromServer(
+							response.data.case.ReportingDate
+						),
+						State: response.data.case.State,
+						Country: response.data.case.Country,
+						Age: response.data.case.Age,
+						Gender: response.data.case.Gender,
+						TypeOfCase: response.data.case.TypeOfCase,
 					};
+					console.log(response);
+					this.cacheCaseId = response.data.case.CaseId;
 					// Show Case information
 					this.caseFound = true;
 				} else {
