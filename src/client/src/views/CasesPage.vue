@@ -2,6 +2,7 @@
 	<div class="mt-5">
 		<b-form inline @submit="searchCase">
 			<b-input
+				required
 				type="number"
 				placeholder="Case Id"
 				v-model="caseId"
@@ -25,10 +26,14 @@
 		</b-form>
 
 		<Error class="mt-4" v-show="error" v-bind:errorMessage="errorMessage" />
-
+		<Success
+			class="mt-4"
+			v-show="success"
+			v-bind:successMessage="successMessage"
+		/>
 		<div v-show="caseFound" class="blackBackground p-5 mt-5">
 			<b-row>
-				<h1>Case ID: {{ caseId }}</h1>
+				<h1>Case ID: {{ caseInformation.Id }}</h1>
 			</b-row>
 			<b-row>
 				<b-form @submit="updateCase">
@@ -100,8 +105,11 @@
 									:disabled="waitingForResponse"
 									v-model="caseInformation.TypeOfCase"
 								>
-									<b-form-select-option value="1">Dead</b-form-select-option>
-									<b-form-select-option value="2"
+									<b-form-select-option value="1"
+										>Confirmed</b-form-select-option
+									>
+									<b-form-select-option value="2">Dead</b-form-select-option>
+									<b-form-select-option value="3"
 										>Recovered</b-form-select-option
 									>
 								</b-form-select>
@@ -260,6 +268,7 @@
 import Services from '../Services/Services';
 import Helpers from '../Services/Helpers';
 import Error from '../components/Error';
+import Success from '../components/Success';
 import { faServer } from '@fortawesome/free-solid-svg-icons';
 export default {
 	name: 'CasesPage',
@@ -270,7 +279,11 @@ export default {
 			maxDate: new Date(), // today
 			minDate: new Date('01/20/2020'),
 
-			// Error ingformation:
+			// Success information
+			success: false,
+			successMessage: null,
+
+			// Error information:
 			error: false,
 			errorMessage: null,
 
@@ -278,14 +291,12 @@ export default {
 			caseLoading: false,
 			waitingForResponse: false,
 
-			// Used to send  update/delete requests
-			cacheCaseId: null,
-
 			// Used to store user inputted IDs
-			caseId: 1,
+			caseId: null,
 
 			// Used to store changes by the user
 			caseInformation: {
+				Id: null,
 				Date: null,
 				State: null,
 				Country: null,
@@ -308,32 +319,31 @@ export default {
 	methods: {
 		async updateCase(e) {
 			e.preventDefault();
-			// Turn off errors if any
+			// Turn off messages if any
 			this.setErrorOff();
+			this.setSuccessOff();
 			// Start loading spinner
 			this.toggleWaitingForResponse();
 
 			try {
-				// const response = await Services.insertData({
-				// 	apiEndPoint: '/CaseData',
-				// 	params: {
-				// 		ReportingDate: Helpers.convertDateFromClient(
-				// 			this.caseInformation.Date
-				// 		),
-				// 		State: this.caseInformation.State,
-				// 		Country: this.caseInformation.Country,
-				// 		Age: this.caseInformation.Age,
-				// 		Gender: this.caseInformation.Gender,
-				// 		TypeOfCase: this.caseInformation.TypeOfCase,
-				//      CaseId:
-				// 	},
-				// });
+				const response = await Services.updateData({
+					apiEndPoint: '/CaseData',
+					body: {
+						ReportingDate: Helpers.convertDateFromClient(
+							this.caseInformation.Date
+						),
+						State: this.caseInformation.State,
+						Country: this.caseInformation.Country,
+						Age: this.caseInformation.Age,
+						Gender: this.caseInformation.Gender,
+						TypeOfCase: this.caseInformation.TypeOfCase,
+						CaseId: this.caseInformation.Id,
+					},
+				});
 
-				const response = {
-					success: true,
-				};
-				if (response.success) {
-					// TO DO: Display update was successful
+				if (response.data.success) {
+					// Display update was successful
+					this.handleSuccess('Case successfully update');
 				} else {
 					// Display error message
 					this.handleError('Case could not be updated. Please try again');
@@ -349,40 +359,28 @@ export default {
 			// Stop loading spinner
 			this.toggleWaitingForResponse();
 		},
+
 		async searchCase(e) {
 			e.preventDefault();
-			// Turn off errors if any
+			// Turn off message if any
 			this.setErrorOff();
+			this.setSuccessOff();
 			// Show loading spinner
 			this.toggleWaitingForResponse();
 			try {
-				// const response = await Services.searchData({
-				// 	apiEndPoint: '/CaseData',
-				// 	params: {
-				// 		caseId: this.caseId,
-				// 	},
-				// });
-
-				const response = {
-					data: {
-						success: true,
-						case: {
-							CaseId: 1,
-							ReportingDate: '01/20/2020',
-							Country: 'wevvwe',
-							State: 'Lima',
-							Age: 10,
-							Gender: 1,
-							TypeOfCase: 1,
-						},
+				const response = await Services.searchData({
+					apiEndPoint: '/CaseData',
+					params: {
+						caseId: this.caseId,
 					},
-				};
+				});
+
+				console.log(response);
 				if (response.data.success) {
-					console.log(response);
 					// Decompose response object
-					console.log(response.data.case);
 					this.caseInformation = {
 						// Convert date so that is properly formated
+						Id: response.data.case.CaseId,
 						Date: Helpers.convertDateFromServer(
 							response.data.case.ReportingDate
 						),
@@ -392,8 +390,6 @@ export default {
 						Gender: response.data.case.Gender,
 						TypeOfCase: response.data.case.TypeOfCase,
 					};
-					console.log(response);
-					this.cacheCaseId = response.data.case.CaseId;
 					// Show Case information
 					this.caseFound = true;
 				} else {
@@ -404,29 +400,28 @@ export default {
 				console.log(error);
 				this.handleError('Some error occurred. Please try again');
 			}
-
-			this.clearCaseInformation();
 			this.toggleWaitingForResponse();
 		},
 
 		async deleteCase(e) {
 			e.preventDefault();
-			// Turn off errors if any
+			// Turn off messages if any
 			this.setErrorOff();
+			this.setSuccessOff();
 			// show loading  spinner in modal
 			this.toggleFormBussy();
 			try {
-				// const response = await Services.deleteData({
-				// 	apiEndPoint: '/CaseData',
-				// 	params: {
-				// 		caseId: this.cacheCaseId,
-				// 	},
-				// });
-				const response = {
-					success: true,
-				};
-				if (response.success) {
+				const response = await Services.deleteData({
+					apiEndPoint: '/CaseData',
+					body: {
+						caseId: this.caseInformation.Id,
+					},
+				});
+				console.log(response);
+
+				if (response.data.success) {
 					// TO DO: Display delete was successful
+					this.handleSuccess('Case successfully deleted');
 				} else {
 					// Display error message
 					this.handleError('Case could not be deleted. Please try again');
@@ -447,38 +442,36 @@ export default {
 
 		async sendInsertRequest(e) {
 			e.preventDefault();
-			console.log('HI');
+			// Turn off messages if any
+			this.setErrorOff();
+			this.setSuccessOff();
 			// To do: Show Laoading
 			this.toggleFormBussy();
 			try {
-				// const response = await Services.insertData({
-				// 	apiEndpoint: '/CaseData',
-				// 	body: {
-				// 		ID: this.insertCase.ID,
-				// 		Country: this.insertCase.Country,
-				// 		State: this.insertCase.State,
-				// 		Date: Helpers.convertDateFromClient(this.insertCase.Date),
-				// 		Age: this.insertCase.Age,
-				// 		Gender: this.insertCase.Gender,
-				// 		TypeOfCase: this.insertCase.TypeOfCase,
-				// 	},
-				// });
-
-				const response = {
-					data: {
-						success: true,
+				const response = await Services.insertData({
+					apiEndPoint: '/CaseData',
+					body: {
+						CaseId: this.insertCase.ID,
+						Country: this.insertCase.Country,
+						State: this.insertCase.State,
+						ReportingDate: Helpers.convertDateFromClient(this.insertCase.Date),
+						Age: this.insertCase.Age,
+						Gender: this.insertCase.Gender,
+						TypeOfCase: this.insertCase.TypeOfCase,
 					},
-				};
-				if (response.data.success == true) {
-					console.log('Success');
+				});
+
+				if (response.data.success) {
+					this.handleSuccess('Case successfully created');
 					// TO DO: Display success message
 				} else {
-					console.log('Error: Case alredy exists OR Location is not valid');
-					// TO DO: DIsplay error message
+					this.handleError(
+						'Case could not be created. Please enter a valid ID'
+					);
 				}
 			} catch (error) {
 				console.log(error);
-				// TO DO: DIsplay error message
+				this.handleError('Some error occurred. Please try again');
 			}
 			this.toggleFormBussy();
 			this.hideInsertModal();
@@ -532,9 +525,21 @@ export default {
 		toggleFormBussy() {
 			this.formIsBusy = !this.formIsBusy;
 		},
+
+		setSuccessOff() {
+			this.success = false;
+		},
+		setSuccessOn() {
+			this.success = true;
+		},
+		handleSuccess(successMessage) {
+			this.setSuccessOn();
+			this.successMessage = successMessage;
+		},
 	},
 	components: {
 		Error,
+		Success,
 	},
 };
 </script>
