@@ -6,6 +6,9 @@ import WorldPage from '../views/WorldPage';
 import GenderPage from '../views/GenderPage';
 import AgePage from '../views/AgePage';
 import CasePage from '../views/CasesPage';
+import CompByGender from '../views/CompByGender';
+import Comp2Provinces from '../views/Comp2Provinces';
+import Comp2Counties from '../views/Comp2Counties';
 Vue.use(VueRouter);
 
 const routes = [
@@ -39,6 +42,21 @@ const routes = [
 		name: 'CasesPage',
 		component: CasePage,
 	},
+	{
+		path: '/CompByGender',
+		name: 'CompByGender',
+		component: CompByGender,
+	},
+	{
+		path: '/Comp2Provinces',
+		name: 'Comp2Provinces',
+		component: Comp2Provinces,
+	},
+	{
+		path: '/Comp2Counties',
+		name: 'Comp2Counties',
+		component: Comp2Counties,
+	}
 ];
 
 const router = new VueRouter({
