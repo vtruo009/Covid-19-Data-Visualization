@@ -6,7 +6,7 @@
 
 <script>
 export default {
-    name: "Comp@Provinces"
+    name: "Comp2Provinces"
 }
 </script>
 
