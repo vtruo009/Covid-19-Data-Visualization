@@ -3,6 +3,7 @@ import App from './App.vue';
 import router from './router';
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import VueGoogleCharts from 'vue-google-charts';
 
 // Sets up FontAwesomeIcons
 Vue.component('font-awesome-icon', FontAwesomeIcon);
@@ -10,6 +11,8 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
 Vue.use(IconsPlugin);
+// Set up Google charts
+Vue.use(VueGoogleCharts);
 Vue.config.productionTip = false;
 
 import 'bootstrap/dist/css/bootstrap.css';
