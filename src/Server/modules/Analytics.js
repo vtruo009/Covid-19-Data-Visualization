@@ -7,7 +7,7 @@ function GetGenderAnalytics(country, typeOfData) {
     var maleNum = 0;
 
     for (var i = 0; i < allCases.length; ++i) {
-        if (allCases[country] == country) {
+        if (allCases[i].country == country) {
             if (allCases[i].gender == "female") {
                 if (typeOfData == 2 && allCases[i].dead) femaleNum++; // dead
                 else if (typeOfData == 3 && allCases[i].recovered) femaleNum++; //recovered
@@ -24,7 +24,6 @@ function GetGenderAnalytics(country, typeOfData) {
     if (femaleNum == 0 && maleNum == 0) return undefined;
 
     return new GenderAnalytics(femaleNum, maleNum);
-
 }
 
 class GenderAnalytics {
@@ -32,6 +31,7 @@ class GenderAnalytics {
         this.femaleNum = femaleNum; // integer
         this.maleNum = maleNum; // integer
     }
+}
 
 module.exports = {
     GetGenderAnalytics : GetGenderAnalytics

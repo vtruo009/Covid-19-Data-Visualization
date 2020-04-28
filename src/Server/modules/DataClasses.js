@@ -28,8 +28,8 @@ module.exports = {
 			this.fromWuhan = line[14];
 			this.visitingWuhan = line[15];
 
-			this.dead = line[16] == '1';
-			this.recovered = line[17] == '1';
+			this.dead = (!(line[16] == "0") && line[16] != "NA");
+			this.recovered = (!(line[17] == "0") && line[17] != "NA");
 
 			this.symptom = line.length >= 19 ? line[18] : '';
 			this.source = line.length >= 20 ? line[19] : '';
