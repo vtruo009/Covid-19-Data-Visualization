@@ -57,7 +57,7 @@ function GetTwoPlacesComparison(largerAreaName1, smallerAreaName1, largerAreaNam
     if (province1Data == null || province2Data == null) {
         place1Value = (province1Data == null) ? -1 : 0;
         place2Value = (province2Data == null) ? -1 : 0;
-        return new TwoPlacesComparison(place1Value, place2Value);
+        return { place1Value: place1Value, place2Value: place2Value }
     }
 
     var dateCountDict1;
@@ -95,7 +95,7 @@ function GetTwoPlacesComparison(largerAreaName1, smallerAreaName1, largerAreaNam
         if (new Date(key) > mostRecentDate2) mostRecentDate2 = new Date(key);
     }
 
-    return new TwoPlacesComparison(dateCountDict1[mostRecentDate1], dateCountDict2[mostRecentDate2]);
+    return { place1Value: dateCountDict1[mostRecentDate1], place2Value: dateCountDict2[mostRecentDate2] }
 }
 
 function isEmpty(dictionary) {
@@ -104,13 +104,6 @@ function isEmpty(dictionary) {
             return false;
     }
     return true;
-}
-
-class TwoPlacesComparison {
-    constructor(place1Value, place2Value) {
-        this.place1Value = place1Value; // integer
-        this.place2Value = place2Value; // integer
-    }
 }
 
 
