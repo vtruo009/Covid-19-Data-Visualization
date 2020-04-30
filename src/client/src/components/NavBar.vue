@@ -30,9 +30,9 @@
 						Cases
 					</b-nav-item>
 					<b-nav-item-dropdown class="navBar-font" text="Analytics">
-						<b-dropdown-item href>Analytic 1</b-dropdown-item>
-						<b-dropdown-item href>Analytic 2</b-dropdown-item>
-						<b-dropdown-item href>Analytic 3</b-dropdown-item>
+						<b-dropdown-item to="/CompByGender">Compare by Gender</b-dropdown-item>
+						<b-dropdown-item to="/Comp2Provinces">Compare 2 Regions</b-dropdown-item>
+						<b-dropdown-item to="/Comp2Counties">Compare 2 Counties</b-dropdown-item>
 						<b-dropdown-item href>Analytic 4</b-dropdown-item>
 					</b-nav-item-dropdown>
 				</b-navbar-nav>

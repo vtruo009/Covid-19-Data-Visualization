@@ -11,26 +11,26 @@ function AddCase(
 	location,
 	id
 ) {
-	console.log(dead);
-	console.log(recovered);
 	for (var i = 0; i < allCases.length; ++i) {
 		if (allCases[i].id == id) return false;
 	}
 
 	const classesModule = require('../modules/DataClasses.js');
 
-	var dateString =
-		reportingDate.getMonth() +
-		1 +
-		'/' +
-		reportingDate.getDay() +
-		'/' +
-		reportingDate.getFullYear();
+	// var dateString =
+	// 	reportingDate.getMonth() +
+	// 	1 +
+	// 	'/' +
+	// 	reportingDate.getDay() +
+	// 	'/' +
+	// 	reportingDate.getFullYear();
 
+	console.log(reportingDate);
+	// console.log(dateString);
 	var newCase = new classesModule.Case([
 		id, // 0: id
 		'', // 1: case in country
-		dateString, // 2: reporting date
+		reportingDate, // 2: reporting date
 		'', // 3: blacnk column
 		'', // 4: summary
 		location, // 5: location
