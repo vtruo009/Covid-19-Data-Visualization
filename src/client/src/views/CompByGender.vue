@@ -20,22 +20,19 @@ export default {
 	data() {
 		return {
 			Country: null,
-			chartData: [
-				['Task', 'Hours per Day'],
-				['Male', 2],
-				['Female', 11],
-			],
+			chartData: null
 		};
 	},
 	methods: {
 		// 1-> confirmed, 2-> dead, 3->recovered
-		initialFormSubmission(e){
+		async initialFormSubmission(e){
 			e.preventDefault();
-			//this.GetData('1')
+			// For the first search we get confirmed cases
+			await this.GetData('1');
 			console.log("Form submitted");
 		},
 		async GetData(TypeOfData) {
-			console.log("Getting data");
+			console.log("Getting data...");
 			try {
 				const response = await Services.GetAnalyticsData({
 					apiEndPoint: '/compareGender',
@@ -44,15 +41,18 @@ export default {
 						TypeOfData: TypeOfData,
 					},
 				});
+				console.log(response);
+				console.log(response.data);
 				if (response.data.CountryExists) {
 					// Set up chartData object to visualize the donut chart
 					this.chartData = [
 						['Gender', 'Number of Cases'],
-						['Male', this.response.data.MaleNumberOfCases],
-						['Female', this.response.data.FemaleNumberOfCases],
+						['Male', response.data.MaleNumberOfCases],
+						['Female', response.data.FemaleNumberOfCases],
 					];
 				} else {
 					// TO DO: SHOW ERROR: "Country does not exist"
+					console.log(this.Country + "does not exist. Please try a different country");
 				}
 			} catch (error) {
 				// TO DO: SHOW ERROR: "Some error occurred. Please try again"

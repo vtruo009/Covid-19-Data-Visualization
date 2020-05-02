@@ -58,7 +58,7 @@ export default {
 	// Note: this function returns a promise, so the caller of this function must be asynchronous.
 	GetAnalyticsData(payload) {
 		return API()
-			.get(`AnalyticsData${payload.apiEndPoint}`, {
+			.get(`Analytics${payload.apiEndPoint}`, {
 				params: payload.params,
 			})
 			.then((response) => response)
