@@ -40,4 +40,28 @@ export default {
 			.then((response) => response)
 			.catch((error) => error.status);
 	},
+
+	// Sends any request to the Analytics router in the backend.
+	// Caller of the function must provide the API endpoint in the payload parameter object
+	// EX for the Compare By Gender feature:
+	//  payload : {
+	//		apiEndPoint: '/compareGender',
+	//		params: {
+	//			Country: 'United States',
+	//			TypeOfData: '1'
+	//		}
+	//	}
+
+	// Please look at the artifacts document, specifically at the Backend Todo List section, to see the naming conventions
+	// for the variables that the backend is expecting that client to sent for your features
+
+	// Note: this function returns a promise, so the caller of this function must be asynchronous.
+	GetAnalyticsData(payload) {
+		return API()
+			.get(`Analytics${payload.apiEndPoint}`, {
+				params: payload.params,
+			})
+			.then((response) => response)
+			.catch((error) => error.status);
+	},
 };
