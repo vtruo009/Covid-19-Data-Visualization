@@ -13,9 +13,11 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.11.0",
+    "notistack": "^0.9.11",
     "vue": "^2.6.11",
     "vue-google-charts": "^0.3.2",
-    "vue-router": "^3.1.6"
+    "vue-router": "^3.1.6",
+    "vue-toastification": "^1.6.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-router": "~4.3.0",
