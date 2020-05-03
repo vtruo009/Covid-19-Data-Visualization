@@ -6,8 +6,14 @@
 
 <script>
 export default {
-    name: "Comp2Provinces"
-}
+    name: "Comp2Provinces",
+    data() {
+      return {};
+    },
+    methods: {},
+    components: {}
+
+};
 </script>
 
 <style>

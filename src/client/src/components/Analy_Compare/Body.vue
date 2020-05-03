@@ -2,7 +2,7 @@
     <div id="Body">
         <!-- User Insert Compare Area -->
         <div class>
-         <b-form @submit="displayData">
+        <b-form @click="displayData(e)" inline>
             <b-row>
 					<b-col>
 						<b-input
@@ -38,7 +38,10 @@
 						</b-button>
 					</b-col>
             </b-row>
-            </b-form>
+            <b-row class="mt-5">
+            <DonutChart v-bind:data="testData"/>
+            </b-row>
+        </b-form>
         </div>
     </div>
 </template>
@@ -47,56 +50,63 @@
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import Services from "../../Services/Services";
+import DonutChart from "../DonutChart";
 
 library.add(faSearch);
 
 export default {
     name: 'Body',
+    props: {
+        firstInputName: String,
+        secondInputName: String,
+        thirdInputName: String,
+        fourthInputName: String,
+        apiEndpoint: String,
+    },
     data(){
         return {
-        firstInput: null,
-        secondInput: null,
-        thirdInput: null,
-        fourthInput: null,
+        chartData:[]
         };
     },
     methods: {
-    //  async displayData(e) {
-	// 		e.preventDefault();
-	// 		this.showTable();
-	// 		// Hide Messages
-	// 		this.setErrorOff();
-	// 		this.setSuccessOff();
+     async displayData(e) {
+			e.preventDefault();
+			this.showTable();
+			// Hide Messages
+			this.setErrorOff();
+			this.setSuccessOff();
 
-	// 		// Send search request to backend
-	// 		this.toggleTableBusy();
-	// 		try {
-	// 			const response = await Services.searchData({
-	// 				apiEndPoint: this.apiEndPoint,
-	// 				params: {
-	// 					[this.firstInputName]: this.firstInput,
-	// 					[this.secondInputName]: this.secondInput,
-    //                     [this.thirdInputName]: this.thirdInput,
-	// 					[this.fourthInputName]: this.fourthInput,
-	// 				},
-	// 			});
-	// 			console.log(response);
-	// 			if (response.data.data == undefined) {
-	// 				this.errorHandler(
-	// 					`No data available for ${this.firstInput}, ${this.secondInput}.`
-	// 				);
-	// 			} else {
-	// 				this.setTableData(response.data.data);
-	// 			}
-	// 			// Save data for future requests
-	// 			this.cacheInputtedData();
-	// 		} catch (error) {
-	// 			this.errorHandler('Some error occurred. Please try again');
-	// 			console.log(error);
-	// 		}
-	// 		//  Sets loading spinner off
-	// 		this.toggleTableBusy();
-	// 	},
+			// Send search request to backend
+			this.toggleTableBusy();
+			try {
+				const response = await Services.searchData({
+					apiEndPoint: this.apiEndPoint,
+					params: {
+						[this.firstInputName]: this.firstInput,
+						[this.secondInputName]: this.secondInput,
+                        [this.thirdInputName]: this.thirdInput,
+						[this.fourthInputName]: this.fourthInput,
+					},
+				});
+				console.log(response);
+				if (response.data.data == undefined) {
+					this.errorHandler(
+						`No data available for ${this.firstInput}, ${this.secondInput}.`
+					);
+				} else {
+					this.setTableData(response.data.data);
+				}
+				// Save data for future requests
+				this.cacheInputtedData();
+			} catch (error) {
+				this.errorHandler('Some error occurred. Please try again');
+				console.log(error);
+			}
+			//  Sets loading spinner off
+			this.toggleTableBusy();
+            //transfer the data into charts?
+		},
+    components: { DonutChart},
     }
 };
 </script>
