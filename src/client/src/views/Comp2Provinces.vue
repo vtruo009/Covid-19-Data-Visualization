@@ -94,7 +94,7 @@ export default {
                 this.Province1 + ", " + this.Country1 + " does not exist. Please try a different province & country"
               );
             }
-            else if (!response.data.Province2Exists) {
+            if (!response.data.Province2Exists) {
               this.erroHandler(
                 this.Province2 + ", " + this.Country2 + " does not exist. Please try a different province & country"
               );
