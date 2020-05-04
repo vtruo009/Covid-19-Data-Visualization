@@ -44,10 +44,6 @@
 		</div>
 		<!-- TABLE DATA-->
 		<Table v-show="table.isVisible" :data="table.data" :isBusy="table.Busy" />
-		<!-- Errors to display -->
-		<Error v-if="error" v-bind:errorMessage="errorMessage" />
-		<Success v-if="success" v-bind:successMessage="successMessage" />
-
 		<!-- Implement Insert Modal -->
 		<b-modal ref="insert-modal" hide-footer hide-title>
 			<b-overlay :show="formIsBusy" rounded="sm">
@@ -117,8 +113,6 @@ import Helpers from '../../Services/Helpers';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import Table from './Table';
-import Error from '../Error';
-import Success from '../Success';
 
 library.add(faSearch);
 
@@ -164,14 +158,6 @@ export default {
 				isVisible: false,
 			},
 
-			// Booleans used to display errors if any
-			error: false,
-			errorMessage: null,
-
-			// Data to display success
-			success: false,
-			successMessage: null,
-
 			// cached inputted values for updating/deleting
 			cacheFirstInput: null,
 			cacheSecondInput: null,
@@ -183,9 +169,6 @@ export default {
 		async displayData(e) {
 			e.preventDefault();
 			this.showTable();
-			// Hide Messages
-			this.setErrorOff();
-			this.setSuccessOff();
 
 			// Send search request to backend
 			this.toggleTableBusy();
@@ -218,9 +201,6 @@ export default {
 
 		async sendInsertRequest(e) {
 			e.preventDefault();
-			// Hide Messages
-			this.setErrorOff();
-			this.setSuccessOff();
 			this.toggleFormBussy();
 			// Send search request to backend
 			try {
@@ -251,36 +231,24 @@ export default {
 			this.toggleFormBussy();
 		},
 		// Helper methods
-		errorHandler(errorMessage) {
-			this.setErrorOn();
-			this.errorMessage = errorMessage;
-			// clear the data
+		errorHandler(message) {
 			this.setTableData(null);
-			// If there are errors then hide table
+			this.$toast.error(message, {
+				position: 'bottom-right',
+				timeout: 2268,
+			});
 			this.hideTable();
 		},
-		successHandler(successMessage) {
-			this.setSuccessOn();
-			this.successMessage = successMessage;
-			// clear the data
+		successHandler(message) {
 			this.setTableData(null);
-			// If there are errors then hide table
+			this.$toast.success(message, {
+				position: 'bottom-right',
+				timeout: 2268,
+			});
 			this.hideTable();
 		},
 		setTableData(data) {
 			this.table.data = data;
-		},
-		setErrorOff() {
-			this.error = false;
-		},
-		setErrorOn() {
-			this.error = true;
-		},
-		setSuccessOff() {
-			this.success = false;
-		},
-		setSuccessOn() {
-			this.success = true;
 		},
 		cacheInputtedData() {
 			this.cacheFirstInput = this.firstInput;
@@ -302,7 +270,6 @@ export default {
 					break;
 			}
 		},
-
 		// Toggle the state of the table
 		toggleTableBusy() {
 			this.table.Busy = !this.table.Busy;
@@ -333,7 +300,7 @@ export default {
 			this.insertData.TypeOfData = null;
 		},
 	},
-	components: { Table, Error, Success },
+	components: { Table },
 };
 </script>
 

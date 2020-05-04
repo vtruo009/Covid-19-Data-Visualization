@@ -252,7 +252,9 @@ export default {
 				this.data[
 					this.selectedRecord.index
 				].number = this.selectedRecord.number;
+				this.successHandler('Record successfully updated');
 			} catch (error) {
+				this.errorHandler('Some error occurred. Please try again later');
 				console.log(error);
 			}
 			// Hides the udpate modal
@@ -276,10 +278,12 @@ export default {
 					},
 				});
 				// Delete the selected row from the table
+				this.successHandler('Record successfully deleted');
 				this.data.splice(this.selectedRecord.index, 1);
 				// refresh table
 				this.$refs.table.refresh();
 			} catch (error) {
+				this.errorHandler('Some error occurred. Please try again later');
 				console.log(error);
 			}
 			// Hides the delete modal
@@ -288,6 +292,18 @@ export default {
 		},
 		toggleFormBussy() {
 			this.formIsBusy = !this.formIsBusy;
+		},
+		errorHandler(message) {
+			this.$toast.error(message, {
+				position: 'bottom-right',
+				timeout: 2268,
+			});
+		},
+		successHandler(message) {
+			this.$toast.success(message, {
+				position: 'bottom-right',
+				timeout: 2268,
+			});
 		},
 	},
 };
