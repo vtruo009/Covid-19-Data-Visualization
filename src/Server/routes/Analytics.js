@@ -35,8 +35,6 @@ router.get('/compareProvinces', (req, res) => {
 	});
 });
 
-
-
 router.get('/compareCounties', (req, res) => {
 	var twoPlacesComperison = AnalyticsModule.GetTwoPlacesComparison(
 		req.query.State1, req.query.County1,
@@ -52,10 +50,22 @@ router.get('/compareCounties', (req, res) => {
 });
 
 router.get('/compareRace', (req, res) => {
-	var twoPlacesComperison = AnalyticsModule.GetRaceComparison(req.query.Option);
+	var raceComparison = AnalyticsModule.GetRaceComparison(req.query.Option);
 
 	res.send({
-		CountryNumberDict : twoPlacesComperison
+		CountryNumberDict: raceComparison
+	});
+});
+
+router.get('/comparePercentageUS', (req, res) => {
+	var populationComparison =
+		AnalyticsModule.GetUSPopulationAnalysis(req.query.State, req.query.County);
+
+	res.send({
+		CountyExists: populationComparison.confirmed != -1,
+		NumOfUnaffected: populationComparison.unaffected,
+		NumOfDeath: populationComparison.deaths,
+		NumOfConfirmed: populationComparison.confirmed
 	});
 });
 
