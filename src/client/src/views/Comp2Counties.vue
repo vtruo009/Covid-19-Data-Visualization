@@ -92,18 +92,18 @@ export default {
               [this.County2, response.data.County2NumberOfCases],
             ];
           }
-          else {
-            if (!response.data.County1Exists) {
+        else{
+          if (!response.data.County1Exists) {
               this.erroHandler(
                 this.County1 + ", " + this.State1 + " does not exist. Please try a different province & county"
               );
             }
-            else if (!response.data.County2Exists) {
+          if (!response.data.County2Exists) {
               this.erroHandler(
                 this.County2 + ", " + this.State2 + " does not exist. Please try a different province & county"
               );
             }
-         }
+        }
       }
         catch(error) {
           this.erroHandler('Some error occurred. Please try again later');
