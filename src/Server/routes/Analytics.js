@@ -35,8 +35,6 @@ router.get('/compareProvinces', (req, res) => {
 	});
 });
 
-
-
 router.get('/compareCounties', (req, res) => {
 	var twoPlacesComperison = AnalyticsModule.GetTwoPlacesComparison(
 		req.query.State1, req.query.County1,
