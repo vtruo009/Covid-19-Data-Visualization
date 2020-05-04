@@ -69,4 +69,17 @@ router.get('/comparePercentageUS', (req, res) => {
 	});
 });
 
+router.get('/comparePercentageWorld', (req, res) => {
+	console.log(req.query);
+	var populationComparison =
+		AnalyticsModule.GetWorldPopulationAnalysis(req.query.Country, req.query.Province);
+
+	res.send({
+		CountyExists: populationComparison.confirmed != -1,
+		NumOfRecovered: populationComparison.recovered,
+		NumOfDeath: populationComparison.deaths,
+		NumOfConfirmed: populationComparison.confirmed
+	});
+});
+
 module.exports = router;

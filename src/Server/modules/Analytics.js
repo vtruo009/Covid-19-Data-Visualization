@@ -129,16 +129,13 @@ function GetRaceComparison(option) {
 }
 
 function GetUSPopulationAnalysis(state, county) {
-    console.log(state + " " + county);
     var unaffected, deaths, confirmed;
 
     var allUSData = readCSVModule.LoadUSData();
     var countyData = null;
 
     for (var i = 0; i < allUSData.length; ++i) {
-        if (allUSData[i].state == state) console.log("!");
         if (allUSData[i].state == state && allUSData[i].county == county) {
-            console.log("?");
             countyData = allUSData[i];
         }
     }
@@ -152,6 +149,30 @@ function GetUSPopulationAnalysis(state, county) {
     unaffected = countyData.population - deaths - confirmed;
 
     return { unaffected: unaffected, deaths: deaths, confirmed: confirmed }
+}
+
+function GetWorldPopulationAnalysis(country, province) {
+    var recovered, deaths, confirmed;
+
+    var allWorldData = readCSVModule.LoadWorldData();
+    var provinceData = null;
+    console.log(country + " " + province);
+
+    for (var i = 0; i < allWorldData.length; ++i) {
+        if (allWorldData[i].country == country && allWorldData[i].state == province) {
+            provinceData = allWorldData[i];
+        }
+    }
+
+    if (provinceData == null) { // The requested province does not exist.
+        return { recovered: -1, deaths: -1, confirmed: -1 }
+    }
+
+    deaths = GetMostRecentValue(provinceData.numDeaths);
+    confirmed = GetMostRecentValue(provinceData.numConfirmed);
+    recovered = GetMostRecentValue(provinceData.numRecovered);
+
+    return { recovered: recovered, deaths: deaths, confirmed: confirmed }
 }
 
 // Returns true if the dictionary in the argument is empty.
@@ -181,5 +202,6 @@ module.exports = {
     GetGenderAnalytics: GetGenderAnalytics,
     GetTwoPlacesComparison: GetTwoPlacesComparison,
     GetRaceComparison: GetRaceComparison,
-    GetUSPopulationAnalysis: GetUSPopulationAnalysis
+    GetUSPopulationAnalysis: GetUSPopulationAnalysis,
+    GetWorldPopulationAnalysis: GetWorldPopulationAnalysis
 };
