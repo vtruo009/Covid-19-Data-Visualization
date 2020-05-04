@@ -82,7 +82,11 @@ export default {
 						response.data.FemaleNumberOfCases == 0
 					) {
 						this.showChart = false;
-						this.erroHandler(`There is no data for ${this.Country}`);
+						this.erroHandler(
+							`No ${this.TypeOfDataOptions[this.TypeOfData].text} Cases for ${
+								this.Country
+							}`
+						);
 					} else {
 						this.showChart = true;
 						// Set up chartData object to visualize the donut chart
