@@ -1,24 +1,24 @@
 <template>
 	<div class="mt-5">
 		<b-form inline @submit="initialFormSubmission">
-			<b-input v-model="County1" required placeholder="County1"></b-input>
+			<b-input v-model="County1" required placeholder="County"></b-input>
 			<b-input
 				class="ml-3"
 				v-model="State1"
 				required
-				placeholder="Province/State1"
+				placeholder="Province/State"
 			></b-input>
 			<b-input
 				class="ml-5"
 				v-model="County2"
 				required
-				placeholder="County2"
+				placeholder="County"
 			></b-input>
 			<b-input
 				class="ml-3"
 				v-model="State2"
 				required
-				placeholder="Province/State2"
+				placeholder="Province/State"
 			></b-input>
 			<b-button type="submit" variant="primary" class="ml-5">Search</b-button>
 		</b-form>
