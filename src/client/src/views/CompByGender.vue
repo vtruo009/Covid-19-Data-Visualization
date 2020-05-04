@@ -111,7 +111,7 @@ export default {
 			// Shows error
 			this.$toast.error(message, {
 				position: 'bottom-right',
-				timeout: 3500,
+				timeout: 4500,
 			});
 		},
 	},
