@@ -3,11 +3,14 @@ const readCSVModule = require('../modules/ReadCSV.js');
 function GetGenderAnalytics(country, typeOfData) {
     var allCases = readCSVModule.LoadAllCases();
 
+    var countryExists = false;
+
     var female = 0;
     var male = 0;
 
     for (var i = 0; i < allCases.length; ++i) {
         if (allCases[i].country == country) {
+            countryExists = true;
             if (allCases[i].gender == "female") {
                 if (typeOfData == 2 && allCases[i].dead) female++; // dead
                 else if (typeOfData == 3 && allCases[i].recovered) female++; //recovered
@@ -21,7 +24,7 @@ function GetGenderAnalytics(country, typeOfData) {
         }
     }
 
-    if (female == 0 && male == 0) return undefined;
+    if (!countryExists) return undefined;
 
     return { femaleNum: female, maleNum: male }
 }
@@ -60,42 +63,36 @@ function GetTwoPlacesComparison(largerAreaName1, smallerAreaName1, largerAreaNam
         return { place1Value: place1Value, place2Value: place2Value }
     }
 
-    var dateCountDict1;
-    var dateCountDict2;
+    var place1Value, place2Value;
 
     switch (typeOfData) {
         case '1': // confirmed
-            dateCountDict1 = province1Data.numConfirmed;
-            dateCountDict2 = province2Data.numConfirmed;
+            place1Value = GetMostRecentValue(province1Data.numConfirmed);
+            place2Value = GetMostRecentValue(province2Data.numConfirmed);
             break;
         case '2': // dead
-            dateCountDict1 = province1Data.numDeaths;
-            dateCountDict2 = province2Data.numDeaths;
+            place1Value = GetMostRecentValue(province1Data.numDeaths);
+            place2Value = GetMostRecentValue(province2Data.numDeaths);
             break;
         case '3': // recovered
-            dateCountDict1 = province1Data.numRecovered;
-            dateCountDict2 = province2Data.numRecovered;
+            place1Value = GetMostRecentValue(province1Data.numRecovered);
+            place2Value = GetMostRecentValue(province2Data.numRecovered);
             break;
     }
 
-    if (isEmpty(dateCountDict1) || isEmpty(dateCountDict2)) {
-        place1Value = isEmpty(dateCountDict1) ? -1 : 0;
-        place2Value = isEmpty(dateCountDict2) ? -1 : 0;
-        return new TwoPlacesComparison(place1Value, place2Value);
+    return { place1Value: place1Value, place2Value: place2Value }
+
+    function GetMostRecentValue(dictionary) {
+        if (isEmpty(dictionary)) return 0;
+
+        var mostResentDate = new Date(1900, 0, 1);
+
+        for (var key in dictionary) {
+            if (new Date(key) > mostResentDate) mostResentDate = new Date(key);
+        }
+
+        return dictionary[mostResentDate];
     }
-
-    var mostRecentDate1 = new Date(2020, 0, 1);
-    var mostRecentDate2 = new Date(2020, 0, 1);
-
-    for (var key in dateCountDict1) {
-        if (new Date(key) > mostRecentDate1) mostRecentDate1 = new Date(key);
-    }
-
-    for (var key in dateCountDict2) {
-        if (new Date(key) > mostRecentDate2) mostRecentDate2 = new Date(key);
-    }
-
-    return { place1Value: dateCountDict1[mostRecentDate1], place2Value: dateCountDict2[mostRecentDate2] }
 }
 
 function isEmpty(dictionary) {
