@@ -24,11 +24,6 @@
 				</button>
 			</a>
 		</div>
-		<!-- Using the donut chart component to display the donut chart. 
-    Note I am passing the chartData object to the DonutChart component using the v-bind property
-    Without this, the DonutChart component will not know what data to display
-     -->
-		<DonutChart v-bind:data="chartData" />
 		<TechUsed />
 	</div>
 </template>
@@ -45,21 +40,11 @@ import DonutChart from '../components/DonutChart';
 export default {
 	name: 'Home',
 	data() {
-		return {
-			// The data in this Array will be used by the DonutChart commponent
-			chartData: [
-				['Task', 'Hours per Day'],
-				['Work', 11],
-				['Eat', 2],
-				['Commute', 2],
-				['Watch TV', 2],
-				['Sleep', 7],
-			],
-		};
+		return {};
 	},
 
 	// ADDING THE DONUTCHART TO THE COMPONENTS OBJECT OF HOME
-	components: { TechUsed, DonutChart },
+	components: { TechUsed },
 };
 </script>
 
