@@ -51,4 +51,12 @@ router.get('/compareCounties', (req, res) => {
 	});
 });
 
+router.get('/compareRace', (req, res) => {
+	var twoPlacesComperison = AnalyticsModule.GetRaceComparison(req.query.Option);
+
+	res.send({
+		CountryNumberDict : twoPlacesComperison
+	});
+});
+
 module.exports = router;
