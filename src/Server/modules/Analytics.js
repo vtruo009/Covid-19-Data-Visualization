@@ -95,6 +95,51 @@ function GetTwoPlacesComparison(largerAreaName1, smallerAreaName1, largerAreaNam
     }
 }
 
+function GetRaceComparison(option) {
+    var allCases = readCSVModule.LoadAllCases();
+
+    var dictionary = {};
+
+    console.log(option);
+    for (var i = 0; i < allCases.length; ++i) {
+        if (!dictionary.hasOwnProperty(allCases[i].country)) {
+            dictionary[allCases[i].country] = 0;
+        }
+
+        var addData = false;
+        switch (option) {
+            case '1': // All Population
+                addData = true;
+                break;
+            case '2': // Female
+                if (allCases[i].gender == 'female') addData = true;
+                break;
+            case '3': // Male
+                if (allCases[i].gender == 'male') addData = true;
+                break;
+            case '4': // 80 +
+                if (allCases[i].age > 80) addData = true;
+                break;
+            case '5': // 60 - 80
+                if (allCases[i].age > 60 && allCases[i].age <= 80) addData = true;
+                break;
+            case '6': // 40 - 60
+                if (allCases[i].age > 40 && allCases[i].age <= 60) addData = true;
+                break;
+            case '7': // 20 - 40
+                if (allCases[i].age > 20 && allCases[i].age <= 40) addData = true;
+                break;
+            case '8': // 0 - 20
+                if (allCases[i].age <= 20) addData == true;
+                break;
+        }
+
+        if (addData) dictionary[allCases[i].country]++;
+    }
+
+    return dictionary;
+}
+
 function isEmpty(dictionary) {
     for (var key in dictionary) {
         if (dictionary.hasOwnProperty(key))
@@ -106,5 +151,6 @@ function isEmpty(dictionary) {
 
 module.exports = {
     GetGenderAnalytics: GetGenderAnalytics,
-    GetTwoPlacesComparison: GetTwoPlacesComparison
+    GetTwoPlacesComparison: GetTwoPlacesComparison,
+    GetRaceComparison: GetRaceComparison
 };

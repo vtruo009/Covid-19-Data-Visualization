@@ -35,8 +35,6 @@ router.get('/compareProvinces', (req, res) => {
 	});
 });
 
-
-
 router.get('/compareCounties', (req, res) => {
 	var twoPlacesComperison = AnalyticsModule.GetTwoPlacesComparison(
 		req.query.State1, req.query.County1,
@@ -48,6 +46,14 @@ router.get('/compareCounties', (req, res) => {
 		County2Exists: twoPlacesComperison.place2Value != -1,
 		County1NumberOfCases: twoPlacesComperison.place1Value,
 		County2NumberOfCases: twoPlacesComperison.place2Value
+	});
+});
+
+router.get('/compareRace', (req, res) => {
+	var countryNumberDict = AnalyticsModule.GetRaceComparison(req.query.Option);
+
+	res.send({
+		CountryNumberDict: countryNumberDict
 	});
 });
 
