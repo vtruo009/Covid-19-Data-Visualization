@@ -88,7 +88,6 @@ function GetRaceComparison(option) {
 
     var dictionary = {};
 
-    console.log(option);
     for (var i = 0; i < allCases.length; ++i) {
         if (!dictionary.hasOwnProperty(allCases[i].country)) {
             dictionary[allCases[i].country] = 0;
@@ -156,7 +155,6 @@ function GetWorldPopulationAnalysis(country, province) {
 
     var allWorldData = readCSVModule.LoadWorldData();
     var provinceData = null;
-    console.log(country + " " + province);
 
     for (var i = 0; i < allWorldData.length; ++i) {
         if (allWorldData[i].country == country && allWorldData[i].state == province) {
