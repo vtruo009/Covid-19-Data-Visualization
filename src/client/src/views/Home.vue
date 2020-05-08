@@ -34,9 +34,6 @@ import { faDatabase } from '@fortawesome/free-solid-svg-icons';
 library.add(faDatabase);
 import TechUsed from '../components/TechUsed';
 
-// IMPORTING DONUT CHART
-import DonutChart from '../components/DonutChart';
-
 export default {
 	name: 'Home',
 	data() {

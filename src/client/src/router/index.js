@@ -6,9 +6,13 @@ import WorldPage from '../views/WorldPage';
 import GenderPage from '../views/GenderPage';
 import AgePage from '../views/AgePage';
 import CasePage from '../views/CasesPage';
-import CompByGender from '../views/CompByGender';
-import Comp2Provinces from '../views/Comp2Provinces';
-import Comp2Counties from '../views/Comp2Counties';
+import CompByGender from '../views/Analytics/CompByGender';
+import Comp2Provinces from '../views/Analytics/Comp2Provinces';
+import Comp2Counties from '../views/Analytics/Comp2Counties';
+import CompByRace from '../views/Analytics/CompByRace';
+import AffectedPopulationCounty from '../views/Analytics/AffectedPopulationCounty';
+import AffectedPopulationProvince from '../views/Analytics/AffectedPopulationProvince';
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -56,7 +60,22 @@ const routes = [
 		path: '/Comp2Counties',
 		name: 'Comp2Counties',
 		component: Comp2Counties,
-	}
+	},
+	{
+		path: '/CompByRace',
+		name: 'CompByRace',
+		component: CompByRace,
+	},
+	{
+		path: '/AffectedPopulationCounty',
+		name: 'AffectedPopulationCounty',
+		component: AffectedPopulationCounty,
+	},
+	{
+		path: '/AffectedPopulationProvince',
+		name: 'AffectedPopulationProvince',
+		component: AffectedPopulationProvince,
+	},
 ];
 
 const router = new VueRouter({

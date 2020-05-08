@@ -47,8 +47,8 @@
 </template>
 
 <script>
-import Services from '../Services/Services';
-import DonutChart from '../components/DonutChart';
+import Services from '../../Services/Services';
+import DonutChart from '../../components/DonutChart';
 
 export default {
 	name: 'Comp2Counties',
