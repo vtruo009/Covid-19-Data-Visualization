@@ -61,17 +61,18 @@ export default {
 				if (response.data.ProvinceExists) {
 					if (!this.showChart) this.showChart = true;
 					this.chartData = [
-						['Province', 'Death Per Region'],
-            [this.Province, response.data.NumOfRecovered],
-            [this.Province, response.data.NumOfDeath],
-            [this.Province, response.data.NumOfConfirmed],
-            
+						['Type of Data', 'Number of Cases'],
+						['Confirmed', response.data.NumOfConfirmed],
+						['Death', response.data.NumOfDeath], 
+						['Recovered', response.data.NumOfRecovered],
+
+
 					];
 				} else {
 					if (!response.data.ProvinceExists) {
 						this.erroHandler(
-              this.Province +
-              ', '+ this.Country +	' does not exist. Please try a different province & country'
+              			this.Province +
+              			', '+ this.Country +	' does not exist. Please try a different province & country'
 						);
 					}
 				}
@@ -87,12 +88,11 @@ export default {
 			});
 		},
 
+
+  },
 	components: {
 		DonutChart,
 	},
-
-
-  },
 };
 </script>
 
