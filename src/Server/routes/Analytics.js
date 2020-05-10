@@ -74,7 +74,7 @@ router.get('/comparePercentageWorld', (req, res) => {
 		AnalyticsModule.GetWorldPopulationAnalysis(req.query.Country, req.query.Province);
 
 	res.send({
-		CountyExists: populationComparison.confirmed != -1,
+		ProvinceExists: populationComparison.confirmed != -1,
 		NumOfRecovered: populationComparison.recovered,
 		NumOfDeath: populationComparison.deaths,
 		NumOfConfirmed: populationComparison.confirmed
