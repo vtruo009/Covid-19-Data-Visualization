@@ -61,7 +61,7 @@ export default {
 				}
 				else {
 					this.erroHandler(
-						this.County + " does not exist. Please try a different county"
+						this.County + ", " + this.State + " does not exist. Please try a different county"
 					);
 				}
 			}
