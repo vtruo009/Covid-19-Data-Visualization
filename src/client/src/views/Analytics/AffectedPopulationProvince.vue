@@ -44,11 +44,6 @@ export default {
 	methods:{
     async FormSubmission(e) {
 			e.preventDefault();
-			await this.GetData('1'); //first submit gets confirmed as default
-			console.log('Information Submitted!');
-    },
-      
-    async GetData(e) {
 			console.log('IN GETDATA()');
 			try {
 				const response = await Services.GetAnalyticsData({
@@ -68,19 +63,21 @@ export default {
 
 
 					];
-				} else {
-					if (!response.data.ProvinceExists) {
+				} 
+				else {
 						this.erroHandler(
               			this.Province +
               			', '+ this.Country +	' does not exist. Please try a different province & country'
 						);
-					}
+					
 				}
 			} catch (error) {
 				this.erroHandler('Some error occurred. Please try again later');
 				console.log(error);
-			}
-		},
+			} //first submit gets confirmed as default
+			console.log('Information Submitted!');
+    },
+      
 		erroHandler(message) {
 			this.$toast.error(message, {
 				position: 'bottom-right',
