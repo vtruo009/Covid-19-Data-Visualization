@@ -1,12 +1,12 @@
+const { stringToDate } = require('../modules/BasicHelpers.js');
+
 module.exports = {
 	Case: class {
 		constructor(line) {
 			this.id = parseInt(line[0]);
 			this.caseInCountry = line[1];
 
-			const helperModule = require('../modules/BasicHelpers.js');
-
-			this.reportingDate = helperModule.stringToDate(line[2]);
+			this.reportingDate = stringToDate(line[2]);
 			this.reportingDateStr = line[2];
 
 			// Column 3 is blank.
@@ -28,8 +28,8 @@ module.exports = {
 			this.fromWuhan = line[14];
 			this.visitingWuhan = line[15];
 
-			this.dead = (!(line[16] == "0") && line[16] != "NA");
-			this.recovered = (!(line[17] == "0") && line[17] != "NA");
+			this.dead = !(line[16] == '0') && line[16] != 'NA';
+			this.recovered = !(line[17] == '0') && line[17] != 'NA';
 
 			this.symptom = line.length >= 19 ? line[18] : '';
 			this.source = line.length >= 20 ? line[19] : '';
@@ -76,7 +76,10 @@ module.exports = {
 			// values contains the number of people died on the corresponding date.
 
 			for (var i = 0; i < dates.length; ++i) {
-				if (!Number.isNaN(dates[i].getMonth()) && !Number.isNaN(parseInt(values[i]))) {
+				if (
+					!Number.isNaN(dates[i].getMonth()) &&
+					!Number.isNaN(parseInt(values[i]))
+				) {
 					this.numDeaths[dates[i]] = parseInt(values[i]);
 				}
 			}
@@ -86,7 +89,10 @@ module.exports = {
 			// values contains the number of confirmed cases on the corresponding date.
 
 			for (var i = 0; i < dates.length; ++i) {
-				if (!Number.isNaN(dates[i].getMonth()) && !Number.isNaN(parseInt(values[i]))) {
+				if (
+					!Number.isNaN(dates[i].getMonth()) &&
+					!Number.isNaN(parseInt(values[i]))
+				) {
 					this.numConfirmed[dates[i]] = parseInt(values[i]);
 				}
 			}
@@ -115,7 +121,10 @@ module.exports = {
 			// values contains the number of people died on the corresponding date.
 
 			for (var i = 0; i < dates.length; ++i) {
-				if (!Number.isNaN(dates[i].getMonth()) && !Number.isNaN(parseInt(values[i]))) {
+				if (
+					!Number.isNaN(dates[i].getMonth()) &&
+					!Number.isNaN(parseInt(values[i]))
+				) {
 					this.numDeaths[dates[i]] = parseInt(values[i]);
 				}
 			}
@@ -125,7 +134,10 @@ module.exports = {
 			// values contains the number of confirmed cases on the corresponding date.
 
 			for (var i = 0; i < dates.length; ++i) {
-				if (!Number.isNaN(dates[i].getMonth()) && !Number.isNaN(parseInt(values[i]))) {
+				if (
+					!Number.isNaN(dates[i].getMonth()) &&
+					!Number.isNaN(parseInt(values[i]))
+				) {
 					this.numConfirmed[dates[i]] = parseInt(values[i]);
 				}
 			}
@@ -135,7 +147,10 @@ module.exports = {
 			// values contains the number of recovered cases on the corresponding date.
 
 			for (var i = 0; i < dates.length; ++i) {
-				if (!Number.isNaN(dates[i].getMonth()) && !Number.isNaN(parseInt(values[i]))) {
+				if (
+					!Number.isNaN(dates[i].getMonth()) &&
+					!Number.isNaN(parseInt(values[i]))
+				) {
 					this.numRecovered[dates[i]] = parseInt(values[i]);
 				}
 			}

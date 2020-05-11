@@ -1,21 +1,20 @@
-var express = require('express');
-var router = express.Router();
+const router = require('express').Router();
+const { LoadUSData } = require('../modules/ReadCSV.js');
+const { USRowConfirmed, USRowDeaths } = require('../modules/DataClasses.js');
+const {
+	EditUSData,
+	AddUSData,
+	DeleteUSData,
+} = require('../modules/ModifyData.js');
 
-const readCSVModule = require('../modules/ReadCSV.js');
-var USData = readCSVModule.LoadUSData();
 // Now, USData stores list of USPlace read from the csv file.
+var USData = LoadUSData();
 
-const ModModule = require('../modules/ModifyData.js');
-// ModModule.DeleteUSData("Bibb", "Alabama", "4/13/2020", USData, 1);
-
-// Get request. query paraemeters contain data from form. render search.html passing data
-const USReq = require('../modules/DataClasses.js');
 router.get('/search', (req, res) => {
 	console.log(req.query);
 	// Get respective data using the query parameters
 	var selectedInUS = [];
 	for (var i = 0; i < USData.length; ++i) {
-		// console.log(USData[i].county);
 		if (
 			req.query.County == USData[i].county &&
 			req.query.State == USData[i].state
@@ -37,7 +36,7 @@ router.get('/search', (req, res) => {
 					temp_date.getDate() +
 					'/' +
 					temp_date.getFullYear();
-				var newItem = new USReq.USRowConfirmed(
+				var newItem = new USRowConfirmed(
 					date,
 					selectedInUS[0].numConfirmed[key]
 				);
@@ -54,10 +53,7 @@ router.get('/search', (req, res) => {
 					temp_date.getDate() +
 					'/' +
 					temp_date.getFullYear();
-				var newItem = new USReq.USRowDeaths(
-					date,
-					selectedInUS[0].numDeaths[key]
-				);
+				var newItem = new USRowDeaths(date, selectedInUS[0].numDeaths[key]);
 				row.push(newItem);
 			}
 		}
@@ -70,7 +66,7 @@ router.get('/search', (req, res) => {
 
 router.post('/delete', (req, res) => {
 	res.send({
-		success: ModModule.DeleteUSData(
+		success: DeleteUSData(
 			req.body.County,
 			req.body.State,
 			req.body.Date,
@@ -82,7 +78,7 @@ router.post('/delete', (req, res) => {
 
 router.post('/update', (req, res) => {
 	res.send({
-		success: ModModule.EditUSData(
+		success: EditUSData(
 			req.body.County,
 			req.body.State,
 			req.body.Date,
@@ -94,7 +90,7 @@ router.post('/update', (req, res) => {
 });
 
 router.post('/insert', (req, res) => {
-	var msg = ModModule.AddUSData(
+	var msg = AddUSData(
 		req.body.County,
 		req.body.State,
 		req.body.Date,
@@ -119,4 +115,5 @@ router.post('/insert', (req, res) => {
 		});
 	}
 });
+
 module.exports = router;

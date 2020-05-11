@@ -1,13 +1,13 @@
-var express = require('express');
-var router = express.Router();
+const router = require('express').Router();
+const { LoadAllCases } = require('../modules/ReadCSV.js');
+const { GenderCountry, GenderDay } = require('../modules/DataClasses.js');
 
 // Get request. query paraemeters contain data from form. render search.html passing data
 router.get('/search', (req, res) => {
 	console.log(req.query);
 	// Get respective data using the query parameters
 
-	const readCSVModule = require('../modules/ReadCSV.js');
-	var allCases = readCSVModule.LoadAllCases();
+	var allCases = LoadAllCases();
 	// Now, allCases stores list of Cases read from the csv file.
 
 	var selectedGender = [];
@@ -27,7 +27,6 @@ router.get('/search', (req, res) => {
 	}
 
 	//From here the selected gender data is stored in selectedGender[] (array of Cases) now
-	const genderReq = require('../modules/DataClasses.js');
 	var row = [];
 	if (req.query.TypeOfData == 1) {
 		var confirmedDict = {};
@@ -67,7 +66,7 @@ router.get('/search', (req, res) => {
 		}
 		for (var key in confirmedDict) {
 			//use confirmedDict cuz every key is the same as other Dict since country == key
-			var newItem = new genderReq.GenderCountry(
+			var newItem = new GenderCountry(
 				key,
 				confirmedDict[key],
 				deathDict[key],
@@ -86,13 +85,13 @@ router.get('/search', (req, res) => {
 		}
 
 		for (var key in dayDict) {
-			var newItem = new genderReq.GenderDay(key, dayDict[key]);
+			var newItem = new GenderDay(key, dayDict[key]);
 			row.push(newItem);
 		}
 	}
 
-	res.send( {
-		data: row
+	res.send({
+		data: row,
 	});
 });
 

@@ -1,19 +1,23 @@
-var express = require('express');
-var router = express.Router();
+const router = require('express').Router();
+const {
+	UpdateWorldData,
+	DeleteWorldData,
+	InsertWorldData,
+} = require('../modules/ModifyData.js');
+const { LoadWorldData } = require('../modules/ReadCSV.js');
+const {
+	WorldRowConfirmed,
+	WorldRowDeaths,
+	WorldRowRecovered,
+} = require('../modules/DataClasses.js');
 
-const ModModule = require('../modules/ModifyData.js');
+var WorldData = LoadWorldData();
 
-const readCSVModule = require('../modules/ReadCSV.js');
-var WorldData = readCSVModule.LoadWorldData();
-
-const worldReq = require('../modules/DataClasses.js');
 router.get('/search', (req, res) => {
-	console.log(req.query);
 	// Get respective data using the query parameters
 	var selectedCountry = [];
 	// Now, WorldData stores list of WorldPlace read from the csv file.
 
-	// console.log(WorldData);
 	for (var i = 0; i < WorldData.length; ++i) {
 		if (
 			req.query.Country == WorldData[i].country &&
@@ -22,8 +26,6 @@ router.get('/search', (req, res) => {
 			selectedCountry.push(WorldData[i]);
 		}
 	}
-
-	console.log(selectedCountry);
 
 	if (selectedCountry.length > 0) {
 		if (req.query.TypeOfData == 1) {
@@ -37,7 +39,7 @@ router.get('/search', (req, res) => {
 					temp_date.getDate() +
 					'/' +
 					temp_date.getFullYear();
-				var newItem = new worldReq.WorldRowConfirmed(
+				var newItem = new WorldRowConfirmed(
 					date,
 					selectedCountry[0].numConfirmed[key]
 				);
@@ -54,7 +56,7 @@ router.get('/search', (req, res) => {
 					temp_date.getDate() +
 					'/' +
 					temp_date.getFullYear();
-				var newItem = new worldReq.WorldRowDeaths(
+				var newItem = new WorldRowDeaths(
 					date,
 					selectedCountry[0].numDeaths[key]
 				);
@@ -71,7 +73,7 @@ router.get('/search', (req, res) => {
 					temp_date.getDate() +
 					'/' +
 					temp_date.getFullYear();
-				var newItem = new worldReq.WorldRowRecovered(
+				var newItem = new WorldRowRecovered(
 					date,
 					selectedCountry[0].numRecovered[key]
 				);
@@ -87,7 +89,7 @@ router.get('/search', (req, res) => {
 
 router.post('/delete', (req, res) => {
 	res.send({
-		success: ModModule.DeleteWorldData(
+		success: DeleteWorldData(
 			req.body.Country,
 			req.body.State,
 			req.body.Date,
@@ -99,7 +101,7 @@ router.post('/delete', (req, res) => {
 
 router.post('/update', (req, res) => {
 	res.send({
-		success: ModModule.UpdateWorldData(
+		success: UpdateWorldData(
 			req.body.Country,
 			req.body.State,
 			req.body.Date,
@@ -111,7 +113,7 @@ router.post('/update', (req, res) => {
 });
 
 router.post('/insert', (req, res) => {
-	var msg = ModModule.InsertWorldData(
+	var msg = InsertWorldData(
 		req.body.Country,
 		req.body.State,
 		req.body.Date,

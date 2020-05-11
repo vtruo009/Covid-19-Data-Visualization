@@ -1,13 +1,12 @@
-var express = require('express');
-var router = express.Router();
+const router = require('express').Router();
+const { LoadAllCases } = require('../modules/ReadCSV.js');
+const { AgeRowCountry, AgeRowDay } = require('../modules/DataClasses.js');
 
 // Get request. query paraemeters contain data from form. render search.html passing data
 router.get('/search', (req, res) => {
 	console.log(req.query);
 	// Get respective data using the query parameters
-
-	const readCSVModule = require('../modules/ReadCSV.js');
-	var allCases = readCSVModule.LoadAllCases();
+	var allCases = LoadAllCases();
 	// Now, allCases stores list of Cases read from the csv file.
 
 	//get age range input from user,
@@ -50,7 +49,6 @@ router.get('/search', (req, res) => {
 	}
 
 	// From here the selected range of age data is stored in selectedRange[] (array of Cases) now.
-	const ageReq = require('../modules/DataClasses.js');
 	var row = [];
 	if (req.query.TypeOfData == 1) {
 		var confirmedDict = {};
@@ -89,7 +87,7 @@ router.get('/search', (req, res) => {
 			}
 		}
 		for (var key in confirmedDict) {
-			var newItem = new ageReq.AgeRowCountry(
+			var newItem = new AgeRowCountry(
 				key,
 				confirmedDict[key],
 				deathDict[key],
@@ -108,7 +106,7 @@ router.get('/search', (req, res) => {
 		}
 
 		for (var key in dayDict) {
-			var newItem = new ageReq.AgeRowDay(key, dayDict[key]);
+			var newItem = new AgeRowDay(key, dayDict[key]);
 			row.push(newItem);
 		}
 	}

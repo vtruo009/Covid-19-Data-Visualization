@@ -1,12 +1,11 @@
-var express = require('express');
-var router = express.Router();
-const ModifyDataModule = require('../modules/ModifyData.js');
-const readCSVModule = require('../modules/ReadCSV.js');
-const BasicHelpersModule = require('../modules/BasicHelpers.js');
-const AccessDataModule = require('../modules/AccessData');
+const router = require('express').Router();
+const { EditCase, AddCase, RemoveCase } = require('../modules/ModifyData.js');
+const { LoadAllCases } = require('../modules/ReadCSV.js');
+const { stringToDate } = require('../modules/BasicHelpers.js');
+const { GetCaseById } = require('../modules/AccessData');
 
 router.get('/search', (req, res) => {
-	var searchCase = AccessDataModule.GetCaseById(req.query.caseId);
+	var searchCase = GetCaseById(req.query.caseId);
 	console.log('Search:', searchCase);
 	if (searchCase == null) {
 		res.send({
@@ -50,9 +49,9 @@ router.post('/update', (req, res) => {
 	} else {
 		stringOfGender = 'female';
 	}
-	var allCases = readCSVModule.LoadAllCases();
-	var date = BasicHelpersModule.stringToDate(req.body.ReportingDate);
-	var updateCase = ModifyDataModule.EditCase(
+	var allCases = LoadAllCases();
+	var date = stringToDate(req.body.ReportingDate);
+	var updateCase = EditCase(
 		allCases,
 		date,
 		req.body.Country,
@@ -70,7 +69,7 @@ router.post('/update', (req, res) => {
 
 router.post('/insert', (req, res) => {
 	console.log(req.body);
-	var allCases = readCSVModule.LoadAllCases();
+	var allCases = LoadAllCases();
 	// var date = BasicHelpersModule.stringToDate(req.body.ReportingDate);
 	// console.log('From insert', date);
 	var stringOfGender;
@@ -79,7 +78,7 @@ router.post('/insert', (req, res) => {
 	} else {
 		stringOfGender = 'female';
 	}
-	var insertCase = ModifyDataModule.AddCase(
+	var insertCase = AddCase(
 		allCases,
 		req.body.ReportingDate, //convert string to date
 		req.body.Country,
@@ -96,8 +95,8 @@ router.post('/insert', (req, res) => {
 });
 
 router.post('/delete', (req, res) => {
-	var allCases = readCSVModule.LoadAllCases();
-	var deleteCase = ModifyDataModule.RemoveCase(allCases, req.body.caseId);
+	var allCases = LoadAllCases();
+	var deleteCase = RemoveCase(allCases, req.body.caseId);
 	res.send({
 		success: deleteCase,
 	});
