@@ -16,7 +16,7 @@ const AgeDataRouter = require('./routes/AgeData');
 const GenderDataRouter = require('./routes/GenderData');
 const CaseDataRouter = require('./routes/CaseData');
 const AnalyticsRouter = require('./routes/Analytics');
-
+const SaveAllDataRouter = require('./routes/SaveAllData');
 // App set up
 
 // Used to make server decode data from body of requests
@@ -41,6 +41,7 @@ app.use('/AgeData', AgeDataRouter);
 app.use('/GenderData', GenderDataRouter);
 app.use('/CaseData', CaseDataRouter);
 app.use('/Analytics', AnalyticsRouter);
+app.use('/SaveAllData', SaveAllDataRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
