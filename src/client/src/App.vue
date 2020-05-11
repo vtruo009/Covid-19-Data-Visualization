@@ -14,7 +14,6 @@ export default {
     NavBar
   },
   created() {
-    console.log("Component is created");
     window.addEventListener("beforeunload", function(e) {
       Services.saveAllData();
     });
