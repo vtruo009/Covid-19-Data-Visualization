@@ -22,9 +22,6 @@ const AnalyticsRouter = require('./routes/Analytics');
 // Used to make server decode data from body of requests
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Public assests set up
-app.use(express.static(path.join(__dirname, 'public')));
-
 // Used to output incoming requests in console
 app.use(morgan('dev'));
 
