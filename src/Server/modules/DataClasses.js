@@ -109,6 +109,12 @@ module.exports = {
 
 			// Dictionary of { <Date, number of Recovered cases> }
 			this.numRecovered = {};
+
+			// Modifying WorldPlace to add 3 new ints for optimization
+			// Populated when num(Deaths/Confirmed/Recovered) are populated
+			this.currentNumConfirmed = 0;
+			this.currentNumDeaths = 0;
+			this.currentRecovered = 0;
 		}
 		addNumDeaths(dates, values) {
 			// dates is a list of Date {1/20/20, 1/21/20, 1/22/20, ...}
