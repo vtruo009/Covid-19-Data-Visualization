@@ -9,8 +9,8 @@ var countries = undefined;
 // Dictionary of <int, dictionary<string, int>>. 
 // The key int is option. (1 = all population, 2 = female, 3 = male, 4 = 80 +, ...)
 // The value string is country name.
-// The value int is number of people/
-// EXL raceComparisonData[2]["Japan"] = number of female confirmed cases in Japan
+// The value int is number of people.
+// EX: raceComparisonData[2]["Japan"] = number of female confirmed cases in Japan
 var raceComparisonData = undefined;
 
 function InitializeAllCases() {
