@@ -87,9 +87,7 @@ function AddCase(reportingDate, country, age, gender, recovered, dead, location,
 		if (allCases[i].id == id) return false;
 	}
 
-	const classesModule = require('../modules/DataClasses.js');
-
-	var newCase = new classesModule.Case([
+	var newCase = new dataClassesModule.Case([
 		id, // 0: id
 		'', // 1: case in country
 		reportingDate, // 2: reporting date
@@ -340,7 +338,7 @@ function GetGenderData(gender, typeOfData) {
 			);
 			row.push(newItem);
 		}
-	} else if (req.query.TypeOfData == 2) {
+	} else if (typeofData == 2) {
 		var dayDict = {};
 		for (var i = 0; i < selectedGender.length; ++i) {
 			if (dayDict[selectedGender[i].reportingDateStr]) {
@@ -402,7 +400,6 @@ function GetAgeData(ageRange, typeOfData) {
 	}
 
 	// From here the selected range of age data is stored in selectedRange[] (array of Cases) now.
-	const ageReq = require('../modules/DataClasses.js');
 	var row = [];
 	if (typeOfData == 1) {
 		var confirmedDict = {};
@@ -441,7 +438,7 @@ function GetAgeData(ageRange, typeOfData) {
 			}
 		}
 		for (var key in confirmedDict) {
-			var newItem = new ageReq.AgeRowCountry(
+			var newItem = new dataClassesModule.AgeRowCountry(
 				key,
 				confirmedDict[key],
 				deathDict[key],
@@ -460,7 +457,7 @@ function GetAgeData(ageRange, typeOfData) {
 		}
 
 		for (var key in dayDict) {
-			var newItem = new ageReq.AgeRowDay(key, dayDict[key]);
+			var newItem = new dataClassesModule.AgeRowDay(key, dayDict[key]);
 			row.push(newItem);
 		}
 	}
