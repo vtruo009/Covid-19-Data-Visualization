@@ -207,4 +207,15 @@ module.exports = {
 			this.numberOfConfirmed = numConfirmedCases;
 		}
 	},
+
+	Country: class {
+		constructor(femaleC, maleC, femaleD, maleD, femaleR, maleR) {
+			this.numFemaleConfirmed = femaleC;
+			this.numMaleConfirmed = maleC;
+			this.numFemaleDied = femaleD;
+			this.numMaleDied = maleD;
+			this.numFemaleRecovered = femaleR;
+			this.numMaleRecovered = maleR;
+        }
+	}
 };
