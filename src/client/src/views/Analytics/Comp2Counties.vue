@@ -1,39 +1,51 @@
 <template>
-	<div class="mt-5">
-		<b-form inline @submit="initialFormSubmission">
-			<b-input v-model="County1" required placeholder="County"></b-input>
-			<b-input
-				class="ml-3"
-				v-model="State1"
-				required
-				placeholder="Province/State"
-			></b-input>
-			<b-input
-				class="ml-5"
-				v-model="County2"
-				required
-				placeholder="County"
-			></b-input>
-			<b-input
-				class="ml-3"
-				v-model="State2"
-				required
-				placeholder="Province/State"
-			></b-input>
-			<b-button type="submit" variant="primary" class="ml-5">Search</b-button>
+	<div class="mt-5 fadeIn">
+		<b-form @submit="initialFormSubmission">
+			<b-row class="d-flex justify-content-center">
+				<b-col lg="2" xs="8" class="m-2">
+					<b-input
+						v-model="County1"
+						required
+						placeholder="First County"
+					></b-input>
+				</b-col>
+				<b-col lg="2" xs="8" class="m-2"
+					><b-input
+						v-model="State1"
+						required
+						placeholder="First State"
+					></b-input>
+				</b-col>
+				<b-col lg="2" xs="8" class="m-2">
+					<b-input
+						v-model="County2"
+						required
+						placeholder="Second County"
+					></b-input
+				></b-col>
+				<b-col lg="2" xs="8" class="m-2"
+					><b-input
+						v-model="State2"
+						required
+						placeholder="Second State"
+					></b-input>
+				</b-col>
+				<b-col lg="2" xs="8" class="m-2">
+					<b-button block type="submit" variant="primary">Search</b-button>
+				</b-col>
+			</b-row>
 		</b-form>
 
-		<div v-if="showChart" class="mt-5">
-			<!-- this will only render if showChart is a truthy value -->
+		<div
+			v-if="showChart"
+			style="margin-top:90px"
+			class="d-flex justify-content-center"
+		>
 			<b-row>
-				<!-- row contains donut chart & selection -->
 				<b-col>
-					<DonutChart v-bind:data="chartData" />
-					<!-- will display whatever bind to it -->
+					<DonutChart :chart-data="chartData" />
 				</b-col>
-				<b-col>
-					<!-- at chagne, calls requestFromSelect func
-              displays typeofdataoptions listed in data()  -->
+				<b-col class="m-5">
 					<b-form-select
 						@change="requestFromSelect"
 						v-model="TypeOfData"
@@ -74,16 +86,13 @@ export default {
 		// 1-> confirmed, 2-> dead, 3->recovered
 		async initialFormSubmission(e) {
 			e.preventDefault();
-			this.TypeOfData = null;
+			this.TypeOfData = '1';
 			await this.GetData('1'); //first submit gets confirmed as default
-			console.log('Information Submitted!');
 		},
 		async requestFromSelect() {
 			await this.GetData(this.TypeOfData); //whatever user chooses
-			console.log('getting what user selected');
 		},
 		async GetData(TypeOfData) {
-			console.log('IN GETDATA()');
 			try {
 				const response = await Services.GetAnalyticsData({
 					apiEndPoint: '/compareCounties',
@@ -95,7 +104,6 @@ export default {
 						TypeOfData: TypeOfData,
 					},
 				});
-				console.log(response);
 				if (response.data.County1Exists && response.data.County2Exists) {
 					if (
 						response.data.County1NumberOfCases == 0 &&
@@ -114,11 +122,22 @@ export default {
 						);
 					} else {
 						this.showChart = true;
-						this.chartData = [
-							['County', 'Number of Cases'],
-							[this.County1, response.data.County1NumberOfCases],
-							[this.County2, response.data.County2NumberOfCases],
-						];
+						this.chartData = {
+							labels: [this.County1, this.County2],
+							datasets: [
+								{
+									label: 'Number of Cases for each County',
+									data: [
+										response.data.County1NumberOfCases,
+										response.data.County2NumberOfCases,
+									],
+									backgroundColor: [
+										'rgba(214, 48, 49, 1)',
+										'rgba(9, 132, 227, 1)',
+									],
+								},
+							],
+						};
 					}
 				} else {
 					if (!response.data.County1Exists) {

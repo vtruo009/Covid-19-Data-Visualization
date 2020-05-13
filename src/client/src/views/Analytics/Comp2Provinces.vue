@@ -1,39 +1,51 @@
 <template>
-	<div class="mt-5">
-		<b-form inline @submit="initialFormSubmission">
-			<b-input v-model="Country1" required placeholder="Country"></b-input>
-			<b-input
-				class="ml-3"
-				v-model="Province1"
-				required
-				placeholder="State/Provinces"
-			></b-input>
-			<b-input
-				class="ml-5"
-				v-model="Country2"
-				required
-				placeholder="Country"
-			></b-input>
-			<b-input
-				class="ml-3"
-				v-model="Province2"
-				required
-				placeholder="State/Provinces"
-			></b-input>
-			<b-button type="submit" variant="primary" class="ml-5">Search</b-button>
+	<div class="mt-5 fadeIn">
+		<b-form @submit="initialFormSubmission">
+			<b-row class="d-flex justify-content-center">
+				<b-col lg="2" xs="8" class="m-2">
+					<b-input
+						v-model="Province1"
+						required
+						placeholder="First Province"
+					></b-input>
+				</b-col>
+				<b-col lg="2" xs="8" class="m-2"
+					><b-input
+						v-model="Country1"
+						required
+						placeholder="First Country"
+					></b-input>
+				</b-col>
+				<b-col lg="2" xs="8" class="m-2">
+					<b-input
+						v-model="Province2"
+						required
+						placeholder="Second Province"
+					></b-input>
+				</b-col>
+				<b-col lg="2" xs="8" class="m-2"
+					><b-input
+						v-model="Country2"
+						required
+						placeholder="Second Country"
+					></b-input>
+				</b-col>
+				<b-col lg="2" xs="8" class="m-2">
+					<b-button block type="submit" variant="primary">Search</b-button>
+				</b-col>
+			</b-row>
 		</b-form>
 
-		<div v-if="showChart" class="mt-5">
-			<!-- this will only render if showChart is a truthy value -->
+		<div
+			v-if="showChart"
+			style="margin-top:90px"
+			class="d-flex justify-content-center"
+		>
 			<b-row>
-				<!-- row contains donut chart & selection -->
 				<b-col>
-					<DonutChart v-bind:data="chartData" />
-					<!-- will display whatever bind to it -->
+					<DonutChart :chart-data="chartData" />
 				</b-col>
-				<b-col>
-					<!-- at chagne, calls requestFromSelect func
-              displays typeofdataoptions listed in data()  -->
+				<b-col class="m-5">
 					<b-form-select
 						@change="requestFromSelect"
 						v-model="TypeOfData"
@@ -74,19 +86,16 @@ export default {
 		// 1-> confirmed, 2-> dead, 3->recovered
 		async initialFormSubmission(e) {
 			e.preventDefault();
-			this.TypeOfData = null;
+			this.TypeOfData = '1';
 			//do i need to cache the inputs also?
 			await this.GetData('1'); //first submit gets confirmed as default
-			console.log('First form submitted!!!!');
 		},
 
 		async requestFromSelect() {
 			await this.GetData(this.TypeOfData); //whatever user chooses
-			console.log('getting what user selected');
 		},
 
 		async GetData(TypeOfData) {
-			console.log('IN GETDATA()');
 			try {
 				const response = await Services.GetAnalyticsData({
 					apiEndPoint: '/compareProvinces',
@@ -100,11 +109,22 @@ export default {
 				});
 				if (response.data.Province1Exists && response.data.Province2Exists) {
 					if (!this.showChart) this.showChart = true;
-					this.chartData = [
-						['Province', 'Number of Cases'],
-						[this.Province1, response.data.Province1NumberOfCases],
-						[this.Province2, response.data.Province2NumberOfCases],
-					];
+					this.chartData = {
+						labels: [this.Province1, this.Province2],
+						datasets: [
+							{
+								label: 'Number of Cases for each province',
+								data: [
+									response.data.Province1NumberOfCases,
+									response.data.Province2NumberOfCases,
+								],
+								backgroundColor: [
+									'rgba(214, 48, 49, 1)',
+									'rgba(9, 132, 227, 1)',
+								],
+							},
+						],
+					};
 				} else {
 					if (!response.data.Province1Exists) {
 						this.erroHandler(

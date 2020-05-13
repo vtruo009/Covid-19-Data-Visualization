@@ -1,17 +1,35 @@
 <template>
-	<div class="mt-5">
+	<div class="mt-5 fadeIn">
 		<!-- By default the first search looka for confirmed cases -->
-		<b-form inline @submit="initialFormSubmission">
-			<b-input v-model="Country" required placeholder="Country"></b-input>
-			<b-button type="submit" variant="primary" class="ml-3">Search</b-button>
+		<b-form @submit="initialFormSubmission">
+			<b-row class="d-flex justify-content-center">
+				<b-col lg="4" sm="8">
+					<b-input
+						v-model="Country"
+						required
+						placeholder="Country"
+						class="m-2"
+					></b-input>
+				</b-col>
+				<b-col lg="4" sm="4">
+					<b-button block type="submit" variant="primary" class="m-2"
+						>Search</b-button
+					>
+				</b-col>
+			</b-row>
 		</b-form>
 
-		<div v-if="showChart" class="mt-5">
+		<div
+			v-if="showChart"
+			style="margin-top:90px"
+			class="d-flex justify-content-center"
+		>
 			<b-row>
 				<b-col>
-					<DonutChart v-bind:data="chartData" />
+					<DonutChart :chart-data="chartData" />
 				</b-col>
-				<b-col>
+				<div></div>
+				<b-col class="m-5">
 					<b-form-select
 						@change="requestFromSelect"
 						v-model="TypeOfData"
@@ -52,8 +70,8 @@ export default {
 			// If chart is not shown, then show it
 			//Prevents the page to reload
 			e.preventDefault();
-			// When an the form is submitted at the beginning, the type of data value is cleaned
-			this.TypeOfData = null;
+			// When an the form is submitted at the beginning, the type of data value is set to confirmed
+			this.TypeOfData = 1;
 			// Save the country in CachedCountry for future requests
 			this.CachedCountry = this.Country;
 			// Call helper function that makes request to backend. Note: For the first search we get confirmed cases
@@ -81,7 +99,6 @@ export default {
 						response.data.MaleNumberOfCases == 0 &&
 						response.data.FemaleNumberOfCases == 0
 					) {
-						this.showChart = false;
 						this.erroHandler(
 							`No ${this.TypeOfDataOptions[this.TypeOfData].text} Cases for ${
 								this.Country
@@ -90,11 +107,22 @@ export default {
 					} else {
 						this.showChart = true;
 						// Set up chartData object to visualize the donut chart
-						this.chartData = [
-							['Gender', 'Number of Cases'],
-							['Male', response.data.MaleNumberOfCases],
-							['Female', response.data.FemaleNumberOfCases],
-						];
+						this.chartData = {
+							labels: ['Male', 'Female'],
+							datasets: [
+								{
+									label: 'Male vs Female Cases',
+									data: [
+										response.data.MaleNumberOfCases,
+										response.data.FemaleNumberOfCases,
+									],
+									backgroundColor: [
+										'rgba(214, 48, 49, 1)',
+										'rgba(9, 132, 227, 1)',
+									],
+								},
+							],
+						};
 					}
 				} else {
 					this.erroHandler(

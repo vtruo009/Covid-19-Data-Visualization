@@ -1,34 +1,28 @@
-<template>
-	<GChart
-		type="PieChart"
-		:data="this.data"
-		:options="chartOptions"
-		class="size"
-	/>
-</template>
-
 <script>
-import { GChart } from 'vue-google-charts';
+import { Doughnut, mixins } from 'vue-chartjs';
+const { reactiveProp } = mixins;
 
 export default {
-	name: 'DonutChart',
-	props: {
-		data: Array,
-	},
+	extends: Doughnut,
 	data() {
 		return {
-			chartOptions: {
-				chart: {},
-				pieHole: 0.3,
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				legend: {
+					labels: {
+						fontColor: 'black',
+						fontSize: 18,
+					},
+				},
 			},
 		};
+	},
+	mixins: [reactiveProp],
+	mounted() {
+		this.renderChart(this.chartData, this.options);
 	},
 };
 </script>
 
-<style>
-.size {
-	width: 900px;
-	height: 500px;
-}
-</style>
+<style></style>
