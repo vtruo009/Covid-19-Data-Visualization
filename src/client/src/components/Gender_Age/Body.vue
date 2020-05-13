@@ -1,29 +1,25 @@
 <template>
 	<div id="Body">
 		<!-- Input form -->
-		<div class="m-5 text-center">
+		<div class="m-5 d-flex justify-content-center">
 			<b-form @submit="displayData">
 				<b-row>
-					<b-col>
+					<b-col lg="3" class="m-2">
 						<b-form-select
 							v-model="dynamicOptionSelected"
 							:options="dynamicOptions"
 							required
 						></b-form-select>
 					</b-col>
-					<b-col>
+					<b-col lg="5" class="m-2">
 						<b-form-select
 							v-model="TypeOfDataSelected"
 							:options="TypeOfDataoptions"
 							required
 						></b-form-select>
 					</b-col>
-					<b-col>
-						<b-button
-							style="margin-right:160px"
-							variant="primary"
-							type="submit"
-						>
+					<b-col lg="3" class="m-2">
+						<b-button block variant="primary" type="submit">
 							<font-awesome-icon :icon="['fas', 'search']" />
 						</b-button>
 					</b-col>
@@ -31,7 +27,7 @@
 			</b-form>
 		</div>
 		<!-- TABLE DATA-->
-		<Table v-bind:data="tableData"></Table>
+		<Table v-show="isDataReady" v-bind:data="tableData"></Table>
 	</div>
 </template>
 
@@ -51,6 +47,7 @@ export default {
 	},
 	data() {
 		return {
+			isDataReady: false,
 			// Selected by user
 			dynamicOptionSelected: null,
 			TypeOfDataSelected: null,
@@ -84,6 +81,7 @@ export default {
 					if (response.status == 200) {
 						// Populates tabledata in grandparent component
 						this.setTableData(response.data.data);
+						this.isDataReady = true;
 					} else {
 						this.errorHandler();
 					}
