@@ -178,10 +178,16 @@ function RemoveUSData(county, state, date, tod) {
 // function SaveRecords()
 // A void function that saves allUSPlace (Maybe modified) into csv.
 function SaveRecords(){
+    if(allUSPlaces == undefined){
+        InitializeAllUSPlace();
+    }
     writeCSVModule.RecordUSData(allUSPlaces);
 }
 
 function GetTwoPlacesComparison(state1, county1, state2, county2, typeOfData) {
+    if(allUSPlaces == undefined){
+        InitializeAllUSPlace();
+    }
     var county1Data = null;
     var county2Data = null;
 
@@ -222,6 +228,9 @@ function GetTwoPlacesComparison(state1, county1, state2, county2, typeOfData) {
 
 
 function GetUSPopulationAnalysis(state, county) {
+    if(allUSPlaces == undefined){
+        InitializeAllUSPlace();
+    }
     var unaffected, deaths, confirmed;
 
     var countyData = null;
@@ -249,7 +258,59 @@ function GetUSPopulationAnalysis(state, county) {
 // We want to return “row”.
 // We want to use this function in routes/USData.js.
 function GetRows(county, state, typeOfData){
-    //How to combine different requests into one function?
+    if(allUSPlaces == undefined){
+        InitializeAllUSPlace();
+    }
+    var selectedInUS = [];
+	for (var i = 0; i < allUSPlaces.length; ++i) {
+		// console.log(USData[i].county);
+		if (
+			county == allUSPlaces[i].county &&
+			state == allUSPlaces[i].state
+		) {
+			selectedInUS.push(allUSPlaces[i]);
+		}
+	}
+
+	// console.log(selectedInUS);
+	if (selectedInUS.length > 0) {
+		if (typeOfData == 1) {
+			var row = [];
+			for (var key in selectedInUS[0].numConfirmed) {
+				var temp_date = new Date(key);
+				var date =
+					temp_date.getMonth() +
+					1 +
+					'/' +
+					temp_date.getDate() +
+					'/' +
+					temp_date.getFullYear();
+				var newItem = new USReq.USRowConfirmed(
+					date,
+					selectedInUS[0].numConfirmed[key]
+				);
+				row.push(newItem);
+			}
+		} else if (typeOfData == 2) {
+			var row = [];
+			for (var key in selectedInUS[0].numDeaths) {
+				var temp_date = new Date(key);
+				var date =
+					temp_date.getMonth() +
+					1 +
+					'/' +
+					temp_date.getDate() +
+					'/' +
+					temp_date.getFullYear();
+				var newItem = new USReq.USRowDeaths(
+					date,
+					selectedInUS[0].numDeaths[key]
+				);
+				row.push(newItem);
+			}
+		}
+    }
+    return row;
 }
 
 module.exports = {
