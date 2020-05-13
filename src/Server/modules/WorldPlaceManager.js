@@ -11,9 +11,7 @@ function InitializeAllWorldPlace() {
 }
 
 function AddallWorldPlace(province, country, date, tod) {
-    if (isempty(allWorldPlace)) {
-        InitializeAllWorldPlace();
-    }
+    if (allWorldPlace == undefined) InitializeAllWorldPlace();
 
     // Copied from ModifyData.js
     var errormsg = 'no error';
@@ -100,9 +98,7 @@ function AddallWorldPlace(province, country, date, tod) {
 }
 
 function EditallWorldPlace(province, country, date, tod, number) {
-    if (isempty(allWorldPlace)) {
-        InitializeAllWorldPlace();
-    }
+    if (allWorldPlace == undefined) InitializeAllWorldPlace();
 
     var result = false;
 	if (tod == 1) {
@@ -173,9 +169,7 @@ function EditallWorldPlace(province, country, date, tod, number) {
 }
 
 function RemoveallWorldPlace(province, country, date, tod) {
-    if (isempty(allWorldPlace)) {
-        InitializeAllWorldPlace();
-    }
+    if (allWorldPlace == undefined) InitializeAllWorldPlace();
 
     var result = false;
 	if (tod == 1) {
