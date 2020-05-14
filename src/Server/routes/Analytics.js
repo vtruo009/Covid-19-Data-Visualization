@@ -8,13 +8,11 @@ const {
 } = require('../modules/CaseManager');
 
 router.get('/compareGender', (req, res) => {
-	console.log(req.query);
 	const genderAnalytics = GetGenderAnalytics(
 		req.query.Country,
 		req.query.TypeOfData
 	);
 
-	console.log(genderAnalytics);
 	if (genderAnalytics == null) {
 		res.send({
 			CountryExists: false,
@@ -31,10 +29,8 @@ router.get('/compareGender', (req, res) => {
 });
 
 router.get('/compareRace', (req, res) => {
-	var raceComparison = GetRaceComparison(req.query.Option);
-
 	res.send({
-		CountryNumberDict: raceComparison,
+		CountryNumberDict: GetRaceComparison(req.query.Option),
 	});
 });
 
