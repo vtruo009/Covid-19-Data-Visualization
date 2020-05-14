@@ -37,10 +37,6 @@ function AddWorldData(province, country, date, tod, number) {
 				var temp_date = helper.stringToDate(date);
 				allWorldPlace[i].numConfirmed[temp_date] = number;
 				// Here: numConfirmed has new date (temp_date) added
-				// If this date's value is the same as GetMostRecentValue(numConfirmed)
-					// temp_date is most recent & we change currentNumConfirmed
-				// Else
-					// do nothing
 				if (allWorldPlace[i].numConfirmed[temp_date] == GetMostRecentValue(allWorldPlace[i].numConfirmed)) {
 					console.log("changed current value\n");
 					allWorldPlace[i].currentNumConfirmed = number;
@@ -72,7 +68,9 @@ function AddWorldData(province, country, date, tod, number) {
 				}
 				var temp_date = helper.stringToDate(date);
 				allWorldPlace[i].numDeaths[temp_date] = number;
-				allWorldPlace[i].currentNumDeaths = number;
+				if (allWorldPlace[i].numDeaths[temp_date] == GetMostRecentValue(allWorldPlace[i].numDeaths)) {
+					allWorldPlace[i].currentNumDeaths = number;
+				}
 				break;
 			} else if (i == allWorldPlace.length - 1) {
 				errormsg = 'wrong place';
@@ -99,7 +97,9 @@ function AddWorldData(province, country, date, tod, number) {
 				}
 				var temp_date = helper.stringToDate(date);
 				allWorldPlace[i].numRecovered[temp_date] = number;
-				allWorldPlace[i].currentNumRecovered = number;
+				if (allWorldPlace[i].numRecovered[temp_date] == GetMostRecentValue(allWorldPlace[i].numRecovered)) {
+					allWorldPlace[i].currentNumRecovered = number;
+				}
 				break;
 			} else if (i == allWorldPlace.length - 1) {
 				errormsg = 'wrong place';
@@ -129,7 +129,9 @@ function EditWorldData(province, country, date, tod, number) {
 						temp.getFullYear();
 					if (d == date) {
 						allWorldPlace[i].numConfirmed[key] = number;
-						allWorldPlace[i].currentNumConfirmed = number;
+						if (allWorldPlace[i].numConfirmed[temp_date] == GetMostRecentValue(allWorldPlace[i].numConfirmed)) {
+							allWorldPlace[i].currentNumConfirmed = number;
+						}
 						result = true;
 						break;
 					}
@@ -150,7 +152,9 @@ function EditWorldData(province, country, date, tod, number) {
 						temp.getFullYear();
 					if (d == date) {
 						allWorldPlace[i].numDeaths[key] = number;
-						allWorldPlace[i].currentNumDeaths = number;
+						if (allWorldPlace[i].numDeaths[temp_date] == GetMostRecentValue(allWorldPlace[i].numDeaths)) {
+							allWorldPlace[i].currentNumDeaths = number;
+						}
 						result = true;
 						break;
 					}
@@ -171,7 +175,9 @@ function EditWorldData(province, country, date, tod, number) {
 						temp.getFullYear();
 					if (d == date) {
 						allWorldPlace[i].numRecovered[key] = number;
-						allWorldPlace[i].currentNumRecovered = number;
+						if (allWorldPlace[i].numRecovered[temp_date] == GetMostRecentValue(allWorldPlace[i].numRecovered)) {
+							allWorldPlace[i].currentNumRecovered = number;
+						}
 						result = true;
 						break;
 					}
