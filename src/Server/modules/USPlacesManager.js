@@ -1,6 +1,7 @@
 const dataClassesModule = require('../modules/DataClasses.js');
 const readCSVModule = require('../modules/ReadCSV.js');
 const writeCSVModule = require('../modules/WriteCSV.js');
+//const getRecentModule = require('../modules/World');
 
 var allUSPlaces = [];
 
@@ -36,9 +37,9 @@ function AddUSData(county, state, date, tod, number) {
 				}
 				var temp_date = helper.stringToDate(date);
 				allUSPlaces[i].numDeaths[temp_date] = number;
-				if(allUSPlaces[i].currentNumDeaths!=number){
+				if(allUSPlaces[i].numDeaths[temp_date] == GetMostRecentValue(allUSPlaces[i].numDeaths)){
 					allUSPlaces[i].currentNumDeaths=number;
-				}
+				}//check if the number is the most recent number
 				break;
 			} else if (i == allUSPlaces.length - 1) {
 				// if its the last element & prog didn't go into the 1st if -> place doesn't exist
@@ -65,7 +66,7 @@ function AddUSData(county, state, date, tod, number) {
 				}
 				var temp_date = helper.stringToDate(date);
 				allUSPlaces[i].numConfirmed[temp_date] = number;
-				if(allUSPlaces[i].currentNumConfirmed!=number){
+				if(allUSPlaces[i].numConfirmed[temp_date] == GetMostRecentValue(allUSPlaces[i].numConfirmed)){
 					allUSPlaces[i].currentNumConfirmed=number;
 				}
 				break;
@@ -90,7 +91,7 @@ function EditUSData(county, state, date, tod, number) {
 		console.log(allUSPlaces.length);
 		for (var i = 0; i < allUSPlaces.length; ++i) {
 			if (county == allUSPlaces[i].county && state == allUSPlaces[i].state) {
-				for (var key in allUSPlaces[i].currentNumConfirmed) {
+				for (var key in allUSPlaces[i].numConfirmed) {
 					var temp = new Date(key);
 					var d =
 						temp.getMonth() +
@@ -100,7 +101,7 @@ function EditUSData(county, state, date, tod, number) {
 						'/' +
 						temp.getFullYear();
 					if (d == date) {
-						allUSPlaces[i].currentNumConfirmed[key] = number;
+						allUSPlaces[i].numConfirmed[key] = number;
 						result = true;
 						break;
 					}
@@ -110,7 +111,7 @@ function EditUSData(county, state, date, tod, number) {
 	} else if (tod == 2) {
 		for (var i = 0; i < allUSPlaces.length; ++i) {
 			if (county == allUSPlaces[i].county && state == allUSPlaces[i].state) {
-				for (var key in allUSPlaces[i].currentNumDeaths) {
+				for (var key in allUSPlaces[i].numDeaths) {
 					var temp = new Date(key);
 					var d =
 						temp.getMonth() +
@@ -120,7 +121,7 @@ function EditUSData(county, state, date, tod, number) {
 						'/' +
 						temp.getFullYear();
 					if (d == date) {
-						allUSPlaces[i].currentNumDeaths[key] = number;
+						allUSPlaces[i].numDeaths[key] = number;
 						result = true;
 						break;
 					}
@@ -223,10 +224,6 @@ function GetTwoPlacesComparison(state1, county1, state2, county2, typeOfData) {
             place1Value = county1Data.currentNumDeaths;
             place2Value = county2Data.currentNumDeaths;
             break;
-        case '3': // recovered
-            place1Value = county1Data.currentNumRecovered;
-            place2Value = county2Data.currentNumRecovered;
-            break;
     }
 
     return { place1Value: place1Value, place2Value: place2Value }
@@ -318,6 +315,17 @@ function GetRows(county, state, typeOfData){
     }
     return row;
 }
+function GetMostRecentValue(dictionary) {
+    if (dictionary.length == 0) return 0;
+
+    var mostResentDate = new Date(1900, 0, 1);
+
+    for (var key in dictionary) {
+        if (new Date(key) > mostResentDate) mostResentDate = new Date(key);
+    }
+
+    return dictionary[mostResentDate];
+}//for currentNumConfirmed
 
 module.exports = {
 	InitializeAllUSPlace: InitializeAllUSPlace,
@@ -328,4 +336,5 @@ module.exports = {
 	GetTwoPlacesComparison: GetTwoPlacesComparison,
 	GetUSPopulationAnalysis: GetUSPopulationAnalysis,
 	GetRows: GetRows,
+	GetMostRecentValue: GetMostRecentValue
 }
