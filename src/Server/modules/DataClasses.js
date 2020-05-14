@@ -1,3 +1,4 @@
+const M = require('../modules/WorldPlaceManager.js');
 module.exports = {
 	Case: class {
 		constructor(line) {
@@ -114,16 +115,25 @@ module.exports = {
 
 			// Dictionary of { <Date, number of Recovered cases> }
 			this.numRecovered = {};
+
+			// Modifying WorldPlace to add 3 new ints for optimization
+			// Populated when num(Deaths/Confirmed/Recovered) are populated
+			this.currentNumConfirmed = 0;
+			this.currentNumDeaths = 0;
+			this.currentNumRecovered = 0;
 		}
+
 		addNumDeaths(dates, values) {
 			// dates is a list of Date {1/20/20, 1/21/20, 1/22/20, ...}
 			// values contains the number of people died on the corresponding date.
-
+			
 			for (var i = 0; i < dates.length; ++i) {
 				if (!Number.isNaN(dates[i].getMonth()) && !Number.isNaN(parseInt(values[i]))) {
 					this.numDeaths[dates[i]] = parseInt(values[i]);
 				}
 			}
+			
+			this.currentNumDeaths = M.GetMostRecentValue(this.numDeaths);
 		}
 		addNumConfirmed(dates, values) {
 			// dates is a list of Date {1/20/20, 1/21/20, 1/22/20, ...}
@@ -134,6 +144,8 @@ module.exports = {
 					this.numConfirmed[dates[i]] = parseInt(values[i]);
 				}
 			}
+
+			this.currentNumConfirmed = M.GetMostRecentValue(this.numConfirmed);
 		}
 		addNumRecovered(dates, values) {
 			// dates is a list of Date {1/20/20, 1/21/20, 1/22/20, ...}
@@ -144,7 +156,10 @@ module.exports = {
 					this.numRecovered[dates[i]] = parseInt(values[i]);
 				}
 			}
+
+			this.currentNumRecovered = M.GetMostRecentValue(this.numRecovered);
 		}
+
 	},
 
 	AgeRowCountry: class {
