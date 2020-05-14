@@ -201,5 +201,6 @@ module.exports = {
     GetTwoPlacesComparison: GetTwoPlacesComparison,
     GetRaceComparison: GetRaceComparison,
     GetUSPopulationAnalysis: GetUSPopulationAnalysis,
-    GetWorldPopulationAnalysis: GetWorldPopulationAnalysis
+    GetWorldPopulationAnalysis: GetWorldPopulationAnalysis,
+    GetMostRecentValue: GetMostRecentValue
 };

@@ -94,7 +94,7 @@ module.exports = {
 	},
 
 	WorldPlace: class {
-		constructor(country, state, latitude, longitude) {
+		constructor(country, state, latitude, longitude, currentNumConfirmed, currentNumDeaths, currentNumRecovered) {
 			this.country = country;
 			this.state = state;
 
@@ -112,9 +112,9 @@ module.exports = {
 
 			// Modifying WorldPlace to add 3 new ints for optimization
 			// Populated when num(Deaths/Confirmed/Recovered) are populated
-			this.currentNumConfirmed = 0;
-			this.currentNumDeaths = 0;
-			this.currentRecovered = 0;
+			this.currentNumConfirmed = currentNumConfirmed;
+			this.currentNumDeaths = currentNumDeaths;
+			this.currentNumRecovered = currentNumRecovered;
 		}
 		addNumDeaths(dates, values) {
 			// dates is a list of Date {1/20/20, 1/21/20, 1/22/20, ...}
@@ -125,6 +125,8 @@ module.exports = {
 					this.numDeaths[dates[i]] = parseInt(values[i]);
 				}
 			}
+
+			this.currentNumDeaths = this.numDeaths[dates[dates.length-1]];
 		}
 		addNumConfirmed(dates, values) {
 			// dates is a list of Date {1/20/20, 1/21/20, 1/22/20, ...}
@@ -135,6 +137,8 @@ module.exports = {
 					this.numConfirmed[dates[i]] = parseInt(values[i]);
 				}
 			}
+
+			this.currentNumConfirmed = this.numConfirmed[dates[dates.length-1]];
 		}
 		addNumRecovered(dates, values) {
 			// dates is a list of Date {1/20/20, 1/21/20, 1/22/20, ...}
@@ -145,7 +149,10 @@ module.exports = {
 					this.numRecovered[dates[i]] = parseInt(values[i]);
 				}
 			}
+
+			this.currentNumRecovered = this.numRecovered[dates[dates.length-1]];
 		}
+
 	},
 
 	AgeRowCountry: class {
