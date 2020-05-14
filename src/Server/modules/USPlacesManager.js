@@ -102,7 +102,7 @@ function EditUSData(county, state, date, tod, number) {
 						temp.getFullYear();
 					if (d == date) {
 						allUSPlaces[i].numConfirmed[key] = number;
-						if (allUSPlaces[i].numConfirmed[temp_date] == GetMostRecentValue(allUSPlaces[i].numConfirmed)) {
+						if (allUSPlaces[i].numConfirmed[temp] == GetMostRecentValue(allUSPlaces[i].numConfirmed)) {
 							allUSPlaces[i].currentNumConfirmed = number;
 						}
 						result = true;
@@ -125,7 +125,7 @@ function EditUSData(county, state, date, tod, number) {
 						temp.getFullYear();
 					if (d == date) {
 						allUSPlaces[i].numDeaths[key] = number;
-						if (allUSPlaces[i].numDeaths[temp_date] == GetMostRecentValue(allUSPlaces[i].numDeaths)) {
+						if (allUSPlaces[i].numDeaths[temp] == GetMostRecentValue(allUSPlaces[i].numDeaths)) {
 							allUSPlaces[i].currentNumDeaths = number;
 						}
 						//console.log('hi, updated Deaths')
@@ -183,7 +183,7 @@ function RemoveUSData(county, state, date, tod) {
 					if (d == date) {
 						delete allUSPlaces[i].numDeaths[key];
 						allUSPlaces[i].currentNumDeaths = GetMostRecentValue(allUSPlaces[i].numDeaths);
-						//console.log('hi, numDeaths delete done here');
+						console.log('hi, numDeaths delete done here');
 						result = true;
 						break;
 					}
