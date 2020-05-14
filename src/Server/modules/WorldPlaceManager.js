@@ -2,7 +2,6 @@ const dataClassesModule = require('../modules/DataClasses.js');
 const readCSVModule = require('../modules/ReadCSV.js');
 const writeCSVModule = require('../modules/WriteCSV.js');
 const helper = require('../modules/BasicHelpers.js');
-const analytics = require('../modules/Analytics.js');
 const worldReq = require('../modules/DataClasses.js');
 
 // Array of WorldPlaces read from CSV
@@ -37,7 +36,15 @@ function AddWorldData(province, country, date, tod, number) {
 				}
 				var temp_date = helper.stringToDate(date);
 				allWorldPlace[i].numConfirmed[temp_date] = number;
-				allWorldPlace[i].currentNumConfirmed = number;
+				// Here: numConfirmed has new date (temp_date) added
+				// If this date's value is the same as GetMostRecentValue(numConfirmed)
+					// temp_date is most recent & we change currentNumConfirmed
+				// Else
+					// do nothing
+				if (allWorldPlace[i].numConfirmed[temp_date] == GetMostRecentValue(allWorldPlace[i].numConfirmed)) {
+					console.log("changed current value\n");
+					allWorldPlace[i].currentNumConfirmed = number;
+				}
 				break;
 			} else if (i == allWorldPlace.length - 1) {
 				errormsg = 'wrong place';
@@ -100,6 +107,7 @@ function AddWorldData(province, country, date, tod, number) {
 			}
 		}
 	}
+	console.log(allWorldPlace[13]);
 	return errormsg;
 }
 
@@ -176,7 +184,7 @@ function EditWorldData(province, country, date, tod, number) {
 
 function RemoveWorldData(province, country, date, tod) {
     if (allWorldPlace.length == 0) InitializeAllWorldPlace();
-	console.log("Before:\n", allWorldPlace[11]);
+	// console.log("Before:\n", allWorldPlace[13]);
     var result = false;
 	if (tod == 1) {
 		for (var i = 0; i < allWorldPlace.length; ++i) {
@@ -192,7 +200,7 @@ function RemoveWorldData(province, country, date, tod) {
 						temp.getFullYear();
 					if (d == date) {
 						delete allWorldPlace[i].numConfirmed[key];
-						allWorldPlace[i].currentNumConfirmed = analytics.GetMostRecentValue(allWorldPlace[i].numConfirmed);
+						allWorldPlace[i].currentNumConfirmed = GetMostRecentValue(allWorldPlace[i].numConfirmed);
 						console.log('DELETED');
 						result = true;
 						break;
@@ -215,7 +223,7 @@ function RemoveWorldData(province, country, date, tod) {
 						temp.getFullYear();
 					if (d == date) {
 						delete allWorldPlace[i].numDeaths[key];
-						allWorldPlace[i].currentNumDeaths = analytics.GetMostRecentValue(allWorldPlace[i].numDeaths);
+						allWorldPlace[i].currentNumDeaths = GetMostRecentValue(allWorldPlace[i].numDeaths);
 						console.log('DELETED DEATH');
 						result = true;
 						break;
@@ -238,7 +246,7 @@ function RemoveWorldData(province, country, date, tod) {
 						temp.getFullYear();
 					if (d == date) {
 						delete allWorldPlace[i].numRecovered[key];
-						allWorldPlace[i].currentNumRecovered = analytics.GetMostRecentValue(allWorldPlace[i].numRecovered);
+						allWorldPlace[i].currentNumRecovered = GetMostRecentValue(allWorldPlace[i].numRecovered);
 						console.log('DELETED RECOVERED');
 						result = true;
 						break;
@@ -247,7 +255,7 @@ function RemoveWorldData(province, country, date, tod) {
 			}
 		}
 	}
-	console.log("After:\n", allWorldPlace[11]);
+	// console.log("After:\n", allWorldPlace[11]);
 	return result;
 }
 
@@ -315,6 +323,8 @@ function GetWorldPopulationAnalysis(country, province) {
 
 function GetRows(country, province, tod) {
 	// Get respective data using the query parameters
+	if (allWorldPlace.length == 0) InitializeAllWorldPlace();
+
 	var selectedCountry = [];
 	
 	for (var i = 0; i < allWorldPlace.length; ++i) {
@@ -389,6 +399,20 @@ function SaveRecords() {
     writeCSVModule.RecordWorldData(allWorldPlace);
 }
 
+// Input: dictionary of {Date, number of cases, deaths, or recovered}.
+// Output: Number of cases for the most recent date. If the dictionary is empty, returns 0.
+function GetMostRecentValue(dictionary) {
+    if (dictionary.length == 0) return 0;
+
+    var mostResentDate = new Date(1900, 0, 1);
+
+    for (var key in dictionary) {
+        if (new Date(key) > mostResentDate) mostResentDate = new Date(key);
+    }
+
+    return dictionary[mostResentDate];
+}
+
 module.exports = {
 	InitializeAllWorldPlace: InitializeAllWorldPlace,
 	AddWorldData: AddWorldData,
@@ -397,5 +421,6 @@ module.exports = {
 	GetTwoPlacesComparison: GetTwoPlacesComparison,
 	GetWorldPopulationAnalysis: GetWorldPopulationAnalysis,
 	GetRows: GetRows,
-	SaveRecords: SaveRecords
+	SaveRecords: SaveRecords,
+	GetMostRecentValue: GetMostRecentValue
 }
