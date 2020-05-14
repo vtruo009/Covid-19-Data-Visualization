@@ -50,7 +50,7 @@ module.exports = {
 			this.numConfirmed = {};
 
 			this.currentNumDeaths = 0;
-			this.currentNumRecovered = 0;
+			//this.currentNumRecovered = 0;
 			this.currentNumConfirmed = 0;
 
 		}
@@ -86,6 +86,14 @@ module.exports = {
 					this.numDeaths[dates[i]] = parseInt(values[i]);
 				}
 			}
+			var mostRecentDate = new Date(1900, 0, 1);
+
+			for (var key in this.numDeaths) {
+				if (new Date(key) > mostRecentDate) mostRecentDate = new Date(key);
+			}
+		
+			//return dictionary[mostRecentDate];
+			this.currentNumDeaths = this.numDeaths[mostRecentDate];
 		}
 		addNumConfirmed(dates, values) {
 			// dates is a list of Date {1/20/20, 1/21/20, 1/22/20, ...}
@@ -95,7 +103,16 @@ module.exports = {
 				if (!Number.isNaN(dates[i].getMonth()) && !Number.isNaN(parseInt(values[i]))) {
 					this.numConfirmed[dates[i]] = parseInt(values[i]);
 				}
+				
 			}
+			var mostRecentDate = new Date(1900, 0, 1);
+
+			for (var key in this.numConfirmed) {
+				if (new Date(key) > mostRecentDate) mostRecentDate = new Date(key);
+			}
+		
+			//return dictionary[mostRecentDate];
+			this.currentNumConfirmed = this.numConfirmed[mostRecentDate];
 		}
 	},
 
