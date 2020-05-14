@@ -38,7 +38,7 @@ module.exports = {
 	},
 
 	USPlace: class {
-		constructor(state, county) {
+		constructor(state, county, currentNumConfirmed,currentNumDeaths) {
 			this.state = state;
 			this.county = county;
 
@@ -48,9 +48,9 @@ module.exports = {
 			// Dictionary of { <Date, number of Confirmed cases> }
 			this.numConfirmed = 0;
 
-			this.currentNumDeaths = 0;
-			this.currentNumRecovered = 0;
-			this.currentNumConfirmed = 0;
+			this.currentNumDeaths = currentNumDeaths;
+			//this.currentNumRecovered = 0;
+			this.currentNumConfirmed = currentNumConfirmed;
 
 		}
 		addExtraInfo(
@@ -84,7 +84,9 @@ module.exports = {
 				if (!Number.isNaN(dates[i].getMonth()) && !Number.isNaN(parseInt(values[i]))) {
 					this.numDeaths[dates[i]] = parseInt(values[i]);
 				}
+				this.currentNumDeaths = this.numDeaths[dates[i]];
 			}
+			
 		}
 		addNumConfirmed(dates, values) {
 			// dates is a list of Date {1/20/20, 1/21/20, 1/22/20, ...}
@@ -94,6 +96,7 @@ module.exports = {
 				if (!Number.isNaN(dates[i].getMonth()) && !Number.isNaN(parseInt(values[i]))) {
 					this.numConfirmed[dates[i]] = parseInt(values[i]);
 				}
+				this.currentNumConfirmed = this.numConfirmed[dates[i]];
 			}
 		}
 	},

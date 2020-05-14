@@ -8,7 +8,7 @@ function InitializeAllUSPlace(){
     allUSPlaces = readCSVModule.LoadUSData();
 }// read allUSdata and put into array
 
-function AddUSData(county, state, date, tod) {
+function AddUSData(county, state, date, tod, number) {
     
     if(allUSPlaces == undefined){
         InitializeAllUSPlace();
@@ -18,7 +18,7 @@ function AddUSData(county, state, date, tod) {
 	if (tod == 1) {
 		for (var i = 0; i < allUSPlaces.length; ++i) {
 			if (county == allUSPlaces[i].county && state == allUSPlaces[i].state) {
-				for (var key in allUSPlaces[i].currentNumConfirmed) {
+				for (var key in allUSPlaces[i].numConfirmed) {
 					var temp_date = new Date(key);
 					var d =
 						temp_date.getMonth() +
@@ -36,6 +36,9 @@ function AddUSData(county, state, date, tod) {
 				}
 				var temp_date = helper.stringToDate(date);
 				allUSPlaces[i].currentNumConfirmed[temp_date] = number;
+				if(allUSPlaces[i].currentNumDeaths!=number){
+					allUSPlaces[i].currentNumDeaths=number;
+				}
 				break;
 			} else if (i == allUSPlaces.length - 1) {
 				// if its the last element & prog didn't go into the 1st if -> place doesn't exist
@@ -45,7 +48,7 @@ function AddUSData(county, state, date, tod) {
 	} else if (tod == 2) {
 		for (var i = 0; i < allUSPlaces.length; ++i) {
 			if (county == allUSPlaces[i].county && state == allUSPlaces[i].state) {
-				for (var key in allUSPlaces[i].currentNumDeaths) {
+				for (var key in allUSPlaces[i].numDeaths) {
 					var temp_date = new Date(key);
 					var d =
 						temp_date.getMonth() +
@@ -61,7 +64,10 @@ function AddUSData(county, state, date, tod) {
 					}
 				}
 				var temp_date = helper.stringToDate(date);
-				allUSPlaces[i].currentNumConfirmed[temp_date] = number;
+				allUSPlaces[i].numConfirmed[temp_date] = number;
+				if(allUSPlaces[i].currentNumConfirmed!=number){
+					allUSPlaces[i].currentNumConfirmed=number;
+				}
 				break;
 			} else if (i == allUSPlaces.length - 1) {
 				// if its the last element & prog didn't go into the 1st if -> place doesn't exist
