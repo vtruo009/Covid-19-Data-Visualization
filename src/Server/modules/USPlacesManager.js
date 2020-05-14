@@ -35,7 +35,7 @@ function AddUSData(county, state, date, tod, number) {
 					}
 				}
 				var temp_date = helper.stringToDate(date);
-				allUSPlaces[i].currentNumConfirmed[temp_date] = number;
+				allUSPlaces[i].numDeaths[temp_date] = number;
 				if(allUSPlaces[i].currentNumDeaths!=number){
 					allUSPlaces[i].currentNumDeaths=number;
 				}
