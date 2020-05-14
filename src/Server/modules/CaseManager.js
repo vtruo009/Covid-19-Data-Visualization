@@ -21,14 +21,7 @@ function InitializeAllCases() {
 	countries = {};
 	for (var i = 0; i < allCases.length; ++i) {
 		if (!(allCases[i].country in countries)) {
-			countries[allCases[i].country] = new dataClassesModule.Country(
-				0,
-				0,
-				0,
-				0,
-				0,
-				0
-			);
+			countries[allCases[i].country] = new dataClassesModule.Country(0, 0, 0, 0, 0, 0);
 		}
 
 		if (allCases[i].gender == 'female') {
@@ -129,15 +122,7 @@ function AddCase(
 
 	// Modify countries
 	if (!(newCase.country in countries)) {
-		countries[newCase.country] = new dataClassesModule.Country(
-			0,
-			0,
-			0,
-			0,
-			0,
-			0,
-			0
-		);
+		countries[newCase.country] = new dataClassesModule.Country(0, 0, 0, 0, 0, 0, 0);
 	}
 	if (newCase.gender == 'female') {
 		countries[newCase.country].numFemaleConfirmed++;
