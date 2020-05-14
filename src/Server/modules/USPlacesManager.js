@@ -102,6 +102,9 @@ function EditUSData(county, state, date, tod, number) {
 						temp.getFullYear();
 					if (d == date) {
 						allUSPlaces[i].numConfirmed[key] = number;
+						if (allUSPlaces[i].numConfirmed[temp_date] == GetMostRecentValue(allUSPlaces[i].numConfirmed)) {
+							allUSPlaces[i].currentNumConfirmed = number;
+						}
 						result = true;
 						break;
 					}
@@ -122,6 +125,10 @@ function EditUSData(county, state, date, tod, number) {
 						temp.getFullYear();
 					if (d == date) {
 						allUSPlaces[i].numDeaths[key] = number;
+						if (allUSPlaces[i].numDeaths[temp_date] == GetMostRecentValue(allUSPlaces[i].numDeaths)) {
+							allUSPlaces[i].currentNumDeaths = number;
+						}
+						//console.log('hi, updated Deaths')
 						result = true;
 						break;
 					}
@@ -153,6 +160,8 @@ function RemoveUSData(county, state, date, tod) {
 						temp.getFullYear();
 					if (d == date) {
 						delete allUSPlaces[i].numConfirmed[key];
+						allUSPlaces[i].currentNumConfirmed = GetMostRecentValue(allUSPlaces[i].numConfirmed);
+						//upate numConfirmed  and currentNumConfirmed
 						result = true;
 						break;
 					}
@@ -173,6 +182,8 @@ function RemoveUSData(county, state, date, tod) {
 						temp.getFullYear();
 					if (d == date) {
 						delete allUSPlaces[i].numDeaths[key];
+						allUSPlaces[i].currentNumDeaths = GetMostRecentValue(allUSPlaces[i].numDeaths);
+						//console.log('hi, numDeaths delete done here');
 						result = true;
 						break;
 					}
