@@ -338,7 +338,7 @@ function GetGenderData(gender, typeOfData) {
 			);
 			row.push(newItem);
 		}
-	} else if (typeofData == 2) {
+	} else if (typeOfData == 2) {
 		var dayDict = {};
 		for (var i = 0; i < selectedGender.length; ++i) {
 			if (dayDict[selectedGender[i].reportingDateStr]) {
@@ -349,7 +349,7 @@ function GetGenderData(gender, typeOfData) {
 		}
 
 		for (var key in dayDict) {
-			var newItem = new genderReq.GenderDay(key, dayDict[key]);
+			var newItem = new dataClassesModule.GenderDay(key, dayDict[key]);
 			row.push(newItem);
 		}
 	}

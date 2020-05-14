@@ -43,10 +43,10 @@ module.exports = {
 			this.county = county;
 
 			// Dictionary of { <Date, number of Deaths> }
-			this.numDeaths = 0;
+			this.numDeaths = {};
 
 			// Dictionary of { <Date, number of Confirmed cases> }
-			this.numConfirmed = 0;
+			this.numConfirmed = {};
 
 			this.currentNumDeaths = 0;
 			this.currentNumRecovered = 0;
