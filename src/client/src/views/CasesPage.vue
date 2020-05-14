@@ -1,28 +1,38 @@
 <template>
 	<div class="mt-5 fadeIn">
-		<b-form inline @submit="searchCase">
-			<b-input
-				required
-				type="number"
-				placeholder="Case Id"
-				v-model="caseId"
-				:disabled="waitingForResponse"
-			></b-input>
-			<b-button
-				class="ml-3"
-				type="submit"
-				variant="primary"
-				:disabled="waitingForResponse"
-				>Search</b-button
-			>
-			<b-button
-				class="ml-3"
-				variant="primary"
-				@click="showInsertModal"
-				:disabled="waitingForResponse"
-				>Insert Case</b-button
-			>
-			<b-spinner class="ml-4" v-if="waitingForResponse"></b-spinner>
+		<b-form @submit="searchCase">
+			<b-row class="d-flex justify-content-center">
+				<b-col lg="3" sm="8" class="m-2">
+					<b-input
+						required
+						type="number"
+						placeholder="Case Id"
+						v-model="caseId"
+						:disabled="waitingForResponse"
+					></b-input>
+				</b-col>
+				<b-col lg="3" sm="8" class="m-2">
+					<b-button
+						block
+						type="submit"
+						variant="primary"
+						:disabled="waitingForResponse"
+						>Search</b-button
+					>
+				</b-col>
+				<b-col lg="3" sm="8" class="m-2">
+					<b-button
+						block
+						variant="primary"
+						@click="showInsertModal"
+						:disabled="waitingForResponse"
+						>Insert Case</b-button
+					>
+				</b-col>
+				<b-col>
+					<b-spinner v-if="waitingForResponse"></b-spinner>
+				</b-col>
+			</b-row>
 		</b-form>
 
 		<div v-show="caseFound" class="blackBackground p-5 mt-5">
