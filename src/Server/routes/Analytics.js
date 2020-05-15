@@ -7,6 +7,9 @@ const {
 	GetRaceComparison,
 } = require('../modules/CaseManager');
 
+const {GetTwoPlacesComparison , GetWorldPopulationAnalysis } = require('../modules/WorldPlaceManager');
+
+
 router.get('/compareGender', (req, res) => {
 	const genderAnalytics = GetGenderAnalytics(
 		req.query.Country,
@@ -35,20 +38,20 @@ router.get('/compareRace', (req, res) => {
 });
 
 router.get('/compareProvinces', (req, res) => {
-	var twoPlacesComperison = AnalyticsModule.GetTwoPlacesComparison(
+	const twoPlacesComparison = GetTwoPlacesComparison(
 		req.query.Country1,
 		req.query.Province1,
 		req.query.Country2,
 		req.query.Province2,
 		req.query.TypeOfData,
-		false
 	);
 
+	console.log(twoPlacesComparison);
 	res.send({
-		Province1Exists: twoPlacesComperison.place1Value != -1,
-		Province2Exists: twoPlacesComperison.place2Value != -1,
-		Province1NumberOfCases: twoPlacesComperison.place1Value,
-		Province2NumberOfCases: twoPlacesComperison.place2Value,
+		Province1Exists: twoPlacesComparison.place1Value != -1,
+		Province2Exists: twoPlacesComparison.place2Value != -1,
+		Province1NumberOfCases: twoPlacesComparison.place1Value,
+		Province2NumberOfCases: twoPlacesComparison.place2Value,
 	});
 });
 
@@ -85,11 +88,12 @@ router.get('/comparePercentageUS', (req, res) => {
 });
 
 router.get('/comparePercentageWorld', (req, res) => {
-	var populationComparison = AnalyticsModule.GetWorldPopulationAnalysis(
+	const populationComparison = GetWorldPopulationAnalysis(
 		req.query.Country,
 		req.query.Province
 	);
 
+	console.log(populationComparison);
 	res.send({
 		ProvinceExists: populationComparison.confirmed != -1,
 		NumOfRecovered: populationComparison.recovered,
