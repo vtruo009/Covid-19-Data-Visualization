@@ -265,7 +265,7 @@ function RemoveWorldData(province, country, date, tod) {
 	return result;
 }
 
-function GetTwoPlacesComparison(country1, province1, country2, province2, tod) {
+function GetTwoWorldPlacesComparison(country1, province1, country2, province2, tod) {
 	if (allWorldPlace.length == 0) InitializeAllWorldPlace();
 
     var province1Data = null;
@@ -331,7 +331,6 @@ function GetWorldPopulationAnalysis(country, province) {
 }
 
 function GetRows(country, province, tod) {
-	// Get respective data using the query parameters
 	if (allWorldPlace.length == 0) InitializeAllWorldPlace();
 
 	var selectedCountry = [];
@@ -427,7 +426,7 @@ module.exports = {
 	AddWorldData: AddWorldData,
 	EditWorldData: EditWorldData,
 	RemoveWorldData: RemoveWorldData,
-	GetTwoPlacesComparison: GetTwoPlacesComparison,
+	GetTwoWorldPlacesComparison: GetTwoWorldPlacesComparison,
 	GetWorldPopulationAnalysis: GetWorldPopulationAnalysis,
 	GetRows: GetRows,
 	SaveRecords: SaveRecords,
