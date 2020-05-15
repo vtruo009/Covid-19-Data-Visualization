@@ -1,14 +1,12 @@
 var express = require('express');
 var router = express.Router();
-
-const AnalyticsModule = require('../modules/Analytics.js');
 const {
 	GetGenderAnalytics,
 	GetRaceComparison,
 } = require('../modules/CaseManager');
 
-const {GetTwoPlacesComparison , GetWorldPopulationAnalysis } = require('../modules/WorldPlaceManager');
-
+const {GetTwoWorldPlacesComparison , GetWorldPopulationAnalysis } = require('../modules/WorldPlaceManager');
+const { GetTwoUSPlacesComparison, GetUSPopulationAnalysis   } = require('../modules/USPlacesManager')
 
 router.get('/compareGender', (req, res) => {
 	const genderAnalytics = GetGenderAnalytics(
@@ -38,7 +36,7 @@ router.get('/compareRace', (req, res) => {
 });
 
 router.get('/compareProvinces', (req, res) => {
-	const twoPlacesComparison = GetTwoPlacesComparison(
+	const twoPlacesComparison = GetTwoWorldPlacesComparison(
 		req.query.Country1,
 		req.query.Province1,
 		req.query.Country2,
@@ -55,38 +53,6 @@ router.get('/compareProvinces', (req, res) => {
 	});
 });
 
-router.get('/compareCounties', (req, res) => {
-	var twoPlacesComperison = AnalyticsModule.GetTwoPlacesComparison(
-		req.query.State1,
-		req.query.County1,
-		req.query.State2,
-		req.query.County2,
-		req.query.TypeOfData,
-		true
-	);
-
-	res.send({
-		County1Exists: twoPlacesComperison.place1Value != -1,
-		County2Exists: twoPlacesComperison.place2Value != -1,
-		County1NumberOfCases: twoPlacesComperison.place1Value,
-		County2NumberOfCases: twoPlacesComperison.place2Value,
-	});
-});
-
-router.get('/comparePercentageUS', (req, res) => {
-	var populationComparison = AnalyticsModule.GetUSPopulationAnalysis(
-		req.query.State,
-		req.query.County
-	);
-
-	res.send({
-		CountyExists: populationComparison.confirmed != -1,
-		NumOfUnaffected: populationComparison.unaffected,
-		NumOfDeath: populationComparison.deaths,
-		NumOfConfirmed: populationComparison.confirmed,
-	});
-});
-
 router.get('/comparePercentageWorld', (req, res) => {
 	const populationComparison = GetWorldPopulationAnalysis(
 		req.query.Country,
@@ -97,6 +63,37 @@ router.get('/comparePercentageWorld', (req, res) => {
 	res.send({
 		ProvinceExists: populationComparison.confirmed != -1,
 		NumOfRecovered: populationComparison.recovered,
+		NumOfDeath: populationComparison.deaths,
+		NumOfConfirmed: populationComparison.confirmed,
+	});
+});
+
+router.get('/compareCounties', (req, res) => {
+	const twoPlacesComparison = GetTwoUSPlacesComparison(
+		req.query.State1,
+		req.query.County1,
+		req.query.State2,
+		req.query.County2,
+		req.query.TypeOfData,
+	);
+
+	res.send({
+		County1Exists: twoPlacesComparison.place1Value != -1,
+		County2Exists: twoPlacesComparison.place2Value != -1,
+		County1NumberOfCases: twoPlacesComparison.place1Value,
+		County2NumberOfCases: twoPlacesComparison.place2Value,
+	});
+});
+
+router.get('/comparePercentageUS', (req, res) => {
+	const populationComparison = GetUSPopulationAnalysis(
+		req.query.State,
+		req.query.County
+	);
+
+	res.send({
+		CountyExists: populationComparison.confirmed != -1,
+		NumOfUnaffected: populationComparison.unaffected,
 		NumOfDeath: populationComparison.deaths,
 		NumOfConfirmed: populationComparison.confirmed,
 	});
