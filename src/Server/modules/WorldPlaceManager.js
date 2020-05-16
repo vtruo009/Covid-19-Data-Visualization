@@ -265,7 +265,9 @@ function RemoveWorldData(province, country, date, tod) {
 	return result;
 }
 
-function GetTwoPlacesComparison(country1, province1, country2, province2, tod) {
+function GetTwoWorldPlacesComparison(country1, province1, country2, province2, tod) {
+	if (allWorldPlace.length == 0) InitializeAllWorldPlace();
+
     var province1Data = null;
     var province2Data = null;
 
@@ -287,16 +289,16 @@ function GetTwoPlacesComparison(country1, province1, country2, province2, tod) {
 	var place1Value, place2Value;
 
     switch (tod) {
-		case '1': // confirmed
+		case "1": // confirmed
 			console.log("in case");
             place1Value = province1Data.currentNumConfirmed;
             place2Value = province2Data.currentNumConfirmed;
             break;
-        case '2': // dead
+        case "2": // dead
             place1Value = province1Data.currentNumDeaths;
             place2Value = province2Data.currentNumDeaths;
             break;
-        case '3': // recovered
+        case "3": // recovered
             place1Value = province1Data.currentNumRecovered;
             place2Value = province2Data.currentNumRecovered;
             break;
@@ -306,8 +308,9 @@ function GetTwoPlacesComparison(country1, province1, country2, province2, tod) {
 }
 
 function GetWorldPopulationAnalysis(country, province) {
-    var recovered, deaths, confirmed;
+	if (allWorldPlace.length == 0) InitializeAllWorldPlace();
 
+    var recovered, deaths, confirmed;
     var provinceData = null;
 
     for (var i = 0; i < allWorldPlace.length; ++i) {
@@ -328,7 +331,6 @@ function GetWorldPopulationAnalysis(country, province) {
 }
 
 function GetRows(country, province, tod) {
-	// Get respective data using the query parameters
 	if (allWorldPlace.length == 0) InitializeAllWorldPlace();
 
 	var selectedCountry = [];
@@ -424,7 +426,7 @@ module.exports = {
 	AddWorldData: AddWorldData,
 	EditWorldData: EditWorldData,
 	RemoveWorldData: RemoveWorldData,
-	GetTwoPlacesComparison: GetTwoPlacesComparison,
+	GetTwoWorldPlacesComparison: GetTwoWorldPlacesComparison,
 	GetWorldPopulationAnalysis: GetWorldPopulationAnalysis,
 	GetRows: GetRows,
 	SaveRecords: SaveRecords,

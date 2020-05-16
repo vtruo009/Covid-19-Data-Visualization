@@ -6,7 +6,7 @@ const writeCSVModule = require('../modules/WriteCSV.js');
 var allCases = undefined;
 // Dictionary of <string, Country>. String is country name like "China"
 var countries = undefined;
-// Dictionary of <int, dictionary<string, int>>. 
+// Dictionary of <int, dictionary<string, int>>.
 // The key int is option. (1 = all population, 2 = female, 3 = male, 4 = 80 +, ...)
 // The value string is country name.
 // The value int is number of people.
@@ -18,28 +18,29 @@ function InitializeAllCases() {
 	allCases = readCSVModule.LoadAllCases();
 
 	// Populate countries
-	countries = {}
+	countries = {};
 	for (var i = 0; i < allCases.length; ++i) {
 		if (!(allCases[i].country in countries)) {
 			countries[allCases[i].country] = new dataClassesModule.Country(0, 0, 0, 0, 0, 0);
 		}
-		
-		if (allCases[i].gender == "female") {
+
+		if (allCases[i].gender == 'female') {
 			countries[allCases[i].country].numFemaleConfirmed += 1;
 			if (allCases[i].dead) countries[allCases[i].country].numFemaleDied++;
-			if (allCases[i].recovered) countries[allCases[i].country].numFemaleRecovered++;
-		}
-		else if (allCases[i].gender == "male") {
+			if (allCases[i].recovered)
+				countries[allCases[i].country].numFemaleRecovered++;
+		} else if (allCases[i].gender == 'male') {
 			countries[allCases[i].country].numMaleConfirmed++;
 			if (allCases[i].dead) countries[allCases[i].country].numMaleDied++;
-			if (allCases[i].recovered) countries[allCases[i].country].numMaleRecovered++;
+			if (allCases[i].recovered)
+				countries[allCases[i].country].numMaleRecovered++;
 		}
 	}
 
 	// Populate raceComparisonData
-	raceComparisonData = {}
+	raceComparisonData = {};
 	for (var i = 1; i <= 8; ++i) {
-		raceComparisonData[i] = {}
+		raceComparisonData[i] = {};
 	}
 
 	for (var i = 0; i < allCases.length; ++i) {
@@ -49,23 +50,19 @@ function InitializeAllCases() {
 		// Option 1: All population
 
 		// Option 2: Female
-		if (allCases[i].gender == "female") optionsToAddData.push(2);
+		if (allCases[i].gender == 'female') optionsToAddData.push(2);
 
 		// Option 3: Male
-		if (allCases[i].gender == "male") optionsToAddData.push(3);
+		if (allCases[i].gender == 'male') optionsToAddData.push(3);
 
 		// Option 4: 80 +
 		if (allCases[i].age > 80) optionsToAddData.push(4);
-
 		// Option 5: 80 +
-		else if (allCases[i].age > 60 ) optionsToAddData.push(5);
-
+		else if (allCases[i].age > 60) optionsToAddData.push(5);
 		// Option 6: 80 +
 		else if (allCases[i].age > 40) optionsToAddData.push(6);
-
 		// Option 7: 80 +
 		else if (allCases[i].age > 20) optionsToAddData.push(7);
-
 		// Option 8: 80 +
 		else if (allCases[i].age > 0) optionsToAddData.push(8);
 
@@ -76,11 +73,20 @@ function InitializeAllCases() {
 				raceComparisonData[option][countryName] = 0;
 			}
 			raceComparisonData[option][allCases[i].country]++;
-        }
+		}
 	}
 }
 
-function AddCase(reportingDate, country, age, gender, recovered, dead, location, id) {
+function AddCase(
+	reportingDate,
+	country,
+	age,
+	gender,
+	recovered,
+	dead,
+	location,
+	id
+) {
 	if (allCases == undefined) InitializeAllCases();
 
 	for (var i = 0; i < allCases.length; ++i) {
@@ -118,11 +124,11 @@ function AddCase(reportingDate, country, age, gender, recovered, dead, location,
 	if (!(newCase.country in countries)) {
 		countries[newCase.country] = new dataClassesModule.Country(0, 0, 0, 0, 0, 0, 0);
 	}
-	if (newCase.gender == "female") {
+	if (newCase.gender == 'female') {
 		countries[newCase.country].numFemaleConfirmed++;
 		if (newCase.dead) countries[newCase.country].numFemaleDied++;
 		if (newCase.recovered) countries[newCase.country].numFemaleRecovered++;
-	} else if (newCase.gender == "male") {
+	} else if (newCase.gender == 'male') {
 		countries[newCase.country].numMaleConfirmed++;
 		if (newCase.dead) countries[newCase.country].numMaleDied++;
 		if (newCase.recovered) countries[newCase.country].numMaleRecovered++;
@@ -133,23 +139,19 @@ function AddCase(reportingDate, country, age, gender, recovered, dead, location,
 	// Option 1: All population
 
 	// Option 2: Female
-	if (newCase.gender == "female") optionsToAddData.push(2);
+	if (newCase.gender == 'female') optionsToAddData.push(2);
 
 	// Option 3: Male
-	if (newCase.gender == "male") optionsToAddData.push(3);
+	if (newCase.gender == 'male') optionsToAddData.push(3);
 
 	// Option 4: 80 +
 	if (newCase.age > 80) optionsToAddData.push(4);
-
 	// Option 5: 80 +
 	else if (newCase.age > 60) optionsToAddData.push(5);
-
 	// Option 6: 80 +
 	else if (newCase.age > 40) optionsToAddData.push(6);
-
 	// Option 7: 80 +
 	else if (newCase.age > 20) optionsToAddData.push(7);
-
 	// Option 8: 80 +
 	else if (newCase.age > 0) optionsToAddData.push(8);
 
@@ -164,7 +166,16 @@ function AddCase(reportingDate, country, age, gender, recovered, dead, location,
 	return true;
 }
 
-function EditCase(reportingDate, country, age, gender, recovered, dead, location, id) {
+function EditCase(
+	reportingDate,
+	country,
+	age,
+	gender,
+	recovered,
+	dead,
+	location,
+	id
+) {
 	if (allCases == undefined) InitializeAllCases();
 
 	var removeResult = RemoveCase(id);
@@ -180,14 +191,16 @@ function RemoveCase(id) {
 	for (var i = 0; i < allCases.length; ++i) {
 		if (allCases[i].id == id) {
 			// Modify countries
-			if (allCases[i].gender == "female") {
+			if (allCases[i].gender == 'female') {
 				countries[allCases[i].country].numFemaleConfirmed--;
 				if (allCases[i].dead) countries[allCases[i].country].numFemaleDied--;
-				if (allCases[i].recovered) countries[allCases[i].country].numFemaleRecovered--;
-			} else if (allCases[i].gender == "male") {
+				if (allCases[i].recovered)
+					countries[allCases[i].country].numFemaleRecovered--;
+			} else if (allCases[i].gender == 'male') {
 				countries[allCases[i].country].numMaleConfirmed--;
 				if (allCases[i].dead) countries[allCases[i].country].numMaleDied--;
-				if (allCases[i].recovered) countries[allCases[i].country].numMaleRecovered--;
+				if (allCases[i].recovered)
+					countries[allCases[i].country].numMaleRecovered--;
 			}
 
 			// Modify raceComparisonData
@@ -195,23 +208,19 @@ function RemoveCase(id) {
 			// Option 1: All population
 
 			// Option 2: Female
-			if (allCases[i].gender == "female") optionsToRemoveData.push(2);
+			if (allCases[i].gender == 'female') optionsToRemoveData.push(2);
 
 			// Option 3: Male
-			if (allCases[i].gender == "male") optionsToRemoveData.push(3);
+			if (allCases[i].gender == 'male') optionsToRemoveData.push(3);
 
 			// Option 4: 80 +
 			if (allCases[i].age > 80) optionsToRemoveData.push(4);
-
 			// Option 5: 80 +
 			else if (allCases[i].age > 60) optionsToRemoveData.push(5);
-
 			// Option 6: 80 +
 			else if (allCases[i].age > 40) optionsToRemoveData.push(6);
-
 			// Option 7: 80 +
 			else if (allCases[i].age > 20) optionsToRemoveData.push(7);
-
 			// Option 8: 80 +
 			else if (allCases[i].age > 0) optionsToRemoveData.push(8);
 
@@ -240,30 +249,29 @@ function GetCaseById(id) {
 	for (var i = 0; i < allCases.length; ++i) {
 		if (allCases[i].id == id) return allCases[i];
 	}
-	return undefined
+	return undefined;
 }
 
 function GetGenderAnalytics(country, typeOfData) {
 	if (allCases == undefined) InitializeAllCases();
-
 	var femaleNum, maleNum;
 
 	switch (typeOfData) {
-		case 1: // confirmed
+		case '1': // confirmed
 			femaleNum = countries[country].numFemaleConfirmed;
 			maleNum = countries[country].numMaleConfirmed;
 			break;
-		case 2: // dead
+		case '2': // dead
 			femaleNum = countries[country].numFemaleDied;
 			maleNum = countries[country].numMaleDied;
 			break;
-		case 3: // recovered
+		case '3': // recovered
 			femaleNum = countries[country].numFemaleRecovered;
 			maleNum = countries[country].numMaleRecovered;
 			break;
 	}
 
-	return { femaleNum: femaleNum, maleNum: maleNum }
+	return { femaleNum, maleNum };
 }
 
 function GetRaceComparison(option) {
@@ -462,7 +470,7 @@ function GetAgeData(ageRange, typeOfData) {
 		}
 	}
 
-	return row
+	return row;
 }
 
 module.exports = {
@@ -475,5 +483,5 @@ module.exports = {
 	GetGenderAnalytics: GetGenderAnalytics,
 	GetRaceComparison: GetRaceComparison,
 	GetGenderData: GetGenderData,
-	GetAgeData: GetAgeData
-}
+	GetAgeData: GetAgeData,
+};

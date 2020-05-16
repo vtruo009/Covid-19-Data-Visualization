@@ -5,15 +5,12 @@ const writeCSVModule = require('../modules/WriteCSV.js');
 
 var allUSPlaces = [];
 
-function InitializeAllUSPlace(){
-    allUSPlaces = readCSVModule.LoadUSData();
-}// read allUSdata and put into array
+function InitializeAllUSPlace() {
+	allUSPlaces = readCSVModule.LoadUSData();
+} // read allUSdata and put into array
 
 function AddUSData(county, state, date, tod, number) {
-    
-    if(allUSPlaces == undefined){
-        InitializeAllUSPlace();
-    }
+	if (allUSPlaces.length == 0) InitializeAllUSPlace();
 
 	var errormsg = 'no error';
 	if (tod == 1) {
@@ -37,9 +34,12 @@ function AddUSData(county, state, date, tod, number) {
 				}
 				var temp_date = helper.stringToDate(date);
 				allUSPlaces[i].numDeaths[temp_date] = number;
-				if(allUSPlaces[i].numDeaths[temp_date] == GetMostRecentValue(allUSPlaces[i].numDeaths)){
-					allUSPlaces[i].currentNumDeaths=number;
-				}//check if the number is the most recent number
+				if (
+					allUSPlaces[i].numDeaths[temp_date] ==
+					GetMostRecentValue(allUSPlaces[i].numDeaths)
+				) {
+					allUSPlaces[i].currentNumDeaths = number;
+				} //check if the number is the most recent number
 				break;
 			} else if (i == allUSPlaces.length - 1) {
 				// if its the last element & prog didn't go into the 1st if -> place doesn't exist
@@ -66,8 +66,11 @@ function AddUSData(county, state, date, tod, number) {
 				}
 				var temp_date = helper.stringToDate(date);
 				allUSPlaces[i].numConfirmed[temp_date] = number;
-				if(allUSPlaces[i].numConfirmed[temp_date] == GetMostRecentValue(allUSPlaces[i].numConfirmed)){
-					allUSPlaces[i].currentNumConfirmed=number;
+				if (
+					allUSPlaces[i].numConfirmed[temp_date] ==
+					GetMostRecentValue(allUSPlaces[i].numConfirmed)
+				) {
+					allUSPlaces[i].currentNumConfirmed = number;
 				}
 				break;
 			} else if (i == allUSPlaces.length - 1) {
@@ -77,16 +80,13 @@ function AddUSData(county, state, date, tod, number) {
 			}
 		}
 	}
-	
 
 	return errormsg;
 }
 
 function EditUSData(county, state, date, tod, number) {
-    if(allUSPlaces == undefined){
-        InitializeAllUSPlace();
-    }
-    var result = false;
+	if (allUSPlaces.length == 0) InitializeAllUSPlace();
+	var result = false;
 	if (tod == 1) {
 		console.log(allUSPlaces.length);
 		for (var i = 0; i < allUSPlaces.length; ++i) {
@@ -102,7 +102,10 @@ function EditUSData(county, state, date, tod, number) {
 						temp.getFullYear();
 					if (d == date) {
 						allUSPlaces[i].numConfirmed[key] = number;
-						if (allUSPlaces[i].numConfirmed[temp] == GetMostRecentValue(allUSPlaces[i].numConfirmed)) {
+						if (
+							allUSPlaces[i].numConfirmed[temp] ==
+							GetMostRecentValue(allUSPlaces[i].numConfirmed)
+						) {
 							allUSPlaces[i].currentNumConfirmed = number;
 						}
 						result = true;
@@ -125,7 +128,10 @@ function EditUSData(county, state, date, tod, number) {
 						temp.getFullYear();
 					if (d == date) {
 						allUSPlaces[i].numDeaths[key] = number;
-						if (allUSPlaces[i].numDeaths[temp] == GetMostRecentValue(allUSPlaces[i].numDeaths)) {
+						if (
+							allUSPlaces[i].numDeaths[temp] ==
+							GetMostRecentValue(allUSPlaces[i].numDeaths)
+						) {
 							allUSPlaces[i].currentNumDeaths = number;
 						}
 						//console.log('hi, updated Deaths')
@@ -139,11 +145,8 @@ function EditUSData(county, state, date, tod, number) {
 	return result;
 }
 
-
 function RemoveUSData(county, state, date, tod) {
-    if(allUSPlaces == undefined){
-        InitializeAllUSPlace();
-    }
+	if (allUSPlaces.length == 0) InitializeAllUSPlace();
 	var result = false;
 	if (tod == 1) {
 		console.log(allUSPlaces.length);
@@ -160,7 +163,9 @@ function RemoveUSData(county, state, date, tod) {
 						temp.getFullYear();
 					if (d == date) {
 						delete allUSPlaces[i].numConfirmed[key];
-						allUSPlaces[i].currentNumConfirmed = GetMostRecentValue(allUSPlaces[i].numConfirmed);
+						allUSPlaces[i].currentNumConfirmed = GetMostRecentValue(
+							allUSPlaces[i].numConfirmed
+						);
 						//upate numConfirmed  and currentNumConfirmed
 						result = true;
 						break;
@@ -182,7 +187,9 @@ function RemoveUSData(county, state, date, tod) {
 						temp.getFullYear();
 					if (d == date) {
 						delete allUSPlaces[i].numDeaths[key];
-						allUSPlaces[i].currentNumDeaths = GetMostRecentValue(allUSPlaces[i].numDeaths);
+						allUSPlaces[i].currentNumDeaths = GetMostRecentValue(
+							allUSPlaces[i].numDeaths
+						);
 						console.log('hi, numDeaths delete done here');
 						result = true;
 						break;
@@ -195,75 +202,76 @@ function RemoveUSData(county, state, date, tod) {
 }
 // function SaveRecords()
 // A void function that saves allUSPlace (Maybe modified) into csv.
-function SaveRecords(){
-    if(allUSPlaces == undefined){
-        InitializeAllUSPlace();
-    }
-    writeCSVModule.RecordUSData(allUSPlaces);
+function SaveRecords() {
+	if (allUSPlaces.length == 0) InitializeAllUSPlace();
+	writeCSVModule.RecordUSData(allUSPlaces);
 }
 
-function GetTwoPlacesComparison(state1, county1, state2, county2, typeOfData) {
-    if(allUSPlaces == undefined){
-        InitializeAllUSPlace();
-    }
-    var county1Data = null;
-    var county2Data = null;
+function GetTwoUSPlacesComparison(
+	state1,
+	county1,
+	state2,
+	county2,
+	typeOfData
+) {
+	if (allUSPlaces.length == 0) InitializeAllUSPlace();
 
-        for (var i = 0; i < allUSPlaces.length; ++i) {
-            if (allUSPlaces[i].state == state1 && allUSPlaces[i].county == county1) {
-                county1Data = allUSPlaces[i];
-            }
-            if (allUSPlaces[i].state == state2 && allUSPlaces[i].county == county2) {
-                county2Data = allUSPlaces[i];
-            }
-        }
+	var county1Data = null;
+	var county2Data = null;
 
-    if (county1Data == null || county2Data == null) {
-        place1Value = (county1Data == null) ? -1 : 0;
-        place2Value = (county2Data == null) ? -1 : 0;
-        return { place1Value: place1Value, place2Value: place2Value }
-    }
+	for (var i = 0; i < allUSPlaces.length; ++i) {
+		if (allUSPlaces[i].state == state1 && allUSPlaces[i].county == county1) {
+			county1Data = allUSPlaces[i];
+		}
+		if (allUSPlaces[i].state == state2 && allUSPlaces[i].county == county2) {
+			county2Data = allUSPlaces[i];
+		}
+	}
 
-    var place1Value, place2Value;
+	if (county1Data == null || county2Data == null) {
+		place1Value = county1Data == null ? -1 : 0;
+		place2Value = county2Data == null ? -1 : 0;
+		return { place1Value: place1Value, place2Value: place2Value };
+	}
 
-    switch (typeOfData) {
-        case '1': // confirmed
-            place1Value = county1Data.currentNumConfirmed;
-            place2Value = county2Data.currentNumConfirmed;
-            break;
-        case '2': // dead
-            place1Value = county1Data.currentNumDeaths;
-            place2Value = county2Data.currentNumDeaths;
-            break;
-    }
+	var place1Value, place2Value;
 
-    return { place1Value: place1Value, place2Value: place2Value }
+	switch (typeOfData) {
+		case '1': // confirmed
+			place1Value = county1Data.currentNumConfirmed;
+			place2Value = county2Data.currentNumConfirmed;
+			break;
+		case '2': // dead
+			place1Value = county1Data.currentNumDeaths;
+			place2Value = county2Data.currentNumDeaths;
+			break;
+	}
+
+	return { place1Value: place1Value, place2Value: place2Value };
 }
-
 
 function GetUSPopulationAnalysis(state, county) {
-    if(allUSPlaces == undefined){
-        InitializeAllUSPlace();
-    }
-    var unaffected, deaths, confirmed;
+	if (allUSPlaces.length == 0) InitializeAllUSPlace();
 
-    var countyData = null;
+	var unaffected, deaths, confirmed;
+	var countyData = null;
 
-    for (var i = 0; i < allUSPlaces.length; ++i) {
-        if (allUSPlaces[i].state == state && allUSPlaces[i].county == county) {
-            countyData = allUSPlaces[i];
-        }
-    }
+	for (var i = 0; i < allUSPlaces.length; ++i) {
+		if (allUSPlaces[i].state == state && allUSPlaces[i].county == county) {
+			countyData = allUSPlaces[i];
+		}
+	}
 
-    if (countyData == null) { // The requested county does not exist.
-        return { unaffected: -1, deaths: -1, confirmed: -1  }
-    }
+	if (countyData == null) {
+		// The requested county does not exist.
+		return { unaffected: -1, deaths: -1, confirmed: -1 };
+	}
 
-    deaths = countyData.currentNumDeaths;
-    confirmed = countyData.currentNumConfirmed;
-    unaffected = countyData.population - deaths - confirmed;
+	deaths = countyData.currentNumDeaths;
+	confirmed = countyData.currentNumConfirmed;
+	unaffected = countyData.population - deaths - confirmed;
 
-    return { unaffected: unaffected, deaths: deaths, confirmed: confirmed }
+	return { unaffected: unaffected, deaths: deaths, confirmed: confirmed };
 }
 
 // function GetRows(county, state, typeOfData)
@@ -271,17 +279,14 @@ function GetUSPopulationAnalysis(state, county) {
 // Similar to what we do in routes/USData.js.
 // We want to return “row”.
 // We want to use this function in routes/USData.js.
-function GetRows(county, state, typeOfData){
-    if(allUSPlaces == undefined){
-        InitializeAllUSPlace();
-    }
-    var selectedInUS = [];
+function GetRows(county, state, typeOfData) {
+	if (allUSPlaces.length == 0) InitializeAllUSPlace();
+
+	var selectedInUS = [];
+
 	for (var i = 0; i < allUSPlaces.length; ++i) {
 		// console.log(USData[i].county);
-		if (
-			county == allUSPlaces[i].county &&
-			state == allUSPlaces[i].state
-		) {
+		if (county == allUSPlaces[i].county && state == allUSPlaces[i].state) {
 			selectedInUS.push(allUSPlaces[i]);
 		}
 	}
@@ -323,20 +328,20 @@ function GetRows(county, state, typeOfData){
 				row.push(newItem);
 			}
 		}
-    }
-    return row;
+	}
+	return row;
 }
 function GetMostRecentValue(dictionary) {
-    if (dictionary.length == 0) return 0;
+	if (dictionary.length == 0) return 0;
 
-    var mostResentDate = new Date(1900, 0, 1);
+	var mostResentDate = new Date(1900, 0, 1);
 
-    for (var key in dictionary) {
-        if (new Date(key) > mostResentDate) mostResentDate = new Date(key);
-    }
+	for (var key in dictionary) {
+		if (new Date(key) > mostResentDate) mostResentDate = new Date(key);
+	}
 
-    return dictionary[mostResentDate];
-}//for currentNumConfirmed
+	return dictionary[mostResentDate];
+} //for currentNumConfirmed
 
 module.exports = {
 	InitializeAllUSPlace: InitializeAllUSPlace,
@@ -344,8 +349,8 @@ module.exports = {
 	EditUSData: EditUSData,
 	RemoveUSData: RemoveUSData,
 	SaveRecords: SaveRecords,
-	GetTwoPlacesComparison: GetTwoPlacesComparison,
+	GetTwoUSPlacesComparison: GetTwoUSPlacesComparison,
 	GetUSPopulationAnalysis: GetUSPopulationAnalysis,
 	GetRows: GetRows,
-	GetMostRecentValue: GetMostRecentValue
-}
+	GetMostRecentValue: GetMostRecentValue,
+};
