@@ -4,7 +4,7 @@ var router = express.Router();
 
 //add require (../USPlacesManager.js)
 //get of whats inside router
-const ModUSPlacesManager = require('../USPlacesManager');
+const ModUSPlacesManager = require('../modules/USPlacesManager.js');
 router.get('/search', (req, res) => {
 	console.log(req.query);
 	res.send({
