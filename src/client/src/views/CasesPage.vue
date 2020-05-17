@@ -29,9 +29,6 @@
 						>Insert Case</b-button
 					>
 				</b-col>
-				<b-col>
-					<b-spinner v-if="waitingForResponse"></b-spinner>
-				</b-col>
 			</b-row>
 		</b-form>
 
