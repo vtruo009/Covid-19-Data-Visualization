@@ -1,18 +1,21 @@
 var express = require('express');
 var router = express.Router();
-const {
-	GetGenderAnalytics,
-	GetRaceComparison,
-} = require('../modules/CaseManager');
 
-const {GetTwoWorldPlacesComparison , GetWorldPopulationAnalysis } = require('../modules/WorldPlaceManager');
-const { GetTwoUSPlacesComparison, GetUSPopulationAnalysis   } = require('../modules/USPlacesManager')
+const W = require('../modules/WorldPlaceManager.js');
+const U = require('../modules/USPlacesManager.js');
+const C = require('../modules/CaseManager.js');
+
+const { performance } = require('perf_hooks');
 
 router.get('/compareGender', (req, res) => {
-	const genderAnalytics = GetGenderAnalytics(
+	const t0 = performance.now();
+	const genderAnalytics = C.GetGenderAnalytics(
 		req.query.Country,
 		req.query.TypeOfData
 	);
+	
+	const t1 = performance.now();
+	console.log(`Call to compareGender takes ${t1-t0} milliseconds.`);
 
 	if (genderAnalytics == null) {
 		res.send({
@@ -30,21 +33,26 @@ router.get('/compareGender', (req, res) => {
 });
 
 router.get('/compareRace', (req, res) => {
+	const t0 = performance.now();
 	res.send({
-		CountryNumberDict: GetRaceComparison(req.query.Option),
+		CountryNumberDict: C.GetRaceComparison(req.query.Option),
 	});
+	const t1 = performance.now();
+	console.log(`Call to compareRace took ${t1-t0} milliseconds.`);
 });
 
 router.get('/compareProvinces', (req, res) => {
-	const twoPlacesComparison = GetTwoWorldPlacesComparison(
+	const t0 = performance.now();
+	const twoPlacesComparison = W.GetTwoWorldPlacesComparison(
 		req.query.Country1,
 		req.query.Province1,
 		req.query.Country2,
 		req.query.Province2,
 		req.query.TypeOfData,
 	);
-
-	console.log(twoPlacesComparison);
+	const t1 = performance.now();
+	console.log(`Call to compareProvinces took ${t1-t0} milliseconds.`);
+	// console.log(twoPlacesComparison);
 	res.send({
 		Province1Exists: twoPlacesComparison.place1Value != -1,
 		Province2Exists: twoPlacesComparison.place2Value != -1,
@@ -54,12 +62,14 @@ router.get('/compareProvinces', (req, res) => {
 });
 
 router.get('/comparePercentageWorld', (req, res) => {
-	const populationComparison = GetWorldPopulationAnalysis(
+	const t0 = performance.now();
+	const populationComparison = W.GetWorldPopulationAnalysis(
 		req.query.Country,
 		req.query.Province
 	);
-
-	console.log(populationComparison);
+	const t1 = performance.now();
+	console.log(`Call to comparePercentageWorld took ${t1-t0} milliseconds.`);
+	// console.log(populationComparison);
 	res.send({
 		ProvinceExists: populationComparison.confirmed != -1,
 		NumOfRecovered: populationComparison.recovered,
@@ -69,14 +79,16 @@ router.get('/comparePercentageWorld', (req, res) => {
 });
 
 router.get('/compareCounties', (req, res) => {
-	const twoPlacesComparison = GetTwoUSPlacesComparison(
+	const t0 = performance.now();
+	const twoPlacesComparison = U.GetTwoUSPlacesComparison(
 		req.query.State1,
 		req.query.County1,
 		req.query.State2,
 		req.query.County2,
 		req.query.TypeOfData,
 	);
-
+	const t1 = performance.now();
+	console.log(`Call to compareCounties took ${t1-t0} milliseconds.`);
 	res.send({
 		County1Exists: twoPlacesComparison.place1Value != -1,
 		County2Exists: twoPlacesComparison.place2Value != -1,
@@ -86,11 +98,13 @@ router.get('/compareCounties', (req, res) => {
 });
 
 router.get('/comparePercentageUS', (req, res) => {
-	const populationComparison = GetUSPopulationAnalysis(
+	const t0 = performance.now();
+	const populationComparison = U.GetUSPopulationAnalysis(
 		req.query.State,
 		req.query.County
 	);
-
+	const t1 = performance.now();
+	console.log(`Call to comparePercentageUS took ${t1-t0} milliseconds.`);
 	res.send({
 		CountyExists: populationComparison.confirmed != -1,
 		NumOfUnaffected: populationComparison.unaffected,
