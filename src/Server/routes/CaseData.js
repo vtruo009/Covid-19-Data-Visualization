@@ -1,14 +1,15 @@
 var express = require('express');
 var router = express.Router();
-const ModifyDataModule = require('../modules/ModifyData.js');
-const readCSVModule = require('../modules/ReadCSV.js');
-const BasicHelpersModule = require('../modules/BasicHelpers.js');
-const AccessDataModule = require('../modules/AccessData');
+const {
+	GetCaseById,
+	EditCase,
+	AddCase,
+	RemoveCase,
+} = require('../modules/CaseManager');
 
 router.get('/search', (req, res) => {
-	var searchCase = AccessDataModule.GetCaseById(req.query.caseId);
-	console.log('Search:', searchCase);
-	if (searchCase == null) {
+	const searchCase = GetCaseById(req.query.caseId);
+	if (searchCase == undefined) {
 		res.send({
 			success: false,
 			case: {},
@@ -44,62 +45,50 @@ router.get('/search', (req, res) => {
 });
 
 router.post('/update', (req, res) => {
-	// Get respective data using the body parameters
 	if (req.body.Gender == 1) {
 		stringOfGender = 'male';
 	} else {
 		stringOfGender = 'female';
 	}
-	var allCases = readCSVModule.LoadAllCases();
-	var date = BasicHelpersModule.stringToDate(req.body.ReportingDate);
-	var updateCase = ModifyDataModule.EditCase(
-		allCases,
-		date,
-		req.body.Country,
-		req.body.Age,
-		stringOfGender,
-		req.body.TypeOfCase == 3,
-		req.body.TypeOfCase == 2,
-		req.body.State,
-		req.body.CaseId
-	);
+
 	res.send({
-		success: updateCase,
+		success: EditCase(
+			req.body.ReportingDate,
+			req.body.Country,
+			req.body.Age,
+			stringOfGender,
+			req.body.TypeOfCase == 3,
+			req.body.TypeOfCase == 2,
+			req.body.State,
+			req.body.CaseId
+		),
 	});
 });
 
 router.post('/insert', (req, res) => {
-	console.log(req.body);
-	var allCases = readCSVModule.LoadAllCases();
-	// var date = BasicHelpersModule.stringToDate(req.body.ReportingDate);
-	// console.log('From insert', date);
-	var stringOfGender;
+	let stringOfGender = '';
 	if (req.body.Gender == 1) {
 		stringOfGender = 'male';
 	} else {
 		stringOfGender = 'female';
 	}
-	var insertCase = ModifyDataModule.AddCase(
-		allCases,
-		req.body.ReportingDate, //convert string to date
-		req.body.Country,
-		req.body.Age,
-		stringOfGender,
-		req.body.TypeOfCase == 3,
-		req.body.TypeOfCase == 2,
-		req.body.State,
-		req.body.CaseId
-	);
 	res.send({
-		success: insertCase,
+		success: AddCase(
+			req.body.ReportingDate, //convert string to date
+			req.body.Country,
+			req.body.Age,
+			stringOfGender,
+			req.body.TypeOfCase == 3,
+			req.body.TypeOfCase == 2,
+			req.body.State,
+			req.body.CaseId
+		),
 	});
 });
 
 router.post('/delete', (req, res) => {
-	var allCases = readCSVModule.LoadAllCases();
-	var deleteCase = ModifyDataModule.RemoveCase(allCases, req.body.caseId);
 	res.send({
-		success: deleteCase,
+		success: RemoveCase(req.body.caseId),
 	});
 });
 
