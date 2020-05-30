@@ -76,8 +76,7 @@ export default {
 				{ value: null, text: 'Type of data', disabled: true },
 				{ value: '1', text: 'Confirmed' },
 				{ value: '2', text: 'Dead' },
-				{ value: '3', text: 'Recovered' },
-			],
+				],
 			chartData: null,
 			showChart: false,
 		};
