@@ -10,8 +10,7 @@
 		"start": "concurrently - k \"npm run server\" \"npm run client\""
 	},
 	"dependencies": {
-		"concurrently": "^5.1.0",
-		"vue-google-charts": "^0.3.2"
+		"concurrently": "^5.1.0"
 	},
 	"devDependencies": {}
 }
