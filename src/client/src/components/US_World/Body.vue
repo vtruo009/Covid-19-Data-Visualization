@@ -1,43 +1,48 @@
 <template>
 	<div id="Body">
-		<div class="m-5 text-center">
+		<div class="mt-5 mb-4">
 			<!-- User input form -->
-			<b-form @submit="displayData" inline>
+			<b-form @submit="displayData">
 				<b-row>
-					<b-col>
+					<b-col lg="3">
 						<b-input
+							class="m-2"
 							v-model="firstInput"
 							v-bind:placeholder="this.firstInputName"
 							required
 						></b-input>
 					</b-col>
-					<b-col>
+					<b-col lg="3">
 						<b-input
+							class="m-2"
 							v-model="secondInput"
 							v-bind:placeholder="this.secondInputName"
 							required
 						></b-input>
 					</b-col>
-					<b-col>
+					<b-col lg="3">
 						<b-form-select
+							class="m-2"
 							v-model="TypeOfDataSelected"
 							:options="TypeOfDataoptions"
 							required
 						></b-form-select>
 					</b-col>
-					<b-col>
-						<b-button variant="primary" type="submit">
+					<b-col lg="1">
+						<b-button class="m-2" block variant="primary" type="submit">
 							<font-awesome-icon :icon="['fas', 'search']" />
 						</b-button>
 					</b-col>
-					<b-col>
-						<button
+					<b-col lg="1">
+						<b-button
+							class="m-2"
+							block
 							type="button"
-							class="btn btn-primary"
+							variant="primary"
 							@click="showInsertModal()"
 						>
 							Insert
-						</button>
+						</b-button>
 					</b-col>
 				</b-row>
 			</b-form>

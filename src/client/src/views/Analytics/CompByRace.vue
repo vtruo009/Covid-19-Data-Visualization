@@ -1,16 +1,24 @@
 <template>
-  <div class="mt-5">
-    <b-form inline @submit="GetData">
-      <b-form-select v-model="OptionSelected" aria-required :options="DataOptions"></b-form-select>
-      <b-button type="submit" variant="primary" class="ml-3">Search</b-button>
-    </b-form>
-
-    <div v-if="showChart" class="mt-5 d-flex justify-content-end">
-      <b-row>
-        <b-col>
-          <DonutChart v-bind:data="chartData" />
+  <div class="mt-5 fadeIn">
+    <b-form @submit="GetData">
+      <b-row class="d-flex justify-content-center">
+        <b-col lg="4" sm="8">
+          <b-form-select
+            required
+            v-model="OptionSelected"
+            aria-required
+            :options="DataOptions"
+            class="m-2"
+          ></b-form-select>
+        </b-col>
+        <b-col lg="4" sm="4">
+          <b-button block type="submit" variant="primary" class="m-2">Search</b-button>
         </b-col>
       </b-row>
+    </b-form>
+
+    <div v-if="showChart" class="mt-5 d-flex justify-content-center">
+      <DonutChart :chart-data="chartData" :showLegend="false" />
     </div>
   </div>
 </template>
@@ -18,6 +26,8 @@
 <script>
 import Services from "../../Services/Services";
 import DonutChart from "../../components/DonutChart";
+// import palette from 'google-palette';
+import Helpers from "../../Services/Helpers";
 export default {
   name: "CompByRace",
   data() {
@@ -50,16 +60,29 @@ export default {
           }
         });
         const CountryNumberDict = response.data.CountryNumberDict;
-        let dataToDisplay = [["Country", "Number of Cases"]];
+        let labelsToDisplay = [];
+        let dataToDisplay = [];
         let noData = true;
+        let counter = 0;
         for (let key in CountryNumberDict) {
           if (CountryNumberDict[key] != 0) noData = false;
-          dataToDisplay.push([key, CountryNumberDict[key]]);
+          counter++;
+          labelsToDisplay.push(key);
+          dataToDisplay.push([CountryNumberDict[key]]);
         }
         if (noData) {
           this.erroHandler("No data available for the option selected");
         } else {
-          this.chartData = dataToDisplay;
+          this.chartData = {
+            labels: labelsToDisplay,
+            datasets: [
+              {
+                label: "Race comparison",
+                data: dataToDisplay,
+                backgroundColor: Helpers.getHexColors(dataToDisplay)
+              }
+            ]
+          };
           this.showChart = true;
         }
       } catch (error) {

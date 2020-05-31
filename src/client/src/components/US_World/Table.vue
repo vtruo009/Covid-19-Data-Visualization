@@ -1,11 +1,21 @@
 <template>
 	<div id="Table">
+		<b-pagination
+			v-model="currentPage"
+			:total-rows="dataLength"
+			:per-page="perPage"
+			align="fill"
+			pills
+			class="m-3"
+		></b-pagination>
 		<b-table
 			dark
 			striped
 			hover
 			ref="table"
-			:items="this.data"
+			:current-page="currentPage"
+			:per-page="perPage"
+			:items="returnData"
 			:fields="fields"
 			:busy="this.isBusy"
 		>
@@ -171,8 +181,19 @@ export default {
 		data: Array,
 		isBusy: Boolean,
 	},
+	computed: {
+		returnData() {
+			return this.data;
+		},
+		dataLength() {
+			return this.data ? this.data.length : 0;
+		},
+	},
 	data() {
 		return {
+			currentPage: 1,
+			perPage: 10,
+
 			formIsBusy: false,
 
 			selectedRecord: {
@@ -212,7 +233,6 @@ export default {
 		},
 
 		// Helper methods:
-
 		clearFields() {
 			this.selectedRecord.date = null;
 			this.selectedRecord.number = null;
@@ -250,7 +270,7 @@ export default {
 				});
 				// Update the selected row on the table
 				this.data[
-					this.selectedRecord.index
+					this.getTableIndex(this.selectedRecord.index)
 				].number = this.selectedRecord.number;
 				this.successHandler('Record successfully updated');
 			} catch (error) {
@@ -266,7 +286,6 @@ export default {
 		async sendDeleteRequest(e) {
 			e.preventDefault();
 			this.toggleFormBussy();
-			console.log('Sends delete request');
 			try {
 				const response = await Services.deleteData({
 					apiEndPoint: this.$parent.apiEndPoint,
@@ -277,10 +296,9 @@ export default {
 						Date: this.selectedRecord.date,
 					},
 				});
-				// Delete the selected row from the table
 				this.successHandler('Record successfully deleted');
-				this.data.splice(this.selectedRecord.index, 1);
-				// refresh table
+				// Delete the selected row on the table
+				this.data.splice(this.getTableIndex(this.selectedRecord.index), 1);
 				this.$refs.table.refresh();
 			} catch (error) {
 				this.errorHandler('Some error occurred. Please try again later');
@@ -289,6 +307,10 @@ export default {
 			// Hides the delete modal
 			this.toggleFormBussy();
 			this.hideDeleteModal();
+		},
+		// Gets the appropiate table index for a selected record
+		getTableIndex(index) {
+			return index + 10 * (this.currentPage - 1);
 		},
 		toggleFormBussy() {
 			this.formIsBusy = !this.formIsBusy;
