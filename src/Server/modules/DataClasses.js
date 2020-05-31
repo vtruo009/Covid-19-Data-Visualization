@@ -29,8 +29,8 @@ module.exports = {
 			this.fromWuhan = line[14];
 			this.visitingWuhan = line[15];
 
-			this.dead = (!(line[16] == "0") && line[16] != "NA");
-			this.recovered = (!(line[17] == "0") && line[17] != "NA");
+			this.dead = !(line[16] == '0') && line[16] != 'NA';
+			this.recovered = !(line[17] == '0') && line[17] != 'NA';
 
 			this.symptom = line.length >= 19 ? line[18] : '';
 			this.source = line.length >= 20 ? line[19] : '';
@@ -52,7 +52,6 @@ module.exports = {
 			this.currentNumDeaths = 0;
 			//this.currentNumRecovered = 0;
 			this.currentNumConfirmed = 0;
-
 		}
 		addExtraInfo(
 			uid,
@@ -82,7 +81,10 @@ module.exports = {
 			// values contains the number of people died on the corresponding date.
 
 			for (var i = 0; i < dates.length; ++i) {
-				if (!Number.isNaN(dates[i].getMonth()) && !Number.isNaN(parseInt(values[i]))) {
+				if (
+					!Number.isNaN(dates[i].getMonth()) &&
+					!Number.isNaN(parseInt(values[i]))
+				) {
 					this.numDeaths[dates[i]] = parseInt(values[i]);
 				}
 			}
@@ -91,7 +93,7 @@ module.exports = {
 			for (var key in this.numDeaths) {
 				if (new Date(key) > mostRecentDate) mostRecentDate = new Date(key);
 			}
-		
+
 			//return dictionary[mostRecentDate];
 			this.currentNumDeaths = this.numDeaths[mostRecentDate];
 		}
@@ -100,17 +102,19 @@ module.exports = {
 			// values contains the number of confirmed cases on the corresponding date.
 
 			for (var i = 0; i < dates.length; ++i) {
-				if (!Number.isNaN(dates[i].getMonth()) && !Number.isNaN(parseInt(values[i]))) {
+				if (
+					!Number.isNaN(dates[i].getMonth()) &&
+					!Number.isNaN(parseInt(values[i]))
+				) {
 					this.numConfirmed[dates[i]] = parseInt(values[i]);
 				}
-				
 			}
 			var mostRecentDate = new Date(1900, 0, 1);
 
 			for (var key in this.numConfirmed) {
 				if (new Date(key) > mostRecentDate) mostRecentDate = new Date(key);
 			}
-		
+
 			//return dictionary[mostRecentDate];
 			this.currentNumConfirmed = this.numConfirmed[mostRecentDate];
 		}
@@ -143,13 +147,16 @@ module.exports = {
 		addNumDeaths(dates, values) {
 			// dates is a list of Date {1/20/20, 1/21/20, 1/22/20, ...}
 			// values contains the number of people died on the corresponding date.
-			
+
 			for (var i = 0; i < dates.length; ++i) {
-				if (!Number.isNaN(dates[i].getMonth()) && !Number.isNaN(parseInt(values[i]))) {
+				if (
+					!Number.isNaN(dates[i].getMonth()) &&
+					!Number.isNaN(parseInt(values[i]))
+				) {
 					this.numDeaths[dates[i]] = parseInt(values[i]);
 				}
 			}
-			
+
 			this.currentNumDeaths = M.GetMostRecentValue(this.numDeaths);
 		}
 		addNumConfirmed(dates, values) {
@@ -157,7 +164,10 @@ module.exports = {
 			// values contains the number of confirmed cases on the corresponding date.
 
 			for (var i = 0; i < dates.length; ++i) {
-				if (!Number.isNaN(dates[i].getMonth()) && !Number.isNaN(parseInt(values[i]))) {
+				if (
+					!Number.isNaN(dates[i].getMonth()) &&
+					!Number.isNaN(parseInt(values[i]))
+				) {
 					this.numConfirmed[dates[i]] = parseInt(values[i]);
 				}
 			}
@@ -169,14 +179,16 @@ module.exports = {
 			// values contains the number of recovered cases on the corresponding date.
 
 			for (var i = 0; i < dates.length; ++i) {
-				if (!Number.isNaN(dates[i].getMonth()) && !Number.isNaN(parseInt(values[i]))) {
+				if (
+					!Number.isNaN(dates[i].getMonth()) &&
+					!Number.isNaN(parseInt(values[i]))
+				) {
 					this.numRecovered[dates[i]] = parseInt(values[i]);
 				}
 			}
 
 			this.currentNumRecovered = M.GetMostRecentValue(this.numRecovered);
 		}
-
 	},
 
 	AgeRowCountry: class {
@@ -253,6 +265,6 @@ module.exports = {
 			this.numMaleDied = maleD;
 			this.numFemaleRecovered = femaleR;
 			this.numMaleRecovered = maleR;
-        }
-	}
+		}
+	},
 };

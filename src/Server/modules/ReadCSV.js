@@ -1,9 +1,9 @@
-function ReadCSV (fileName) {
-	const fs = require('fs')
+function ReadCSV(fileName) {
+	const fs = require('fs');
 
 	var data = fs.readFileSync(fileName, 'utf8');
 
-	var lines = data.split("\n");
+	var lines = data.split('\n');
 
 	var parsedCSV = [];
 
@@ -16,7 +16,7 @@ function ReadCSV (fileName) {
 		var csvArray = [];
 		var curPos = -1;
 		while (curPos < line.length) {
-			if (line.charAt(curPos + 1) == '\"') {
+			if (line.charAt(curPos + 1) == '"') {
 				var endPos = curPos + 2;
 				while (endPos < line.length && line.charAt(endPos) != '"') endPos++;
 				var cell = line.substring(curPos + 2, endPos);
@@ -36,7 +36,7 @@ function ReadCSV (fileName) {
 	return parsedCSV;
 }
 
-function LoadAllCases () {
+function LoadAllCases() {
 	// Read values from the CSV, organizes the data into an array of "Case", and returns the array.
 	const fileNamesModule = require('../modules/DatabaseFileNames.js');
 	let parsedCSV = ReadCSV(fileNamesModule.CasesFileName);
@@ -52,7 +52,7 @@ function LoadAllCases () {
 	return allCases;
 }
 
-function LoadUSData () {
+function LoadUSData() {
 	// Read values from the CSV, organizes the data into an array of "USPlace" and returns the array.
 
 	// Modules
@@ -95,7 +95,8 @@ function LoadUSData () {
 			parsedDeathData[i][8], // Lat
 			parsedDeathData[i][9], // Long
 			parsedDeathData[i][10], // Combined_key
-			parsedDeathData[i][11]); // Population
+			parsedDeathData[i][11]
+		); // Population
 		newState.addNumDeaths(
 			deathDates,
 			parsedDeathData[i].slice(numNonDateColumn)
@@ -109,9 +110,7 @@ function LoadUSData () {
 	numNonDateColumn = 11;
 
 	var confirmedDates = [];
-	var confirmedDatesDateLabels = parsedConfirmedData[0].slice(
-		numNonDateColumn
-	);
+	var confirmedDatesDateLabels = parsedConfirmedData[0].slice(numNonDateColumn);
 	confirmedDatesDateLabels.forEach((date) =>
 		confirmedDates.push(helperModule.stringToDate(date))
 	);
@@ -122,10 +121,7 @@ function LoadUSData () {
 		var county = parsedConfirmedData[i][5];
 
 		if (!(county + ',' + state in statesDict)) {
-			statesDict[county + ',' + state] = new classModule.USPlace(
-				state,
-				county
-			);
+			statesDict[county + ',' + state] = new classModule.USPlace(state, county);
 			statesDict[county + ',' + state].addExtraInfo(
 				parsedConfirmedData[i][0], // UID
 				parsedConfirmedData[i][1], // iso2
@@ -136,7 +132,8 @@ function LoadUSData () {
 				parsedConfirmedData[i][8], // Lat
 				parsedConfirmedData[i][9], // Long
 				parsedConfirmedData[i][10], // Combined_key
-				"NA"); // No population data in the csv with confirmed data.
+				'NA'
+			); // No population data in the csv with confirmed data.
 		}
 
 		statesDict[county + ',' + state].addNumConfirmed(
@@ -154,7 +151,7 @@ function LoadUSData () {
 	return allStates;
 }
 
-function LoadWorldData () {
+function LoadWorldData() {
 	// Read values from the CSV, organizes the data into an array of "WorldPlace" and returns the array.
 
 	// Modules
@@ -189,7 +186,12 @@ function LoadWorldData () {
 		var latitude = parsedDeathData[i][2];
 		var longitude = parsedDeathData[i][3];
 
-		var newState = new classModule.WorldPlace(country, state, latitude, longitude);
+		var newState = new classModule.WorldPlace(
+			country,
+			state,
+			latitude,
+			longitude
+		);
 		newState.addNumDeaths(
 			deathDates,
 			parsedDeathData[i].slice(numNonDateColumn)
@@ -203,9 +205,7 @@ function LoadWorldData () {
 	numNonDateColumn = 4;
 
 	var confirmedDates = [];
-	var confirmedDatesDateLabels = parsedConfirmedData[0].slice(
-		numNonDateColumn
-	);
+	var confirmedDatesDateLabels = parsedConfirmedData[0].slice(numNonDateColumn);
 	confirmedDatesDateLabels.forEach((date) =>
 		confirmedDates.push(helperModule.stringToDate(date))
 	);
@@ -219,8 +219,12 @@ function LoadWorldData () {
 			var latitude = parsedConfirmedData[i][2];
 			var longitude = parsedConfirmedData[i][3];
 
-			statesDict[state + ',' + country] =
-				new classModule.WorldPlace(country, state, latitude, longitude);
+			statesDict[state + ',' + country] = new classModule.WorldPlace(
+				country,
+				state,
+				latitude,
+				longitude
+			);
 		}
 
 		statesDict[state + ',' + country].addNumConfirmed(
@@ -234,9 +238,7 @@ function LoadWorldData () {
 	numNonDateColumn = 4;
 
 	var recoveredDates = [];
-	var recoveredDatesDateLabels = parsedRecoveredData[0].slice(
-		numNonDateColumn
-	);
+	var recoveredDatesDateLabels = parsedRecoveredData[0].slice(numNonDateColumn);
 	recoveredDatesDateLabels.forEach((date) =>
 		recoveredDates.push(helperModule.stringToDate(date))
 	);
@@ -247,12 +249,15 @@ function LoadWorldData () {
 		var country = parsedRecoveredData[i][1];
 
 		if (!(state + ',' + country in statesDict)) {
-
 			var latitude = parsedRecoveredData[i][2];
 			var longitude = parsedRecoveredData[i][3];
 
-			statesDict[state + ',' + country] =
-				new classModule.WorldPlace(country, state, latitude, longitude);
+			statesDict[state + ',' + country] = new classModule.WorldPlace(
+				country,
+				state,
+				latitude,
+				longitude
+			);
 		}
 
 		statesDict[state + ',' + country].addNumRecovered(
@@ -273,5 +278,5 @@ function LoadWorldData () {
 module.exports = {
 	LoadAllCases: LoadAllCases,
 	LoadUSData: LoadUSData,
-	LoadWorldData: LoadWorldData
-}
+	LoadWorldData: LoadWorldData,
+};

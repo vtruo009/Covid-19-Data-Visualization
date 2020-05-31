@@ -281,17 +281,14 @@ function GetUSPopulationAnalysis(state, county) {
 // We want to use this function in routes/USData.js.
 function GetRows(county, state, typeOfData) {
 	if (allUSPlaces.length == 0) InitializeAllUSPlace();
-
 	var selectedInUS = [];
-
 	for (var i = 0; i < allUSPlaces.length; ++i) {
-		// console.log(USData[i].county);
-		if (county == allUSPlaces[i].county && state == allUSPlaces[i].state) {
+		if (county === allUSPlaces[i].county && state === allUSPlaces[i].state) {
 			selectedInUS.push(allUSPlaces[i]);
 		}
 	}
 
-	// console.log(selectedInUS);
+	console.log(selectedInUS);
 	if (selectedInUS.length > 0) {
 		if (typeOfData == 1) {
 			var row = [];
@@ -304,10 +301,10 @@ function GetRows(county, state, typeOfData) {
 					temp_date.getDate() +
 					'/' +
 					temp_date.getFullYear();
-				var newItem = new USReq.USRowConfirmed(
-					date,
-					selectedInUS[0].numConfirmed[key]
-				);
+				let newItem = {
+					date: date,
+					number: selectedInUS[0].numConfirmed[key],
+				};
 				row.push(newItem);
 			}
 		} else if (typeOfData == 2) {
@@ -321,10 +318,10 @@ function GetRows(county, state, typeOfData) {
 					temp_date.getDate() +
 					'/' +
 					temp_date.getFullYear();
-				var newItem = new USReq.USRowDeaths(
-					date,
-					selectedInUS[0].numDeaths[key]
-				);
+				let newItem = {
+					date: date,
+					number: selectedInUS[0].numDeaths[key],
+				};
 				row.push(newItem);
 			}
 		}

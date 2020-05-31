@@ -1,20 +1,23 @@
 var express = require('express');
 var router = express.Router();
 
-
 //add require (../USPlacesManager.js)
 //get of whats inside router
 const ModUSPlacesManager = require('../modules/USPlacesManager.js');
 router.get('/search', (req, res) => {
 	console.log(req.query);
 	res.send({
-		data: ModUSPlacesManager.GetRows(req.body.County, req.body.State, req.body.TypeOfData),//call GetRow
+		data: ModUSPlacesManager.GetRows(
+			req.query.County,
+			req.query.State,
+			req.query.TypeOfData
+		),
 	});
 });
 
 router.post('/delete', (req, res) => {
 	res.send({
-		success: ModUSPlacesManager.RmoveUSData(
+		success: ModUSPlacesManager.RemoveUSData(
 			req.body.County,
 			req.body.State,
 			req.body.Date,
